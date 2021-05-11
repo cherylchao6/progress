@@ -17,8 +17,6 @@ function addInputForm () {
 //Preview Uploaded Pictures
 function previewBeforeUpload(id){
   let fileInput = document.querySelector("#"+id)
-  console.log(fileInput.value)
-  console.log(fileInput.files)
   document.querySelector("#"+id).addEventListener("change",function(){
     if(fileInput.files.length == 0){
       return;
