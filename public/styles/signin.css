@@ -1,0 +1,35 @@
+body {
+  overflow: hidden;
+}
+
+main {
+  margin-top: 100px;
+  height: 700px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.col-6 {
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  letter-spacing: 2px;
+  color: rgb(19, 34, 53);
+}
+
+.row {
+  margin-top: 40px;
+}
+
+.btn-outline-dark {
+  color: #6ddad3;
+  border-color: #6ddad3;
+}
+
+#signinbtn {
+  margin-top: 40px;
+  margin-bottom: 30px;
+}

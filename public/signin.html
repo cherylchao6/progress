@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="./styles/reset.css" rel="stylesheet">
-  <title>addProgress</title>
+  <title>Document</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
 </head>
 <body>
@@ -49,61 +49,31 @@
       </div>
     </nav>
   </header>
-  <!-- 表單 -->
-  <main class=container>
-    <h1>FEEL POSITIVE TO START A NEW PROGRESS ?</h1>
-    <form>
+  <main>
+    <h1>WELCOME BACK!</h1>
+    <form>
       <div class="row"> 
         <div class="col-6">
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="progressName" placeholder="讓你堅持下去的原因！">
-            <label for="progressName">Progress名字</label>
+            <input type="text" class="form-control" id="email" placeholder="email">
+            <label for="email">Email</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="motivation" placeholder="讓你堅持下去的原因！">
-            <label for="motivation">動機</label>
+            <input type="text" class="form-control" id="password" placeholder="password">
+            <label for="password">密碼</label>
           </div>
-          <select class="form-select mb-3" aria-label="Default select example">
-            <option selected>類別</option>
-            <option value="運動">運動</option>
-            <option value="成長">成長</option>
-            <option value="體態外表">體態外表</option>
-            <option value="園藝">園藝</option>
-            <option value="學習">學習</option>
-            <option value="居家">居家</option>
-            <option value="烹飪">烹飪</option>
-            <option value="作品">作品</option>
-          </select>
-          <!-- 上傳progress封片照片 -->
-          <div class="row mb-3 mt-3">
-            <div class="col-3 g-3" id="photo">
-              <input class="fileInput" type="file" id="file-0" accept="image/*">
-              <label for="file-0" id="file-0-preview">
-                <img src="https://bit.ly/3ubuq5o" alt="" class="preview-image">
-                <div class="uploadDiv">
-                  <span>Progress封面照</span>
-                </div>
-              </label>
-              <div class="text-center">
-                <button id="file-0-removebtn" class="removeBtn">Remove</button>
-              </div>
-            </div>
-          </div>
-          <div class="form-check form-switch mb-3">
-            <input class="form-check-input" type="checkbox" id="checkPrivacy">
-            <label class="form-check-label" for="checkPrivacy">設為隱私</label>
+          <div class="text-center" id="signinbtn">
+            <button class="btn btn-outline-dark" type="submit">SIGNIN</button>
           </div>
           <div class="text-center">
-            <button class="btn btn-outline-dark" type="submit">Challenge Accepted!</button>
+            <p><a href="#">什麼！！！你還不是會員？！快來加入我們, 一起朝著目標邁進吧！</a></p>
           </div>
         </div>
       </div>
     </form>
   </main>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
-  <script src="./script/addProgress.js"></script>
+  <link href="./styles/signin.css" rel="stylesheet">
   <link href="./styles/header.css" rel="stylesheet">
-  <link href="./styles/addProgress.css" rel="stylesheet">
 </body>
 </html>
