@@ -31,11 +31,11 @@ function verifyAdminToken (req, res, next) {
         return res.sendStatus(403)
       };
       let email = result.email;
-      let sql = 'SELECT is_admin FROM users WHERE email = ?';
+      let sql = 'SELECT role FROM users WHERE email = ?';
       let checkAdmin = await query(sql, email);
-      if (checkAdmin[0].is_admin !== 1) {
+      if (checkAdmin[0].role !== 1) {
         res.sendStatus(403);
-      } else if (checkAdmin[0].is_admin === 1) {
+      } else if (checkAdmin[0].role === 1) {
         next();
       };
     });

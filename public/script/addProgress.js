@@ -1,3 +1,20 @@
+//add new input form when click plus button
+function addInputForm (id) {
+  let formId = id+1;
+  let plusButton = document.querySelector(`#addInputForm${id}`);
+  let form = document.querySelector(`#inputForm${formId}`)
+  plusButton.addEventListener('click', ()=>{
+    form.style.display = "inline";
+  });
+}
+addInputForm(1);
+addInputForm(2);
+
+
+
+
+
+
 //Preview Uploaded Pictures
 function previewBeforeUpload(id) {
   let fileInput = document.querySelector("#"+id)

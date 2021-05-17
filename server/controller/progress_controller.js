@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const addProgress = async (req, res, next) => {
   try {
+    //insert progress table
     let progressData;
     let reqData = JSON.parse(JSON.stringify(req.body));
     if (req.file) {
@@ -46,7 +47,23 @@ const addProgress = async (req, res, next) => {
         };
       }
     }
-    await Progress.addProgress(progressData); 
+    let insertProgressId = await Progress.addProgress(progressData); 
+    //insert progress_data table
+    let progressDataArray = [];
+    for (let i = 1; i < 4; i++ ) {
+      if (reqData[`input${i}Name`] == '') {
+        break;
+      }
+      let inputData = {
+        progress_id: insertProgressId,
+        name: reqData[`input${i}Name`],
+        unit: reqData[`input${i}Unit`]
+      };
+      progressDataArray.push(inputData);
+    }
+    if (progressDataArray.length !== 0) {
+      await Progress.addProgressData(progressDataArray);
+    } 
   } catch (err) {
     next(err);
   }
@@ -66,13 +83,13 @@ const editProgress = async (req, res, next) => {
       //沒改照片或是remove本來的照片
       let progressData = await Progress.selectProgress(req.query);
       //沒改照片
-      if (progressData.picture == filename) {
+      if (progressData.progress.picture == filename) {
         editProgressData = {
           progressId: req.query.progressid,
           name: reqData.progressName,
           motivation: reqData.motivation,
           category: reqData.category,
-          picture: progressData.picture
+          picture: progressData.progress.picture
         };
         if (reqData.checkPrivacy) { 
           editProgressData.public = "1";
@@ -115,6 +132,25 @@ const editProgress = async (req, res, next) => {
       }
     }
     await Progress.editProgress(editProgressData);
+    //update progress_data table
+    let progressDataArray = [];
+    for (let i = 1; i < 4; i++ ) {
+      if (reqData[`input${i}Name`] == '') {
+        break;
+      }
+      let inputData = {
+        progress_id: req.query.progressid,
+        name: reqData[`input${i}Name`],
+        unit: reqData[`input${i}Unit`]
+      };
+      progressDataArray.push(inputData);
+    }
+    let progressData = {
+      progress_id: req.query.progressid,
+      data: progressDataArray
+    }
+    await Progress.editProgressData(progressData);
+
   } catch (err) {
     next(err);
   }
@@ -123,12 +159,12 @@ const editProgress = async (req, res, next) => {
 const selectProgress = async (req, res, next) => {
   try {
     // req.query parameter 傳回 { progressid: '1' }
-    let progressData = await Progress.selectProgress(req.query);
-    let pictureName = progressData.picture;
+    let progressInfo = await Progress.selectProgress(req.query);
+    let pictureName = progressInfo.progress.picture;
     let pictureWithPath = `${process.env.IMAGE_PATH}${pictureName}`;
-    progressData.picture = pictureWithPath;
+    progressInfo.progress.picture = pictureWithPath;
     let data = {
-      data: progressData
+      data: progressInfo
     }
     res.status(200).send(data);
   } catch (err) {

@@ -1,8 +1,21 @@
+//add new input form when click plus button
+function addInputForm (id) {
+  let formId = id+1;
+  let plusButton = document.querySelector(`#addInputForm${id}`);
+  let form = document.querySelector(`#inputForm${formId}`)
+  plusButton.addEventListener('click', ()=>{
+    form.style.display = "inline";
+  });
+}
+addInputForm(1);
+addInputForm(2);
+
+// Get API query parameter
 let token = localStorage.getItem("token")
 const urlParams = new URLSearchParams(window.location.search);
 const progressId = urlParams.get("progressid");
 
-// Get API query parameter
+
 getProgressData ();
 
 //get progress data
@@ -25,17 +38,36 @@ function getProgressData () {
       if (data) {
         //sql資料填入input
         let name = document.querySelector("#progressName");
-        name.value = data.data.name;
+        name.value = data.data.progress.name;
         let motivation = document.querySelector("#motivation");
-        motivation.value = data.data.motivation;
+        motivation.value = data.data.progress.motivation;
         let category = document.querySelector("#category");
-        category.value = data.data.category;
+        category.value = data.data.progress.category;
         let image = document.querySelector('#image');
-        image.src = data.data.picture;
-        if (data.data.public == '1') {
+        image.src = data.data.progress.picture;
+        if (data.data.progress.public == '1') {
           let public = document.querySelector('#checkPrivacy')
           public.setAttribute('checked', true);
-        } 
+        }
+        //判斷幾組數據並顯示數單表單
+        let form2 = document.querySelector('#inputForm2');
+        let form3 = document.querySelector('#inputForm3');
+        switch ((data.data.progressData).length) {
+          case 2 :
+            form2.style.display = "inline";
+            break;
+          case 3 :
+            form2.style.display = "inline";
+            form3.style.display = "inline";
+            break;
+        };
+        for (let i in data.data.progressData) {
+          let id = parseInt(i) + 1;
+          let inputName = document.querySelector(`#input${id}Name`);
+          let inputUnit = document.querySelector(`#input${id}Unit`);
+          inputName.value = data.data.progressData[i].name;
+          inputUnit.value = data.data.progressData[i].unit;    
+        };
       } 
     });
 }

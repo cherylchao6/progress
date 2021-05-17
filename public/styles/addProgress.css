@@ -1,11 +1,11 @@
 main {
   margin-top: 100px;
-  height: 600px;
+  height: 900px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-.col-6 {
+.col-10 {
   margin: 0 auto;
 }
 
@@ -58,4 +58,24 @@ h1 {
 
 #h1 {
   margin-top: 100px;
+}
+
+.inputForm {
+  border: 1px solid rgb(201, 205, 209);
+  padding: 20px;
+}
+
+#inputForm2,
+#inputForm3 {
+  display: none;
+}
+
+.addInputForm {
+  background-color: rgb(255, 255, 255);
+  border: 2px solid #ffffff;
+  cursor: pointer;
+}
+
+#submitBtn {
+  margin-bottom: 30px;
 }
