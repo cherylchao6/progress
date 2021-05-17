@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./styles/reset.css" rel="stylesheet">
+  <title>Diary</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+  <link href="./styles/header.css" rel="stylesheet">
+  <link href="./styles/diary.css" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid" id="header">
+        <a class="navbar-brand" href="#">
+          <img src="./images/logo.jpg" id="logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-mutated">
+            <li class="nav-item">
+              <a class="nav-link" href="#">品牌故事</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="myprogress" href="#">ＭyProgress</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                類別
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">運動</a></li>
+                <li><a class="dropdown-item" href="#">成長</a></li>
+                <li><a class="dropdown-item" href="#">體態外表</a></li>
+                <li><a class="dropdown-item" href="#">園藝</a></li>
+                <li><a class="dropdown-item" href="#">學習</a></li>
+                <li><a class="dropdown-item" href="#">居家</a></li>
+                <li><a class="dropdown-item" href="#">烹飪</a></li>
+                <li><a class="dropdown-item" href="#">作品</a></li>
+              </ul>
+          </ul>
+          <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="有人完成過......" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div class="row row1" >
+      <div class="col-4 row">
+        <div class="col-6 user1 userProfile">
+
+          <div class="container" id ="userDetail">
+            <div class="row userDetail" id="userName">趙姿涵</div>
+            <div class="row userDetail" id="fans">粉絲 1000</div>
+            <div class="row userDetail" id="idols">偶像 1000</div>
+            <div class="row userDetail" id="finishedProgress">完成 0 個Progress</div>
+          </div>
+          <div class="row userDetail" id="editProfile">編輯個人檔案</div>
+          <div class="row" id="moreAction">
+            <div class="col-6" id="followBtn">追蹤</div>
+            <div class="col-6" id="MessageBtn">私訊</div>
+          </div>
+        </div>
+        <div class="col-6 user2">
+          <img src="https://bud.healthdaily.tw/file/bud.healthdaily/f8/n7248/1.jpg" id="userPicture">
+        </div>
+        <div class="row" id="motto">
+          座右銘：愛拼才會贏
+        </div>
+      </div>
+      <div class="col-2 progressFile">
+        <div>
+          <div class="row userDetail"><h4 id="progressName">Progress: 戴牙套<h4></div>
+          <div class="row userDetail"><h4 id="category">類別：體態外表</h4></div>
+        </div>
+      </div>
+      <div class="col-3 diaryPicture">
+        <img src="https://www.pumpkin.care/blog/wp-content/uploads/2020/08/Cat-Age-Chart-Hero-Opt1-1200x628.jpg" id="diaryPicture">
+      </div>
+      <div class="col-3 diaryTime">
+        <div class="raw diaryDay" ><h1 id="diaryDay">Day1</h1></div>
+        <div class="raw diaryDate"><h4 id="diaryDate">2021/05/13</h4></div>
+      </div>
+    </div>
+    <div class="row row2 text-center"><h3 id="motivation">動機：變漂亮</h3></div>
+    <div class="row row3 text-center"><h3 id="mood">心情：輕輕鬆鬆難不倒我</h3></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-11 diaryMain">
+          <div class="row">
+            <div class="col-4 text-center"><h4>體重：45Kg</h4></div>
+            <div class="col-4 text-center"><h4>體重：45Kg</h4></div>
+            <div class="col-4 text-center"><h4>體重：45Kg</h4></div>
+          </div>
+          <div class="row diaryContent">
+            <p id="diaryContent">gbnerenbnbe</p>
+          </div>
+          <!-- diaryImages -->
+          <div class="row">
+            <div class="col-3 diaryImage">
+              <img src="https://bud.healthdaily.tw/file/bud.healthdaily/f8/n7248/1.jpg" id="image1">
+            </div>
+            <div class="col-3 diaryImage">
+              <img src="https://bud.healthdaily.tw/file/bud.healthdaily/f8/n7248/1.jpg" id="image1">
+            </div>
+            <div class="col-3 diaryImage">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/VAN_CAT.png/1200px-VAN_CAT.png" id="image1">
+            </div>
+            <div class="col-3 diaryImage">
+              <img src="https://bud.healthdaily.tw/file/bud.healthdaily/f8/n7248/1.jpg" id="image1">
+            </div>
+            <div class="col-3 diaryImage">
+              <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxIPEhUSEA8VFhUVFRUVFRUVFRUVFxUXFRcWFhUVFRUYHSggGBolHRUXITEhJSkrLi4uFx8zODMsNygtLisBCgoKDg0OGhAQFy0dHR0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLf/AABEIAMgA/AMBIgACEQEDEQH/xAAbAAACAgMBAAAAAAAAAAAAAAAAAQQFAgMGB//EADoQAAEDAgIHBgUEAQMFAAAAAAEAAhEDIQQxBRJBUWFxgQYikaGx8BMywdHhBxRCUvEzYnIjorLC0v/EABkBAQEBAQEBAAAAAAAAAAAAAAABAgQDBf/EACERAQEAAgMAAgIDAAAAAAAAAAABAhEDITESQRNRBCIy/9oADAMBAAIRAxEAPwD2BCELTJoCEIGmkhQZISTVAhC5LtT2w/Z1RRawOdAc6cr5AcVLdNY423Udahc3oTtfRxENd3HbiujBUll8LjZ6aEkKshCEIBCEIGhJCASTKxVDSRKSASKaRQJCEIEhCAgaYSTQMoQhQNAQhUNCE1ABNJNUC8g/Uug5uNJgkPaxw5aobHi0r19ef/qrhyDh62rIGsw8zBA/8vBYznT14rrJxWBLrAgiD/WV3ugNPupxTqPB3XE8juXL4R1HE919Y62wRqmP62tG6FZVsDTADGMtwMDrtK8Z13HRlq9V6FhNIMqA6puLEbQdxC3/ABRvXDUaw+VztV8Q2o03A2NP9gqbEYrF0anwzVkZtc1xIO2eB4cFbza9jznBvyvUW1gTn7ss9dcBgtK1KLZ+aSJnfBJK31O0FZhE6snZdJ/Ix0l/j5O6S1lxDO1lUkAsHmJkKXT7TyCCwgg3AvA9ytTmwv2zeDOfTrQULkqna9jBL2kW81AHb34hDMPQL3mdsAcSVfy4ftPw5/p3Fas1gLnOAAuSVzGle1BaYpAAbzmeQ2efRV9etVrXrOk7gCGN4NG0/wC4qrx2DqGA0Eg7rrOXJb49MOKT1c9mdOvrYgMc6QQ60zkJ6Ls1w/YbQxZWdVd/EEdXfgHxXcrfHvXbz5dfLokkJL0eQQhCgEk0IBNJMKhppJoGhCEAmkmgE0JqAVJ2z0f+4wdVgEuAD282Xt0kdVdrRjngMcT/AFOfJKsuq8M0bh3B4OrMZQbjlu6rradQObGsZHQ+CqHPYYc2DuIifypDXutYkHxHIrjzy075NtzWazjBlbH4bLbt98Vnouq1ru/ad6tNJYMhhqNIIibbeIOwwvH42t/LV0qcPhXPmXWBFhxj8ofTIDyRduQ4bL9Fni8ZqOw72iG1YDo42MdUtJYxutVaTtnpGXS6lkiy2teFYXGWi+07puOa14hrw+DMECSOe1SKGL1aYIb33kFrf9smCfBTqmDI23InlkYHBTS70ocVhdcw5xDTMkXI3dVbaIbRpDUpMAtmfmd/yKyqYWAotCnDrdVcb8al/tHQMYSP9PwJUbHkUgJIDn2aNvNPDVQ3Iy7ZAJ8p/Cy0fo/XxDTV7zj3r3s3ZIsOS6pduezXro9AYH4FFrSSXHvOJzJO/pCsE0Lpk05Ld3bFIrJJVCSWSSgSEIQCyCxWQVDQmUBQCaEKgTQEIBNCEGFWoGiSuC7S9py4upMdDcnFdX2gxho0nObEgbV45isWXvJJuSSTmvHlysmo9+HCXup2Hq06fejLZ9VIo6aoh13Bo3GY8gVUl5qENkAbYsrXBaLwzx8OtkbB+RaeJ2LkrsW37/DPF6jY3gyBPD7K3wNRhpOph8tIMGZ5Efdecdp+wgoVG6pLmuY54dPzEEbRbIrntD6RxOENX4VSp3Hthhg0nAgFwM3aYOY4L1xweOWT1PEUmVMG1uT6ZkcHA3VZisIXFpzJJDiJ2fn0UXC6cZi6ArUpaQdVzf6vmIPiF0mAdLWzeBO6bGSsZYPTHLUaNBYQPraxFmtEA7CLXV02nrYh+0NA8ti10cM4Oc5lmjMxtkqixPbWjh3GnSpvrVCbluq1knYXuIHqmGP0zll9rXSLKrnWbDRYfdaadKMxfyVPiO1uMpv1auBYASGy17X/ADZXA9FLHaJ1TOn0GzxWM8dXtvHdnSyZUcwxFjtOXVW+jsS0PYNYFxnnFrZKq0fVFUQ4XPFbWU9R3dsRkVePP41nPHfTtGlCi4DEh7c+alr6Eu3BZokk0lUJCaSgElkkqEsgkmEGRCAFkQlCgElklCoAhCEDCcICagoO2DW/t36zgBGZE+AXibHSTey9f/UbFtp4Yg5us3ntK8Xpsv8AMOuv9AvHl9dPD4ucPTaBv3iLqxoljmgtFxmJE+ijYVzWtsGuPBzfIAqXh6lZ9g0N5tMrxuO3vMlphsa2AxwLmyD8N0y12Wsw/wAT1vcX244/svTrNPw6vw5BJa5gcejg4DyWzD0nAa1Ykx/WB5BbsRjviNIZNwc2iYNrQJWO8Vur45PQNKnh6bqALnH4ziSYE5ERHH0XdaIZtIsGiOO8eQXF4fDFlZoJ+Y+YufVeh0cHqsECCbkJfley/GTSJp7El+CqUKL9WpUPdMwRIk7bxHmuUd2U+LRbRxGHexw1Q6GlzXBpBBa9siLeauMZg3uh7cmPmOVla46lUxEOD3WHyXgfQqTO60XCIGG0ezWZ8QtbTYdYAkFz3DLuiYAU3EYyhrQ2kCTcmI6lQqVF2T2zGerqzPIlT8O2lsa4nb3bjwUttNSIdUfDcC3I7h+FNr1NaCB5KVWog07Njh91X0a2s0tOzyUs0S7XegqwFpV8uT0edVwPvxXU0XSF2cGW8dOTmx1ltmsVkkvd4hEJoQYpLJJQCYSWQVGaIThCgSSyShAoQsoRCAhNCj4/FNosc9xgAE+CDgf1Oq65awXOwCSeZA2rzylo6TBa7r/8tBKs9N6RfiKrnutJzeZt/wAcjygqPTw7zYF2WU6gjg0CSOQXhld114TUSaWiztYANx1v/ZzfRWuApFpAa5o4Nq02+ILzKpaOCFyXsnaANb/ucHRyMKxw9anS7znvdHEtjgblp6KYrk6h2FcWw97osIZqnoSD9FvwGhmNIcWVMtrAczGY5qro6Ua/vU2yBmS4kWzHfMKSdPfDAguFt+U36flaslvbM39NHbTs6XNGIwgAfTF2ua7VdtmJsVq0Xjq9fuU2NLpa1wcS2Gkd4ggSrjDaYdimFtNhdskmBxglUuh/3NCtUfUpmNckFgMatrEbSIzSxvG3Wq9CwuiQylql+s7PIAA7o+6ifsng/wCmY2xHpms8BpptRtyDxjykZFS6FS9ms3S0kFZuErx+WU9QHaHpukkd4b8wtFT4tId3UcOUFXter3CXAjncHw2LmcVpTMfDOebQ13olxxi43LIOxhqDVe2DGbXCeipq2Eh2s1xO+fuCprajS6SB11geuzzRWc2+e+RB6g7fFeF7e+PTdgzqkGPsumwZBEiy5SgYyM81f6LqjKV7cN108eabWsJLJJdTmJNCagxSWaUIEmhEKjYhNCiEiE0IpBBTQgS5DtrpBurqa2zL6nP0XV1xYrjO0WDbqOe7M+wPJS+NYevPZGsSATxJjpPzeBHJKvW/iDbOAIb4beZWddpmy1tpDafDeuauyCm/IRJ2AXPIDYttSBBqX3MBtzcRn0t6LW3OAIG3eeZ9haK7i4297lYlSG41xy5ADIco9jZGzHSNKo9hhxyMxnxWmiNUjcFc4J7SADK2z40dkdNPa3UqP1ajbAOgB42HdKvMfpqq4wBq8vVV1bRLKhsAVZ6J0O1pvst09jzVen5J7Yp8FpDFHEkNokU9WJk98ye8dx/C77RTHuEObbjmsqHwaYsBPipWGxzCYFp3i3imnhnnv6Tq1Iasa0HnCqMVQz1wDvOTo3yM1b1ZNi0Fp3LRUwR/iehUy7ZxulOMKIGq6WnfcfhYuwYByjc4KZUwkSW2vccdx+61tqEWdff+V4Wae8yam0+U+qscI3goxpg3HhsW/DyFvB55Lqi6Qs4UfDVJUpdUrnrGE04QiEksklQoTAQmoMykmUIhITQgUJoTQa3Cdi5/T+BdUaflAj3C6RVmnPkIFy6QNmy5J3JWsb28h0nT1Hls5blHBH1T7RVRSqEa0naVAo4kEZrnynbrnifSbYrXUowFJoC3gs6jO7KyqEKMpV2vjuyLqxwlObHcVPpYUOHNVFHSpVYEEhXOFpV8pKuMJgRaQrWlhwLwtSM2qfRtJ+Th79hX2CwrXC4LXDcs2NbaBsJUlgESN0+CrNqVhnOaIN48wpLaoIUanWyWbhuUZLEN2j/KgVWB2Vnbt/BSm1/4u6cVqrNB+6zWp0itfuHMFbqHBR6jpN7HepOEbdMfVviyoBTGytdCI+y3rojnpIThCqMULKEkCWQShMIjJCEKghCaFAk0JoEqfTb4Y53D2AFcESuY7Y43UpkNz9Eq4+vGe0TgajuZzM+arKLyDfJW9XCGo4udvWQwLVz2u2RswleQOnUlWQqWhV9KheB5KY2kS4CPxCCww4ge+SsMK6IUHD0j4X8Lqwo0oE+7ozVphX5Ke6ooGGokRy9LqxdRtI9+4WoxUOlWNjwLT9FtwmLOW4nqkyjM8VqdS/kFFT6dePeULZ++1XBu9QcdU1IdsJaT1BnzUDF4k69iO7Hgpasm3RVXB4kbPJahWtdVlDGQeBz+q306oBtcLFq/FIeGu29VvwQg5qCImxVhhKeVlcPUy8XNALfC1UBZbl1Ry0ITQgSSySQJNCFUZIQUIBNJCBoQhBi82zhcP2xqkiGiGjaT6DfxXcuauF7dOa1k5NmOL3bhwWcvG+P1xVPDzkPQ+ils0YNrlDwVUATtOQ+qvMKOAnjdczrRaeB2NHVTKGjoMAXO36yrOm0Re6lUKZlaZtaGaODWepWBoRNt3qrhrNbko5Z3jbd5X+irOzwjJB5/YHzUluRG78rLC04C20qearKNTp6pytJHl+FrLLkcirFzZHvcVCqMMggZW9+ClWI2ksL8RhA3KiFPVfDuUrpaDosclFx2EDrwvPJ6Y3XSubhoyUikR/IdUUmQNUm2w/VbmtizvFebW2wUg7Iqy0S8juu8VXCnxW7D1C1w1st69cLqvPKbjpqbVmtWHdIW5dTlpITQgSE0kQQmhCBlJNCAQhCoE0IQa69QNE+QzK8n7c4lzqo1zfY0GQ0bua9TxswYMLxztiz/AKx1ZMH5jtK8+Tx7cU7QcG+87pV1haxlc7gHEnl9lcYSdY+8lzV0ugw1WSOMKwpVwqTD1MzwsptEwOKsyS4r2nXEcFqD5cq1uItb2N6lUXq/Jn4rEVs1sw1XeoLnCBfbHv3tWyhVvM5q7Z0nOdCYIlR6lXzskakEcUtTTKrTjLesXZHxCZqSLoYZHSF5toYAmD0W0U9i14hmqZC2Mqe/qo01yW22e80w6citjxK01Gxkqi50TXMQZt1Vu0rl9EY3vwbj0XTsuurC7jm5Jqskk0LbzJCEIBCE0AhCEAhCaAQhCDF7JzXAfqYxraTYG3ID1XoK4D9UbsYI/lcrOXjfH/p55gRHVdJgcNYe9i5zCtMg+q6LB19k/wCFzV1p3wtXL/Kye+FgytrclsI1oXnW4dJ+1TaNTystLKPks6Qj31SJW2pU3bLrCliMhzWVRsNWqjSgg81e06SqdYknmPopb3397lX4Y3JUms7JErYXZ9FIpOUSmbLeNngpCtlVsjxCh0HZtOYUphkFQq9nTtVpEgVVqqVgRbNa31CRKwcyRdDTUyqWPDh+F22jsQKjQYjguGcSCut0HUD2gixyI2L24b9PLmnW1uhIFNdDmIoTSQNCSJRWSEIRAhCEAhCEAV5h+pOP16raQ/gJdzOxCFjPx68U/s5Ojnf8BT6MgTuQhc9dS0w58lLoZpoWbE2klyzw9zyQhVK31G5LUTn74IQhGuhYnmPrKlVTkhCg24dtltrCAhCSdF9aWVYPP1krVie9PEDohCVYww5tfMGCs69OOSSFlUNuavdA14OqbHYd/A8UkLfHdVnknTqGpoQuxxhCEIEhCEH/2Q==" id="image1">
+            </div>
+            <div class="col-3 diaryImage">
+              <img src="https://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/article_thumbnails/other/cat_relaxing_on_patio_other/1800x1200_cat_relaxing_on_patio_other.jpg?resize=750px:*" id="image1">
+            </div>
+            <div class="col-3 diaryImage">
+              <img src="https://bud.healthdaily.tw/file/bud.healthdaily/f8/n7248/1.jpg" id="image1">
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+      <!-- 編輯按鈕 -->
+      <div class="text-center">
+        <button class="btn btn-outline-dark">編輯日記</button>
+      </div>
+    
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+  <!-- <script src="./script/addProgress.js"></script> -->
+</body>
+</html>

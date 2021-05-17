@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <link href="./styles/reset.css" rel="stylesheet">
+  <title>addProgress</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+  <link href="./styles/header.css" rel="stylesheet">
+  <link href="./styles/addProgress.css" rel="stylesheet">
 </head>
 <body>
   <header>
@@ -47,9 +50,47 @@
         </div>
       </div>
     </nav>
-    <link href="./styles/reset.css" rel="stylesheet">
-    <link href="./styles/header.css" rel="stylesheet">
   </header>
+  <!-- 表單 -->
+  <main class=container>
+    <div id="h1">
+      <h1>Personal Profile</h1>
+    </div>
+    <form method='POST' enctype='multipart/form-data' name='addProgress'>
+      <div class="row"> 
+        <div class="col-6">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="progressName" name="progressName" placeholder="讓你堅持下去的原因！">
+            <label for="progressName">姓名</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="motivation" name="motivation" placeholder="讓你堅持下去的原因！">
+            <label for="motivation">座右銘</label>
+          </div>
+          <!-- 上傳個人照片 -->
+          <div class="row mb-3 mt-3">
+            <div class="col-3 g-3" id="photo">
+              <input class="fileInput" type="file" id="file-0" accept="image/*" name="picture">
+              <label for="file-0" id="file-0-preview">
+                <img src="https://bit.ly/3ubuq5o" alt="" class="preview-image">
+                <div class="uploadDiv">
+                  <span>大頭貼</span>
+                </div>
+              </label>
+              <div class="text-center">
+                <div id="file-0-removebtn" class="removeBtn">Remove</div>
+              </div>
+            </div>
+          </div>
+          <div class="text-center">
+            <input class="btn btn-outline-dark" type="submit" value="Challenge Accepted!">
+          </div>
+        </div>
+      </div>
+    </form>
+  </main>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+  <script src="./script/addProgress.js"></script>
 </body>
 </html>

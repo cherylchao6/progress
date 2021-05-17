@@ -27,14 +27,21 @@ h1 {
   padding: 20px;
 }
 
+#inputForm2,
+#inputForm3 {
+  display: none;
+}
+
 .addInputForm {
   background-color: rgb(255, 255, 255);
   border: 2px solid #ffffff;
+  cursor: pointer;
 }
 
 .removeBtn {
   background-color: rgb(255, 255, 255);
   border: 2px solid #ffffff;
+  cursor: pointer;
 }
 
 .preview-image {

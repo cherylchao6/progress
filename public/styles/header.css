@@ -6,12 +6,17 @@
 .container-fluid {
   height: 100px;
   width: 100vw;
-  position: fixed; /*讓header停留在最上面*/
+  top: 0;
+}
+header {
+  position: fixed;
   top: 0;
   z-index: 5;
-  background-color: rgb(19, 34, 53);
 }
 
+#header {
+  background-color: rgb(19, 34, 53);
+}
 
 .nav-link {
   letter-spacing: 16px;
@@ -25,7 +30,7 @@
   color: #6ddad3;
 }
 
-#myprogress{
+#myprogress {
   letter-spacing: 2px;
   padding-right: 28px;
 }
@@ -37,4 +42,9 @@
 .btn-outline-success {
   color: #6ddad3;
   border-color: #6ddad3;
+}
+
+.navbar {
+  padding-bottom: 0;
+  padding-top: 0;
 }

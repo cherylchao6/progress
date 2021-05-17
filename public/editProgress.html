@@ -54,7 +54,7 @@
   <!-- 表單 -->
   <main class=container>
     <div id="h1">
-      <h1>FEEL POSITIVE TO START A NEW PROGRESS ?</h1>
+      <h1>EDIT MY PROGRESS</h1>
     </div>
     <form method='POST' enctype='multipart/form-data' name='addProgress'>
       <div class="row"> 
@@ -67,7 +67,7 @@
             <input type="text" class="form-control" id="motivation" name="motivation" placeholder="讓你堅持下去的原因！">
             <label for="motivation">動機</label>
           </div>
-          <select class="form-select mb-3" aria-label="Default select example" name="category">
+          <select class="form-select mb-3" aria-label="Default select example" name="category" id="category">
             <option selected>類別</option>
             <option value="運動" name="運動">運動</option>
             <option value="成長" name="成長">成長</option>
@@ -83,7 +83,7 @@
             <div class="col-3 g-3" id="photo">
               <input class="fileInput" type="file" id="file-0" accept="image/*" name="picture">
               <label for="file-0" id="file-0-preview">
-                <img src="https://bit.ly/3ubuq5o" alt="" class="preview-image">
+                <img src="https://bit.ly/3ubuq5o" alt="" class="preview-image" id="image">
                 <div class="uploadDiv">
                   <span>Progress封面照</span>
                 </div>
@@ -98,7 +98,7 @@
             <label class="form-check-label" for="checkPrivacy">設為隱私</label>
           </div>
           <div class="text-center">
-            <input class="btn btn-outline-dark" type="submit" value="Challenge Accepted!">
+            <input class="btn btn-outline-dark" type="submit" value="Save">
           </div>
         </div>
       </div>
@@ -106,6 +106,6 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
-  <script src="./script/addProgress.js"></script>
+  <script src="./script/editProgress.js"></script>
 </body>
 </html>
