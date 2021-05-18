@@ -3,17 +3,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const progressId = urlParams.get("progressid");
 const diaryId = urlParams.get("diaryid");
 let token = localStorage.getItem("token");
-//add new input form when click plus button
-function addInputForm (id) {
-  let formId = id+1;
-  let plusButton = document.querySelector(`#addInputForm${id}`);
-  let form = document.querySelector(`#inputForm${formId}`)
-  plusButton.addEventListener('click', ()=>{
-    form.style.display = "inline";
-  });
-}
-addInputForm(1);
-addInputForm(2);
+
 //Diary data API
 getDiaryData ();
 function getDiaryData () {
@@ -34,6 +24,7 @@ function getDiaryData () {
     .then (response => {
       if (response) {
         let data = response.data;
+        console.log(data);
         // //sql資料填入input
         let date = document.querySelector("#date");
         date.value = data.basicInfo.date;
@@ -69,13 +60,19 @@ function getDiaryData () {
         };
         let content = document.querySelector("#content");
         content.value = data.basicInfo.content;
+        let form1 = document.querySelector('#inputForm1');
         let form2 = document.querySelector('#inputForm2');
         let form3 = document.querySelector('#inputForm3');
         switch ((data.inputData).length) {
+          case 1:
+            form1.style.display = "inline";
+            break;
           case 2 :
+            form1.style.display = "inline";
             form2.style.display = "inline";
             break;
           case 3 :
+            form1.style.display = "inline";
             form2.style.display = "inline";
             form3.style.display = "inline";
             break;

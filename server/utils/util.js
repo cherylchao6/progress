@@ -18,6 +18,33 @@ function verifyToken(req, res, next) {
   }
 }
 
+function verifyAuthor (req, res, next) {
+  const authHeader = req.headers.authorization; 
+  //if (authHeader) then do authHeader.split(' ')[1] -> token = undefined or is token
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) {
+    res.sendStatus(401);
+  } else {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, result) => {
+      if (err) {
+        console.log(err)
+        return res.sendStatus(403)
+      };
+      req.user = result;
+      let progressId = req.query.progressid;
+      let userId = result.id
+      let sql = `SELECT * FROM progress WHERE id = ${progressId} AND user_id = ${userId}`;
+      let checkUser = await query(sql);
+      console.log(checkUser);
+      if (checkUser.length == 0) {
+        res.sendStatus(405);
+      } else if (checkUser.length == 1) {
+        next();
+      };
+    });
+  }
+}
+
 function verifyAdminToken (req, res, next) {
   const authHeader = req.headers.authorization; 
   //if (authHeader) then do authHeader.split(' ')[1] -> token = undefined or is token
@@ -55,5 +82,6 @@ const upload = multer({ storage: storage });
 module.exports = {
   verifyToken,
   verifyAdminToken,
+  verifyAuthor,
   upload
 }

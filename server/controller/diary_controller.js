@@ -50,7 +50,9 @@ const addDiary = async (req, res, next) => {
       };
       diaryDataArray.push(inputData);
     }
-    await Diary.addDiaryData(diaryDataArray);
+    if (diaryDataArray !== 0) {
+      await Diary.addDiaryData(diaryDataArray);
+    }
 
   } catch (err) {
     next(err);

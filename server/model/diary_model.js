@@ -23,10 +23,9 @@ const addDiaryData = async (diaryDataArray)=> {
       inputArray.push(diaryDataArray[i]['name']);
       inputArray.push(parseInt(diaryDataArray[i]['value']));
       inputArray.push(diaryDataArray[i]['unit']);
-      inputArray.push(parseInt(i)+1);
       sqlArray.push(inputArray);
     }
-    await query('INSERT INTO diary_data (diary_id, name, value, unit, input_set) VALUES ?', [sqlArray]);
+    await query('INSERT INTO diary_data (diary_id, name, value, unit) VALUES ?', [sqlArray]);
 } catch (error) {
     console.log(error);
     return {error};
@@ -47,7 +46,7 @@ const selectDiary = async (diaryid)=> {
     let diaryBasicInfo = await query(`SELECT progress_id, date, content, mood, main_image FROM diary WHERE id=${diaryid}`);
     diaryBasicInfo[0].fileName = diaryBasicInfo[0]['main_image'];
     diaryBasicInfo[0]['main_image'] = `${process.env.IMAGE_PATH}${diaryBasicInfo[0]['main_image']}`;
-    let diaryInputData = await query(`SELECT name, value, unit, input_set FROM diary_data WHERE diary_id=${diaryid}`);
+    let diaryInputData = await query(`SELECT name, value, unit FROM diary_data WHERE diary_id=${diaryid}`);
     let diaryImages = await query(`SELECT path FROM diary_images WHERE diary_id=${diaryid}`);
     for (let i in diaryImages){
       diaryImages[i].fileName = diaryImages[i].path;

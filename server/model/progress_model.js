@@ -44,6 +44,21 @@ const selectProgress = async (progressId) => {
       return {error};
   }
 }
+const selectDiaryId = async (progressId) => {
+  try {
+    let DiaryIdOfProgress = await query(`SELECT id FROM diary WHERE progress_id=${progressId}`);
+    let diaryIdArray = [];
+    if (DiaryIdOfProgress.length !== 0) {
+      for (let i in DiaryIdOfProgress) {
+        diaryIdArray.push(DiaryIdOfProgress[i].id);
+      }
+    }
+    return (diaryIdArray);
+  } catch (error) {
+      console.log(error);
+      return {error};
+  }
+}
 
 const editProgress = async (editProgressData) => {
   try {
@@ -80,5 +95,6 @@ module.exports = {
   addProgressData,
   selectProgress,
   editProgress,
-  editProgressData
+  editProgressData,
+  selectDiaryId
 }

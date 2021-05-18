@@ -1,4 +1,5 @@
 const Progress = require('../model/progress_model.js');
+const Diary = require('../model/diary_model.js');
 require('dotenv').config();
 
 const addProgress = async (req, res, next) => {
@@ -132,6 +133,7 @@ const editProgress = async (req, res, next) => {
       }
     }
     await Progress.editProgress(editProgressData);
+
     //update progress_data table
     let progressDataArray = [];
     for (let i = 1; i < 4; i++ ) {
@@ -151,6 +153,30 @@ const editProgress = async (req, res, next) => {
     }
     await Progress.editProgressData(progressData);
 
+    // //如果刪掉progress數據，日記相關數據也要刪掉
+    // let ProgressInfo = await Progress.selectProgress(req.query);
+    // console.log(ProgressInfo);
+    // let ProgressDataNameArray = [];
+    // for (let k in ProgressInfo.progressData) {
+    //   ProgressDataNameArray.push(ProgressInfo.progressData[k].name);
+    // }
+    // console.log(ProgressDataNameArray);
+    // let DiaryIdOfProgressArray = await Progress.selectDiaryId(req.query.progressid);
+    // console.log(DiaryIdOfProgressArray);
+    // for (let i in DiaryIdOfProgressArray) {
+    //   let diaryInfo = await Diary.selectDiary(DiaryIdOfProgressArray[i]);
+    //   console.log(diaryInfo);
+    //   let diaryDataNameArray = [];
+    //   for (let j in diaryInfo.inputData ) {
+    //     diaryDataNameArray.push(diaryInfo.inputData[j].name);
+    //   }
+    //   console.log(diaryDataNameArray);
+    //   for (let m in diaryDataNameArray) {
+    //     if (diaryDataNameArray[m] ) {
+
+    //     }
+    //   }
+    // }
   } catch (err) {
     next(err);
   }

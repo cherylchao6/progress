@@ -27,6 +27,7 @@ h1 {
   padding: 20px;
 }
 
+#inputForm1,
 #inputForm2,
 #inputForm3 {
   display: none;

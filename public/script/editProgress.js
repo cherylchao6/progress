@@ -1,3 +1,4 @@
+
 //add new input form when click plus button
 function addInputForm (id) {
   let formId = id+1;
@@ -17,7 +18,6 @@ const progressId = urlParams.get("progressid");
 
 
 getProgressData ();
-
 //get progress data
 function getProgressData () {
   fetch(`/api/1.0/progress?progressid=${progressId}`,{
@@ -114,9 +114,12 @@ form.addEventListener ("submit", function(ev){
       alert("請先登入");
       return window.location.assign('/signin.html');
     } else if (response.status === 403) {
-      alert("登入逾期，請重新登入");
+      alert("登入逾期");
+      return window.location.assign('/signin.html');
+    } else if (response.status === 405) {
+      alert("無權限");
       return window.location.assign('/signin.html');
     }
-  })
+  });
   ev.preventDefault();
 }, false);          
