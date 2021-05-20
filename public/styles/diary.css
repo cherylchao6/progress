@@ -1,0 +1,141 @@
+main {
+  margin-top: 100px;
+}
+
+.row1 {
+  height: 300px;
+  margin-left: 0px;
+  margin-left: 0px;
+  margin-bottom: 10px;
+}
+.user1 {
+  height: 260px;
+}
+
+.user2 {
+  height: 260px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.userDetail {
+  margin-bottom: 5px;
+  justify-content: center;
+}
+.userProfile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* #followBtn,
+#MessageBtn {
+  padding-top: 100px;
+} */
+
+/* #fans {
+  padding-top: 50px;
+} */
+
+#userProfile {
+  padding-bottom: 50px;
+}
+
+#userPicture {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.diaryPicture {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+#motto {
+  padding: 0px;
+  margin: 0px;
+  justify-content: center;
+  align-items: center;
+}
+
+.progressFile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.diaryDay {
+  width: 100%;
+  height: 250px;
+  background-image: url("../../images/circle.png");
+  background-position: center;
+  background-size: contain;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-repeat: no-repeat;
+}
+
+.diaryTime {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.diaryContent {
+  margin: 0 auto;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  border-width: 3px;
+  border-style: solid;
+  border-color: rgb(19, 34, 53);
+}
+
+.diaryMain {
+  margin: 0 auto;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+#diaryContent {
+  margin: 30px;
+  font-size: 25px;
+  letter-spacing: 2px;
+}
+
+.diaryImage {
+  height: 247px;
+  margin-bottom: 20px;
+}
+
+.btn-outline-dark {
+  color: #6ddad3;
+  border-color: #6ddad3;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#hint {
+  color: #6ddad3;
+  background-color: rgb(19, 34, 53);
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+#data {
+  justify-content: center;
+  align-items: center;
+}

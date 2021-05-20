@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./styles/reset.css" rel="stylesheet">
+  <title>addProgress</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+  <link href="./styles/header.css" rel="stylesheet">
+  <link href="./styles/addProgress.css" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid" id="header">
+        <a class="navbar-brand" href="#">
+          <img src="./images/logo.jpg" id="logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-mutated">
+            <li class="nav-item">
+              <a class="nav-link" href="#">品牌故事</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="myprogress" href="#">ＭyProgress</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                類別
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">運動</a></li>
+                <li><a class="dropdown-item" href="#">成長</a></li>
+                <li><a class="dropdown-item" href="#">體態外表</a></li>
+                <li><a class="dropdown-item" href="#">園藝</a></li>
+                <li><a class="dropdown-item" href="#">學習</a></li>
+                <li><a class="dropdown-item" href="#">居家</a></li>
+                <li><a class="dropdown-item" href="#">烹飪</a></li>
+                <li><a class="dropdown-item" href="#">作品</a></li>
+              </ul>
+          </ul>
+          <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="有人完成過......" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <!-- 表單 -->
+  <main class=container>
+    <div id="h1">
+      <h1>FEEL POSITIVE TO START A NEW PROGRESS ?</h1>
+    </div>
+    <form method='POST' enctype='multipart/form-data' name='addProgress'>
+      <div class="row"> 
+        <div class="col-10">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="progressName" name="progressName" placeholder="讓你堅持下去的原因！">
+            <label for="progressName">Progress名字</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="motivation" name="motivation" placeholder="讓你堅持下去的原因！">
+            <label for="motivation">動機</label>
+          </div>
+          <select class="form-select mb-3" aria-label="Default select example" name="category">
+            <option selected>類別</option>
+            <option value="運動" name="運動">運動</option>
+            <option value="成長" name="成長">成長</option>
+            <option value="體態外表" name="體態外表">體態外表</option>
+            <option value="園藝" name="園藝">園藝</option>
+            <option value="學習" name="學習">學習</option>
+            <option value="居家" name="居家">居家</option>
+            <option value="烹飪" name="烹飪">烹飪</option>
+            <option value="作品" name="作品">作品</option>
+          </select>
+          <div class="row row2">
+            <div class="col-4" id="inputForm1">
+              <div class="inputForm">
+                <div class="form-floating mb-3 g-3">
+                  <input type="text" class="form-control" id="input1Name" placeholder="input1Name" name="input1Name">
+                  <label for="input1Name">數據名稱</label>
+                </div>
+                <div class="form-floating mb-3 g-3">
+                  <input type="text" class="form-control" id="input1Unit" placeholder="input1Unit" name="input1Unit">
+                  <label for="input1Unit">數據單位</label>
+                </div>
+                <div class="text-end">
+                  <div class="addInputForm" id="addInputForm1">+</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-4" id="inputForm2">
+              <div class="inputForm">
+                <div class="form-floating mb-3 g-3">
+                  <input type="text" class="form-control" id="input2Name" placeholder="input2Name" name="input2Name">
+                  <label for="input2Name">數據名稱</label>
+                </div>
+                <div class="form-floating mb-3 g-3">
+                  <input type="text" class="form-control" id="input1Unit2" placeholder="input2Unit" name="input2Unit">
+                  <label for="input2Unit">數據單位</label>
+                </div>
+                <div class="text-end">
+                  <div class="addInputForm" id="addInputForm2">+</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-4" id="inputForm3">
+              <div class="inputForm">
+                <div class="form-floating mb-3 g-3">
+                  <input type="text" class="form-control" id="input3Name" placeholder="input3Name" name="input3Name">
+                  <label for="input3Name">數據名稱</label>
+                </div>
+                <div class="form-floating mb-3 g-3">
+                  <input type="text" class="form-control" id="input3Unit" placeholder="input3Unit" name="input3Unit">
+                  <label for="input3Unit">數據單位</label>
+                </div>
+                <div style="width: 251.98px; height: 24px;"></div>
+              </div>
+            </div>
+          </div>
+          <!-- 上傳progress封片照片 -->
+          <div class="row mb-3 mt-3">
+            <div class="col-3 g-3" id="photo">
+              <input class="fileInput" type="file" id="file-0" accept="image/*" name="picture">
+              <label for="file-0" id="file-0-preview">
+                <img src="https://bit.ly/3ubuq5o" alt="" class="preview-image">
+                <div class="uploadDiv">
+                  <span>Progress封面照</span>
+                </div>
+              </label>
+              <div class="text-center">
+                <div id="file-0-removebtn" class="removeBtn">Remove</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="checkPrivacy" value="1" name="checkPrivacy">
+            <label class="form-check-label" for="checkPrivacy">設為隱私</label>
+          </div>
+          <div class="text-center" id="submitBtn">
+            <input class="btn btn-outline-dark" type="submit" value="Challenge Accepted!">
+          </div>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+  <script src="./script/addProgress.js"></script>
+</body>
+</html>
