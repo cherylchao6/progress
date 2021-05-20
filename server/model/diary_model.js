@@ -66,8 +66,8 @@ const selectDiary = async (diaryid)=> {
 
 const editDiary = async (editDiaryData) => {
   try {
-    let {date, mood, content, main_image, diary_id} = editDiaryData;
-    let result = await query(`UPDATE diary SET date='${date}', mood='${mood}', content='${content}', main_image='${main_image}' WHERE id='${diary_id}'`);
+    let {date, mood, content, year, month, day, main_image, diary_id} = editDiaryData;
+    let result = await query(`UPDATE diary SET date='${date}', mood='${mood}', content='${content}', year='${year}', month='${month}', day='${day}', main_image='${main_image}' WHERE id='${diary_id}'`);
 } catch (error) {
     console.log(error);
     return {error};
@@ -83,14 +83,81 @@ const deleteDiaryImages = async (diaryid) => {
 }
 };
 
+const deleteDiaryData = async (diaryid) => {
+  try {
+    await query (`DELETE FROM diary_data WHERE diary_id = ${diaryid}`);
+} catch (error) {
+    console.log(error);
+    return {error};
+}
+};
+
+const deleteDiaryDataNotInProgress = async (data) => {
+  try {
+    let {diaryId, name} = data
+    await query (`DELETE FROM diary_data WHERE diary_id = ${diaryId} AND name='${name}'`);
+} catch (error) {
+    console.log(error);
+    return {error};
+}
+};
+
 const editDiaryData = async (diaryDataArray) => {
   try {
     for (let i in diaryDataArray) {
-      let inputSet = parseInt(i)+1
       let {diary_id, name, value, unit} = diaryDataArray[i]
-      await query (`UPDATE diary_data SET name='${name}', value='${value}', unit='${unit}' WHERE diary_id='${diary_id}' AND input_set='${inputSet}'`);
+      await query (`UPDATE diary_data SET name='${name}', value='${value}', unit='${unit}' WHERE diary_id='${diary_id}' AND name='${name}'`);
     }
     
+} catch (error) {
+    console.log(error);
+    return {error};
+}
+};
+
+const selectDiaryTime = async (progressId) => {
+  try {
+    let arr = await query (`SELECT year, month, day FROM diary WHERE progress_id =${progressId} ORDER BY date`);
+    let output = {};
+    for (let a of arr) {
+        if(output[a.year]) {
+            if (output[a.year][a.month -1]){
+                output[a.year][a.month -1][a.month].push(a.day);
+            } else {
+                output[a.year][a.month -1] = {};
+                output[a.year][a.month -1][a.month] = [];
+                output[a.year][a.month -1][a.month].push(a.day);
+            }
+        } else {
+            let year = output[a.year] = [];
+            if (year[a.month -1]){
+                year[a.month -1][a.month].push(a.day);
+            } else {
+                year[a.month -1] = {};
+                year[a.month -1][a.month] = [];
+                year[a.month -1][a.month].push(a.day);
+            }
+        }
+    }
+ 
+    // for (let k in yearArray) {
+    //   let allMonthArray = await query (`SELECT DISTINCT month FROM diary WHERE progress_id =${progressId} AND year=${yearArray[k]} ORDER BY month`);
+    //   let monthDayArray = [];
+    //   for (let l in allMonthArray) {
+    //     let allDay = await query (`SELECT day FROM diary WHERE progress_id =${progressId} AND year=${yearArray[k]} AND month=${allMonthArray[l].month} ORDER BY day`);
+    //     let allDayArray = [];
+    //     for (let p in allDay) {
+    //       allDayArray.push(allDay[p].day);
+    //     }
+    //     let month = allMonthArray[l].month;
+    //     let monthDay = {};//{月：[日array]}
+    //     monthDay[month] = allDayArray;
+    //     monthDayArray.push(monthDay);
+    //   }
+    //   let year = yearArray[k];
+    //   data[year]= monthDayArray;
+    // }  
+    return(output);
 } catch (error) {
     console.log(error);
     return {error};
@@ -109,5 +176,8 @@ module.exports = {
   editDiary,
   selectDiary,
   deleteDiaryImages,
-  editDiaryData
+  deleteDiaryData,
+  editDiaryData,
+  deleteDiaryDataNotInProgress,
+  selectDiaryTime
 };

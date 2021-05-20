@@ -153,30 +153,31 @@ const editProgress = async (req, res, next) => {
     }
     await Progress.editProgressData(progressData);
 
-    // //如果刪掉progress數據，日記相關數據也要刪掉
-    // let ProgressInfo = await Progress.selectProgress(req.query);
-    // console.log(ProgressInfo);
-    // let ProgressDataNameArray = [];
-    // for (let k in ProgressInfo.progressData) {
-    //   ProgressDataNameArray.push(ProgressInfo.progressData[k].name);
-    // }
-    // console.log(ProgressDataNameArray);
-    // let DiaryIdOfProgressArray = await Progress.selectDiaryId(req.query.progressid);
-    // console.log(DiaryIdOfProgressArray);
-    // for (let i in DiaryIdOfProgressArray) {
-    //   let diaryInfo = await Diary.selectDiary(DiaryIdOfProgressArray[i]);
-    //   console.log(diaryInfo);
-    //   let diaryDataNameArray = [];
-    //   for (let j in diaryInfo.inputData ) {
-    //     diaryDataNameArray.push(diaryInfo.inputData[j].name);
-    //   }
-    //   console.log(diaryDataNameArray);
-    //   for (let m in diaryDataNameArray) {
-    //     if (diaryDataNameArray[m] ) {
-
-    //     }
-    //   }
-    // }
+    //如果刪掉progress數據，日記相關數據也要刪掉
+    let ProgressInfo = await Progress.selectProgress(req.query);
+    let ProgressDataNameArray = [];
+    for (let k in ProgressInfo.progressData) {
+      ProgressDataNameArray.push(ProgressInfo.progressData[k].name);
+    }
+    let DiaryIdOfProgressArray = await Progress.selectDiaryId(req.query.progressid);
+    for (let i in DiaryIdOfProgressArray) {
+      let diaryInfo = await Diary.selectDiary(DiaryIdOfProgressArray[i]);
+      let diaryId = DiaryIdOfProgressArray[i];
+      let diaryDataNameArray = [];
+      for (let j in diaryInfo.inputData ) {
+        diaryDataNameArray.push(diaryInfo.inputData[j].name);
+      }
+      for (let m in diaryDataNameArray) {
+        let index = ProgressDataNameArray.indexOf(diaryDataNameArray[m]);
+        if (index == -1) { 
+          let data = {
+            diaryId: diaryId,
+            name: diaryDataNameArray[m]
+          };
+          await Diary.deleteDiaryDataNotInProgress(data);
+        }
+      }
+    }
   } catch (err) {
     next(err);
   }
@@ -198,6 +199,15 @@ const selectProgress = async (req, res, next) => {
   }
 };
 
+const selectProgressTime = async (req, res, next) => {
+  try {
+    // req.query parameter 傳回 { progressid: '1' }
+    let data = await Diary.selectDiaryTime(req.query.progressid);
+    res.status(200).send(data);
+  } catch (err) {
+    next(err);
+  }
+};
 
 
 
@@ -205,5 +215,6 @@ const selectProgress = async (req, res, next) => {
 module.exports = {
   addProgress,
   editProgress,
-  selectProgress
+  selectProgress,
+  selectProgressTime
 };

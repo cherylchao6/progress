@@ -60,6 +60,7 @@ img {
   padding-bottom: 40px;
   padding-right: 20px;
   padding-left: 20px;
+  height: 300px;
 }
 
 #motto {
@@ -95,30 +96,10 @@ img {
   align-items: center;
 }
 
-.diaryContent {
-  margin: 0 auto;
-  margin-top: 20px;
-  margin-bottom: 50px;
-  border-width: 3px;
-  border-style: solid;
-  border-color: rgb(19, 34, 53);
-}
-
 .diaryMain {
   margin: 0 auto;
   margin-top: 20px;
   margin-bottom: 50px;
-}
-
-#diaryContent {
-  margin: 30px;
-  font-size: 25px;
-  letter-spacing: 2px;
-}
-
-.diaryImage {
-  height: 247px;
-  margin-bottom: 20px;
 }
 
 .btn-outline-dark {
@@ -135,7 +116,45 @@ img {
   padding-bottom: 15px;
 }
 
-#data {
+#diarys {
+  margin-top: 20px;
+}
+
+.diaryInfo {
+  padding: 4px;
+  height: 270px;
+  margin-bottom: 10px;
+}
+.diaryImage {
+  height: 222px;
+  margin-bottom: 20px;
+  border-radius: 0 0 7px 7px;
+}
+
+#date {
+  padding-top: 5px;
+  padding-bottom: 6px;
+  background-color: rgb(19, 34, 53);
+  color: whitesmoke;
+  border-radius: 7px 7px 0 0;
+  letter-spacing: 2px;
+  font-size: 22px;
+}
+
+#dateFont {
+  margin-bottom: 0cm;
+}
+
+#diaryInfoBorder {
+  border: 2px rgb(19, 34, 53) solid;
+  height: 270px;
+  border-radius: 10px;
+}
+#addDiary {
+  font-size: 160px;
+  text-align: center;
+}
+.timescale {
   justify-content: center;
   align-items: center;
 }

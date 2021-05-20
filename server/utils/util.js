@@ -32,7 +32,7 @@ function verifyAuthor (req, res, next) {
       };
       req.user = result;
       let progressId = req.query.progressid;
-      let userId = result.id
+      let userId = result.id;
       let sql = `SELECT * FROM progress WHERE id = ${progressId} AND user_id = ${userId}`;
       let checkUser = await query(sql);
       console.log(checkUser);

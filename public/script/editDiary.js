@@ -167,7 +167,6 @@ form.addEventListener ("submit", function(ev){
   let encodefilename = splitArray[index];
   //轉為是中文檔名
   let mainImageName = decodeURIComponent(encodefilename);
-  console.log(mainImageName);
   let imageSrcArray = [];
   for (let k=1; k<9; k++) {
   selectImagesSrc(k)
@@ -178,7 +177,7 @@ form.addEventListener ("submit", function(ev){
   }
   data.append("mainImageSrc", `${mainImageSrc}`);
   data.append("imagesSrc", `${imageSrcArray}`)
-  fetch(`/editDiary?progressId=${progressId}&diaryid=${diaryId}`,{
+  fetch(`/editDiary?progressid=${progressId}&diaryid=${diaryId}`,{
     method: 'POST',
     body: data,
     headers: { 'authorization': `Bearer ${token}` },
