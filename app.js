@@ -49,7 +49,7 @@ app.post('/fakedata', async (req,res)=>{
   await query('INSERT INTO diary (progress_id, date, content, mood, main_image, year, month, day) VALUES ?', [sqlArray1]);
   //insert diaryData
   let sqlArray2 = [];
-  for (let j=1; j <= req.query.num/2; j++) {
+  for (let j=1; j < req.query.num/2 + 1; j++) {
     let value = getRandom(100,700);
     let dataArray = [];
     dataArray.push(j);
@@ -58,7 +58,7 @@ app.post('/fakedata', async (req,res)=>{
     dataArray.push('kg');
     sqlArray2.push(dataArray);
   }
-  for (let k=0; k <req.query.num/2; k++) {
+  for (let k=1; k < req.query.num/2 + 1; k++) {
     let value = getRandom(100,700);
     let dataArray = [];
     dataArray.push(k);
@@ -67,12 +67,33 @@ app.post('/fakedata', async (req,res)=>{
     dataArray.push('cm');
     sqlArray2.push(dataArray);
   };
+
+  for (let l=1; l < req.query.num/2 + 1; l++) {
+    let value = getRandom(100,700);
+    let dataArray = [];
+    dataArray.push(req.query.num/2 + l);
+    dataArray.push('體重');
+    dataArray.push(value);
+    dataArray.push('kg');
+    sqlArray2.push(dataArray);
+  }
+
+  for (let m=1; m < req.query.num/2 + 1; m++) {
+    let value = getRandom(100,700);
+    let dataArray = [];
+    dataArray.push(req.query.num/2 + m);
+    dataArray.push('腰圍');
+    dataArray.push(value);
+    dataArray.push('cm');
+    sqlArray2.push(dataArray);
+  }
+
   await query('INSERT INTO diary_data (diary_id, name, value, unit) VALUES ?', [sqlArray2]);
   
   res.send("hihihi")
 })
 //Routes:
-app.use(require('./server/routes/sign'));
+app.use(require('./server/routes/user'));
 app.use(require('./server/routes/diary'));
 app.use(require('./server/routes/progress'));
 

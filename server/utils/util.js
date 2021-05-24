@@ -45,6 +45,37 @@ function verifyAuthor (req, res, next) {
   }
 }
 
+function verifyVistor (req, res, next) {
+  const authHeader = req.headers.authorization; 
+  //if (authHeader) then do authHeader.split(' ')[1] -> token = undefined or is token
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) {
+    res.sendStatus(401);
+  } else {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, result) => {
+      if (err) {
+        console.log(err)
+        return res.sendStatus(403)
+      };
+      let progressId = req.query.progressid;
+      let userId = result.id;
+      let sql = `SELECT * FROM progress WHERE id = ${progressId} AND user_id = ${userId}`;
+      let checkUser = await query(sql);
+      if (checkUser.length == 0) {
+        result.identity = 'vistor';
+        req.user = result;
+        console.log(req.user);
+        next();
+      } else if (checkUser.length == 1) {
+        result.identity = "author";
+        req.user = result;
+        console.log(req.user);
+        next();
+      }
+    });
+  }
+}
+
 function verifyAdminToken (req, res, next) {
   const authHeader = req.headers.authorization; 
   //if (authHeader) then do authHeader.split(' ')[1] -> token = undefined or is token
@@ -70,6 +101,8 @@ function verifyAdminToken (req, res, next) {
 }
 
 
+
+
 //Multer for uploading files
 const storage = multer.diskStorage({
   destination: 'public/uploaded/',
@@ -83,5 +116,6 @@ module.exports = {
   verifyToken,
   verifyAdminToken,
   verifyAuthor,
+  verifyVistor,
   upload
 }

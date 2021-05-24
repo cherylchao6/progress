@@ -2,12 +2,11 @@
 let token = localStorage.getItem("token");
 const urlParams = new URLSearchParams(window.location.search);
 const progressId = urlParams.get("progressid");
-
 let data;
-getProgressTimeData();
-setTimeout(function(){sendDate()}, 1200);
+renderSelectTimeData();
+setTimeout(function(){appendColumns()}, 1500);
+setTimeout(function(){sendDate()}, 1700);
 getProgressData ();
-getAuthorProfile();
 let page = 0;
 function addPage () {
   page += 1;
@@ -18,56 +17,9 @@ function minusPage () {
     page -= 1;
   }
 };
-
 //get progress time data
-function getProgressTimeData () {
-  fetch(`/api/1.0/progressTime?progressid=${progressId}`,{
-    method: "GET",
-    headers: { 'authorization': `Bearer ${token}` },
-  }).then(response => {
-    if (response.status === 200 ) {
-      return response.json();
-    } else if (response.status === 401) {
-      alert('請先登入');
-      return window.location.assign('/signin');
-      } else if (response.status === 403) {
-        alert('無權限操做此網頁');
-        return window.location.assign('/signin');
-      }
-    })
-    .then (timedata => {
-      if (timedata) {
-        //appendColumns
-        data = timedata;
-        let column1 = document.querySelector("#column1");
-        let column2 = document.querySelector("#column2");
-        let yearArray = Object.keys(timedata);
-        yearArray.unshift("All");
-        let selectOptionsArray = yearArray.map(year => `<option value=${year} name=${year}>${year}</option>`);
-        let recentYear = yearArray[yearArray.length-1];
-        selectOptionsArray[selectOptionsArray.length-1]= `<option selected value=${recentYear} name=${recentYear}>${recentYear}</option>`;
-        let options = selectOptionsArray.join('');
-        column1.innerHTML = options;
-        let monthArray = [];
-        for (let k in timedata[recentYear]) {
-          for (const key of Object.keys(timedata[recentYear][k])) {
-            monthArray.push(key);
-          }
-        }
-        monthArray.unshift("All");
-        let selectOptionsMonthArray = monthArray.map(month => `<option value=${month} name=${month}>${month}</option>`);
-        let recentMonth = monthArray[monthArray.length-1];
-        selectOptionsMonthArray[selectOptionsMonthArray.length-1] = `<option selected value=${recentMonth} name=${recentMonth}>${recentMonth}</option>`;
-        let monthOptions = selectOptionsMonthArray.join('');
-        column2.innerHTML = monthOptions;
-        } 
-    });
-};
-
-
-//get Author profile 
-function getAuthorProfile () {
-  fetch(`/api/1.0/author/?progressid=${progressId}`,{
+async function getProgressTimeData () {
+  return await fetch(`/api/1.0/progressTime?progressid=${progressId}`,{
     method: "GET",
     headers: { 'authorization': `Bearer ${token}` },
   }).then(response => {
@@ -83,31 +35,37 @@ function getAuthorProfile () {
     })
     .then (data => {
       if (data) {
-        console.log(data);
-        let userName = document.querySelector('#userName');
-        userName.innerHTML = data.name;
-        let fans = document.querySelector('#fans');
-        fans.innerHTML = `粉絲 ${data.follower}`;
-        let idols = document.querySelector('#idols');
-        idols.innerHTML = `偶像 ${data.following}`;
-        let finishedProgress = document.querySelector('#finishedProgress');
-        finishedProgress.innerHTML = data.finishedProgress;
-        let motto = document.querySelector('#motto');
-        motto.innerHTML = data.motto;
-        let userPicture = document.querySelector('#userPicture');
-        userPicture.src = data.photo;
-        let editProfile = document.querySelector('#editProfile');
-        let editProgress = document.querySelector('#editProgress');
-        let editProgressLink = document.querySelector('#editProgressLink');
-        if (data.author == data.vistor) {
-          editProfile.style.display = "flex";
-          editProgress.style.display = "block";
-          //在這裡改連結
-          editProgressLink.href=`/editProgress?progressid=${progressId}`;
+        let column1 = document.querySelector("#column1");
+        let column2 = document.querySelector("#column2");
+        let yearArray = Object.keys(data);
+        yearArray.unshift("All");
+        let selectOptionsArray = yearArray.map(year => `<option value=${year} name=${year}>${year}</option>`);
+        let recentYear = yearArray[yearArray.length-1];
+        selectOptionsArray[selectOptionsArray.length-1]= `<option selected value=${recentYear} name=${recentYear}>${recentYear}</option>`;
+        let options = selectOptionsArray.join('');
+        // let select_options = yearArray.map(year => `<option value=${year} name=${year}>${year}</option>`).join('');
+        // let selects = `<option selected value="0" name="year">年</option>${select_options}`
+        column1.innerHTML = options;
+        let monthArray = [];
+        for (let k in data[recentYear]) {
+          for (const key of Object.keys(data[recentYear][k])) {
+            monthArray.push(key);
+          }
         }
-      }
+        monthArray.unshift("All");
+        let selectOptionsMonthArray = monthArray.map(month => `<option value=${month} name=${month}>${month}</option>`);
+        let recentMonth = monthArray[monthArray.length-1];
+        selectOptionsMonthArray[selectOptionsMonthArray.length-1] = `<option selected value=${recentMonth} name=${recentMonth}>${recentMonth}</option>`;
+        let monthOptions = selectOptionsMonthArray.join('');
+        column2.innerHTML = monthOptions;
+        } 
     });
+};
+
+async function renderSelectTimeData () {
+  data = await getProgressTimeData ();
 }
+
 
 //get progress data
 function getProgressData () {
@@ -179,6 +137,8 @@ function getProgressData () {
         };
         let totalDays = progressDays(firstDate, lastDate);
         diaryDay.innerHTML = `${totalDays}</br>Days`;
+        
+
       }
     });
 }
@@ -189,33 +149,48 @@ function onChangeColumn1() {
   let column2 = document.querySelector("#column2");
   let column1 = document.querySelector("#column1");
   let year = column1.options[column1.options.selectedIndex].text;
-  if (year == "All") {
-    column2.innerHTML = `<option selected value= "All" name= "All">All</option>`;
-  }
   let monthArray = [];
-  console.log(year);
-  console.log(data);
-    for (let k in data[year]) {
-      for (const key of Object.keys(data[year][k])) {
-        monthArray.push(key);
-      }
+  for (let k in data[year]) {
+    for (const key of Object.keys(data[year][k])) {
+      monthArray.push(key);
     }
-    monthArray.unshift("All");
-    let selectOptionsMonthArray = monthArray.map(month => `<option value=${month} name=${month}>${month}</option>`);
-    let recentMonth = monthArray[monthArray.length-1];
-    if (year == "All") {
-      console.log("here");
-      selectOptionsMonthArray[0] = `<option selected value= "All" name= "All">All</option>`;
-    }
-    selectOptionsMonthArray[selectOptionsMonthArray.length-1] = `<option selected value=${recentMonth} name=${recentMonth}>${recentMonth}</option>`;
-    let monthOptions = selectOptionsMonthArray.join('');
-    column2.innerHTML = monthOptions;
+  }
+  monthArray.unshift("All");
+  let selectOptionsMonthArray = monthArray.map(month => `<option value=${month} name=${month}>${month}</option>`);
+  let recentMonth = monthArray[monthArray.length-1];
+  selectOptionsMonthArray[selectOptionsMonthArray.length-1] = `<option selected value=${recentMonth} name=${recentMonth}>${recentMonth}</option>`;
+  let monthOptions = selectOptionsMonthArray.join('');
+  column2.innerHTML = monthOptions;
 };
 
 
 
 
-
+function appendColumns() {
+  let column1 = document.querySelector("#column1");
+  let column2 = document.querySelector("#column2");
+  let yearArray = Object.keys(data);
+  yearArray.unshift("All");
+  let selectOptionsArray = yearArray.map(year => `<option value=${year} name=${year}>${year}</option>`);
+  let recentYear = yearArray[yearArray.length-1];
+  selectOptionsArray[selectOptionsArray.length-1]= `<option selected value=${recentYear} name=${recentYear}>${recentYear}</option>`;
+  let options = selectOptionsArray.join('');
+  // let select_options = yearArray.map(year => `<option value=${year} name=${year}>${year}</option>`).join('');
+  // let selects = `<option selected value="0" name="year">年</option>${select_options}`
+  column1.innerHTML = options;
+  let monthArray = [];
+  for (let k in data[recentYear]) {
+    for (const key of Object.keys(data[recentYear][k])) {
+      monthArray.push(key);
+    }
+  }
+  monthArray.unshift("All");
+  let selectOptionsMonthArray = monthArray.map(month => `<option value=${month} name=${month}>${month}</option>`);
+  let recentMonth = monthArray[monthArray.length-1];
+  selectOptionsMonthArray[selectOptionsMonthArray.length-1] = `<option selected value=${recentMonth} name=${recentMonth}>${recentMonth}</option>`;
+  let monthOptions = selectOptionsMonthArray.join('');
+  column2.innerHTML = monthOptions;
+}
 //draw canvas
 let ctx = document.getElementById('chart').getContext('2d');
 let myChart = new Chart(ctx, {
@@ -279,8 +254,7 @@ function sendDate () {
     method: 'POST',
     body: JSON.stringify(data),
     headers: new Headers({
-      'Content-Type': 'application/json',
-      'authorization': `Bearer ${token}`
+      'Content-Type': 'application/json'
     })
   })
   .then(function (response) {
@@ -361,13 +335,9 @@ function sendDate () {
         diaryInfo.dataset.bsPlacement = "bottom";
         diaryInfo.title = `${data.diarys[i].content}`;
         diarys.appendChild(diaryInfo);
-        let diaryLink = document.createElement("a");
-        diaryLink.href = `/diary?progressid=${progressId}&diaryid=${data.diarys[i].id}`;
-        diaryLink.style = "text-decoration:none;"
-        diaryInfo.appendChild(diaryLink);
         let diaryInfoBorder = document.createElement("div");
         diaryInfoBorder.id = "diaryInfoBorder";
-        diaryLink.appendChild(diaryInfoBorder);
+        diaryInfo.appendChild(diaryInfoBorder);
         let date = document.createElement("div");
         date.className = "text-center";
         date.id = "date";

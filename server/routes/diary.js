@@ -3,7 +3,7 @@ const router = express.Router();
 const path = require('path');
 router.use(express.json());
 router.use(express.urlencoded({ extended: false }));
-const { verifyToken, verifyAuthor, verifyAdminToken, upload } = require('../utils/util');
+const { verifyToken, verifyAuthor, verifyAdminToken, verifyVistor, upload } = require('../utils/util');
 const {addDiary, editDiary, selectDiary} = require("../controller/diary_controller");
 
 //addDiary
@@ -17,7 +17,7 @@ router.get('/editDiary', (req, res) => {
   res.sendFile(path.join(__dirname + '../../../public/' + 'editDiary.html'));
 });
 router.post('/editDiary', verifyAuthor, upload.fields(fields), editDiary);
-router.get("/api/1.0/diary", verifyAdminToken, selectDiary);
+router.get("/api/1.0/diary", verifyVistor, selectDiary);
 //diary頁面
 router.get('/diary', (req, res) => {
   res.sendFile(path.join(__dirname + '../../../public/' + 'diary.html'));
