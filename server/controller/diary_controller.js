@@ -32,7 +32,6 @@ const addDiary = async (req, res, next) => {
       };
     };
     let insertDiaryId= await Diary.addDiary(diaryData); 
-    
     //insert diaryImages table
 
     if (reqImages["images"]) {

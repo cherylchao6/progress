@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
-const { query } = require('../model/mysql');
+const { pool } = require('../model/mysql');
 // authorization: Bearer <access_token>
 function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization; 
@@ -34,11 +34,11 @@ function verifyAuthor (req, res, next) {
       let progressId = req.query.progressid;
       let userId = result.id;
       let sql = `SELECT * FROM progress WHERE id = ${progressId} AND user_id = ${userId}`;
-      let checkUser = await query(sql);
+      let checkUser = await pool.query(sql);
       console.log(checkUser);
-      if (checkUser.length == 0) {
+      if (checkUser[0].length == 0) {
         res.sendStatus(405);
-      } else if (checkUser.length == 1) {
+      } else if (checkUser[0].length == 1) {
         next();
       };
     });
@@ -55,21 +55,19 @@ function verifyVistor (req, res, next) {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, result) => {
       if (err) {
         console.log(err)
-        return res.sendStatus(403)
+        return res.sendStatus(403);
       };
       let progressId = req.query.progressid;
       let userId = result.id;
       let sql = `SELECT * FROM progress WHERE id = ${progressId} AND user_id = ${userId}`;
-      let checkUser = await query(sql);
-      if (checkUser.length == 0) {
+      let checkUser = await pool.query(sql);
+      if (checkUser[0].length == 0) {
         result.identity = 'vistor';
         req.user = result;
-        console.log(req.user);
         next();
-      } else if (checkUser.length == 1) {
+      } else if (checkUser[0].length == 1) {
         result.identity = "author";
         req.user = result;
-        console.log(req.user);
         next();
       }
     });

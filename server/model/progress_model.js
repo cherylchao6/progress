@@ -1,10 +1,10 @@
 const { response } = require('express');
-const { query } = require ('./mysql');
+const { pool } = require ('./mysql');
 
 const addProgress = async (addProgress) => {
   try {
-      let result  = await query('INSERT INTO progress SET ?', addProgress);
-      let progressId = result.insertId;
+      let result  = await pool.query('INSERT INTO progress SET ?', addProgress);
+      let progressId = result[0].insertId;
       return progressId;
   } catch (error) {
       console.log(error);
@@ -22,7 +22,7 @@ const addProgressData = async (progressDataArray) => {
         inputArray.push(progressDataArray[i]['unit']);
         sqlArray.push(inputArray);
       }
-      await query('INSERT INTO progress_data (progress_id, name, unit) VALUES ?', [sqlArray]);
+      await pool.query('INSERT INTO progress_data (progress_id, name, unit) VALUES ?', [sqlArray]);
   } catch (error) {
       console.log(error);
       return {error};
@@ -32,11 +32,11 @@ const addProgressData = async (progressDataArray) => {
 const selectProgress = async (progressId) => {
   try {
     let id = progressId.progressid;
-    let progress = await query(`SELECT name, category, motivation, public, picture FROM progress WHERE id=${id}`);
-    let progressData = await query(`SELECT name, unit FROM progress_data WHERE progress_id=${id}`);
+    let progress = await pool.query(`SELECT name, category, motivation, public, picture FROM progress WHERE id=${id}`);
+    let progressData = await pool.query(`SELECT name, unit FROM progress_data WHERE progress_id=${id}`);
     let progressInfo = {
-      progress: progress[0],
-      progressData: progressData
+      progress: progress[0][0],
+      progressData: progressData[0]
     };
     return progressInfo;
   } catch (error) {
@@ -47,22 +47,22 @@ const selectProgress = async (progressId) => {
 
 const selectProgressWithDiarys = async (progressId) => {
   try {
-    let progress = await query(`SELECT name, category, motivation, public, picture, status FROM progress WHERE id=${progressId}`);
-    progress[0].picture = `${process.env.IMAGE_PATH}${progress[0].picture}`
-    let progressData = await query(`SELECT name, unit FROM progress_data WHERE progress_id=${progressId}`);
-    let diarys = await query(`SELECT date, main_image FROM diary WHERE progress_id=${progressId} ORDER BY date`);
-    for ( let i in diarys) {
-      diarys[i].main_image = `${process.env.IMAGE_PATH}${diarys[i].main_image}`
+    let progress = await pool.query(`SELECT name, category, motivation, public, picture, status FROM progress WHERE id=${progressId}`);
+    progress[0][0].picture = `${process.env.IMAGE_PATH}${progress[0][0].picture}`
+    let progressData = await pool.query(`SELECT name, unit FROM progress_data WHERE progress_id=${progressId}`);
+    let diarys = await pool.query(`SELECT date, main_image FROM diary WHERE progress_id=${progressId} ORDER BY date`);
+    for ( let i in diarys[0]) {
+      diarys[0][i].main_image = `${process.env.IMAGE_PATH}${diarys[0][i].main_image}`
     }
     let data = {
-      name: progress[0].name,
-      category: progress[0].category,
-      motivation: progress[0].motivation,
-      public: progress[0].public,
-      status: progress[0].status,
-      picture: progress[0].picture,
-      datatype: progressData,
-      diarys: diarys,
+      name: progress[0][0].name,
+      category: progress[0][0].category,
+      motivation: progress[0][0].motivation,
+      public: progress[0][0].public,
+      status: progress[0][0].status,
+      picture: progress[0][0].picture,
+      datatype: progressData[0],
+      diarys: diarys[0],
     };
     return data;
   } catch (error) {
@@ -73,24 +73,23 @@ const selectProgressWithDiarys = async (progressId) => {
 
 const selectProgressWithDiarysVistor = async (progressId) => {
   try {
-    let progress = await query(`SELECT name, category, motivation, public, picture, status FROM progress WHERE id=${progressId} and public = "0"`);
-    console.log(progress);
-    if (progress.length !== 0) {
-      progress[0].picture = `${process.env.IMAGE_PATH}${progress[0].picture}`
-      let progressData = await query(`SELECT name, unit FROM progress_data WHERE progress_id=${progressId}`);
+    let progress = await pool.query(`SELECT name, category, motivation, public, picture, status FROM progress WHERE id=${progressId} and public = "0"`);
+    if (progress[0].length !== 0) {
+      progress[0][0].picture = `${process.env.IMAGE_PATH}${progress[0][0].picture}`
+      let progressData = await pool.query(`SELECT name, unit FROM progress_data WHERE progress_id=${progressId}`);
       let diarys = await query(`SELECT date, main_image FROM diary WHERE progress_id=${progressId} ORDER BY date`);
-      for ( let i in diarys) {
-        diarys[i].main_image = `${process.env.IMAGE_PATH}${diarys[i].main_image}`
+      for ( let i in diarys[0]) {
+        diarys[0][i].main_image = `${process.env.IMAGE_PATH}${diarys[0][i].main_image}`
       }
       let data = {
-        name: progress[0].name,
-        category: progress[0].category,
-        motivation: progress[0].motivation,
-        public: progress[0].public,
-        status: progress[0].status,
-        picture: progress[0].picture,
-        datatype: progressData,
-        diarys: diarys,
+        name: progress[0][0].name,
+        category: progress[0][0].category,
+        motivation: progress[0][0].motivation,
+        public: progress[0][0].public,
+        status: progress[0][0].status,
+        picture: progress[0][0].picture,
+        datatype: progressData[0],
+        diarys: diarys[0],
       };
       return data;
     } else {
@@ -105,11 +104,11 @@ const selectProgressWithDiarysVistor = async (progressId) => {
 
 const selectDiaryId = async (progressId) => {
   try {
-    let DiaryIdOfProgress = await query(`SELECT id FROM diary WHERE progress_id=${progressId}`);
+    let DiaryIdOfProgress = await pool.query(`SELECT id FROM diary WHERE progress_id=${progressId}`);
     let diaryIdArray = [];
-    if (DiaryIdOfProgress.length !== 0) {
-      for (let i in DiaryIdOfProgress) {
-        diaryIdArray.push(DiaryIdOfProgress[i].id);
+    if (DiaryIdOfProgress[0].length !== 0) {
+      for (let i in DiaryIdOfProgress[0]) {
+        diaryIdArray.push(DiaryIdOfProgress[0][i].id);
       }
     }
     return (diaryIdArray);
@@ -122,7 +121,7 @@ const selectDiaryId = async (progressId) => {
 const editProgress = async (editProgressData) => {
   try {
     let {progressId, name, motivation, category, picture, public} = editProgressData;
-    let result = await query(`UPDATE progress SET name ='${name}', motivation='${motivation}', category='${category}', picture='${picture}', public='${public}' WHERE id='${progressId}'`);
+    let result = await pool.query(`UPDATE progress SET name ='${name}', motivation='${motivation}', category='${category}', picture='${picture}', public='${public}' WHERE id='${progressId}'`);
   } catch (error) {
       console.log(error);
       return {error};
@@ -132,7 +131,7 @@ const editProgress = async (editProgressData) => {
 const editProgressData = async (progressData) => {
   try {
     let {progress_id} =  progressData;
-    await query(`DELETE FROM progress_data WHERE progress_id=${progress_id}`);
+    await pool.query(`DELETE FROM progress_data WHERE progress_id=${progress_id}`);
     let sqlArray = [];
       for (let i in progressData.data){
         let inputArray = [];
@@ -141,7 +140,7 @@ const editProgressData = async (progressData) => {
         inputArray.push(progressData.data[i]['unit']);
         sqlArray.push(inputArray);
       }
-      await query('INSERT INTO progress_data (progress_id, name, unit) VALUES ?', [sqlArray]);
+      await pool.query('INSERT INTO progress_data (progress_id, name, unit) VALUES ?', [sqlArray]);
     
 } catch (error) {
     console.log(error);
@@ -151,19 +150,19 @@ const editProgressData = async (progressData) => {
 
 const selectProgressAuthor = async (progressid) => {
   try {
-    let authorid = await query (`SELECT user_id FROM progress WHERE id = ${progressid}`);
-    let authorProfile = await query (`SELECT id, name, photo, motto FROM users WHERE id=${authorid[0].user_id}`);
-    let finishedProgress = await query (`SELECT id FROM progress WHERE user_id=${authorid[0].user_id} AND status =1`);
-    let follower = await query (`SELECT follower_id FROM follow WHERE following_id = ${authorid[0].user_id}`);
-    let following = await query (`SELECT following_id FROM follow WHERE follower_id = ${authorid[0].user_id}`);
+    let authorid = await pool.query (`SELECT user_id FROM progress WHERE id = ${progressid}`);
+    let authorProfile = await pool.query (`SELECT id, name, photo, motto FROM users WHERE id=${authorid[0][0].user_id}`);
+    let finishedProgress = await pool.query (`SELECT id FROM progress WHERE user_id=${authorid[0][0].user_id} AND status =1`);
+    let follower = await pool.query (`SELECT follower_id FROM follow WHERE following_id = ${authorid[0][0].user_id}`);
+    let following = await pool.query (`SELECT following_id FROM follow WHERE follower_id = ${authorid[0][0].user_id}`);
     let data = {
-      author: authorProfile[0].id,
-      name: authorProfile[0].name,
-      photo: `${process.env.IMAGE_PATH}${authorProfile[0].photo}`,
-      motto: authorProfile[0].motto,
-      finishedProgress: finishedProgress.length,
-      follower: follower.length,
-      following: following.length,
+      author: authorProfile[0][0].id,
+      name: authorProfile[0][0].name,
+      photo: `${process.env.IMAGE_PATH}${authorProfile[0][0].photo}`,
+      motto: authorProfile[0][0].motto,
+      finishedProgress: finishedProgress[0].length,
+      follower: follower[0].length,
+      following: following[0].length,
     }
     return(data);
 } catch (error) {
@@ -174,13 +173,13 @@ const selectProgressAuthor = async (progressid) => {
 
 const selectProgressBasicInfo = async (progressId) => {
   try {
-    let progressBasicInfo = await query(`SELECT name, category, motivation FROM progress WHERE id=${progressId}`);
-    let firstDiary = await query(`SELECT MIN(date) FROM diary WHERE progress_id=${progressId}`);
+    let progressBasicInfo = await pool.query(`SELECT name, category, motivation FROM progress WHERE id=${progressId}`);
+    let firstDiary = await pool.query(`SELECT MIN(date) FROM diary WHERE progress_id=${progressId}`);
     let progressInfo = {
-      name: progressBasicInfo[0].name,
-      category: progressBasicInfo[0].category,
-      motivation: progressBasicInfo[0].motivation,
-      firstDiaryDate: firstDiary[0]['MIN(date)']
+      name: progressBasicInfo[0][0].name,
+      category: progressBasicInfo[0][0].category,
+      motivation: progressBasicInfo[0][0].motivation,
+      firstDiaryDate: firstDiary[0][0]['MIN(date)']
     }
     return (progressInfo);
   } catch (error) {

@@ -127,7 +127,6 @@ function getProgressData () {
     })
     .then (data => {
       if (data) {
-        //sql資料填入input
         console.log(data);
         //做gif
         let images = [];

@@ -1,7 +1,98 @@
 //basic setting
 const express = require('express');
 const app = express();
+
 const path = require('path');
+
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server)
+const Chat = require('./server/model/chat_model.js');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
+
+//socket 
+//middleware
+io.use((socket, next) => {
+  const token = socket.handshake.auth.token;
+  console.log(token);
+  if (token === null) {
+    const err = new Error("未登入");
+    next(err);
+  } else {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, result) => {
+      if (err) {
+        const err = new Error("登入逾期");
+        next(err);
+      }
+      socket.userInfo = result;
+      next();
+    });
+  }
+});
+
+io.on('connection', (socket) => {
+  console.log(socket.userInfo)
+  socket.emit("userInfo", socket.userInfo);
+  //emit userName
+  //登入localstorage放userName
+  //room事件
+  // 拿userID去選出room;
+  // 丟user姓名，跟該所有room的資訊給前端？
+  // sql拿回來是一個array;
+  // sql room Array 
+  // [
+  //   {
+  //     roomid: 1,
+  //     userPicture:網址,
+  //     userName:趙姿涵,
+  //     lastMessage: gerhabes,
+  //     lastMessageTime:ddvcw,
+  //     message:[
+  //       {msg,
+  //        sourse(名字),
+  //        time
+  //       },
+  //       { msg,
+  //         sourse,
+  //         time
+  //        },
+  //     ]
+        
+
+  //   },
+  //   {
+  //     roomid: 2,
+  //     userPicture:網址,
+  //     userName:趙姿涵,
+  //     lastMessage: gerhabes,
+  //     lastMessageTime:ddvcw
+  //   },
+  // ]
+  // socket.emit("rooms", rooms);
+
+
+  console.log('a user connected');
+  socket.on('chat message', (msg) => {
+    console.log('message: ' + msg);
+  })
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+  ;
+});
+
+
+// app.set("io", io);
+// const chat = require('./server/model/chat_model.js').chat
+// app.get('/chatroom',(req)=>{
+//   chat(req);
+// })
+
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
@@ -9,8 +100,26 @@ app.use(express.static('public'));
 //美化json排版
 app.set('json spaces', 2);
 
-app.listen(4000, () => {
+
+
+server.listen(4000, () => {
   console.log('the server is running on 4000');
+});
+
+
+//Routes:
+app.use(require('./server/routes/user'));
+app.use(require('./server/routes/diary'));
+app.use(require('./server/routes/progress'));
+
+
+app.use((err, req, res, next)=> {
+  console.log(err);
+  res.status(500).send(err);
+});
+
+app.use((req, res)=> {
+res.sendStatus(404);
 });
 
 
@@ -91,17 +200,5 @@ app.post('/fakedata', async (req,res)=>{
   await query('INSERT INTO diary_data (diary_id, name, value, unit) VALUES ?', [sqlArray2]);
   
   res.send("hihihi")
-})
-//Routes:
-app.use(require('./server/routes/user'));
-app.use(require('./server/routes/diary'));
-app.use(require('./server/routes/progress'));
-
-app.use((err, req, res, next)=> {
-  console.log(err);
-  res.status(500).send(err);
 });
 
-app.use((req, res)=> {
-res.sendStatus(404);
-});

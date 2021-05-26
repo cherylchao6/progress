@@ -298,7 +298,6 @@ const selectProgressAuthor = async (req, res, next) => {
     // req.query parameter 傳回 { progressid: '1' };
     let data = await Progress.selectProgressAuthor(req.query.progressid);
     data.vistor = req.user.id
-    console.log(data);
     res.status(200).send(data);
   } catch (err) {
     next(err);
