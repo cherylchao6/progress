@@ -60,6 +60,7 @@ img {
   padding-bottom: 40px;
   padding-right: 20px;
   padding-left: 20px;
+  height: 300px;
 }
 
 #motto {
@@ -86,6 +87,7 @@ img {
   justify-content: center;
   align-items: center;
   background-repeat: no-repeat;
+  text-align: center;
 }
 
 .diaryTime {
@@ -138,4 +140,46 @@ img {
 #data {
   justify-content: center;
   align-items: center;
+}
+
+#editProfile {
+  color: #6ddad3;
+  border: 2px solid #6ddad3;
+  width: 140px;
+  border-radius: 10px;  
+  display: none;
+}
+#editProfileLink, #editProgressLink {
+  text-decoration:none
+}
+
+#editProfile:hover {
+  background-color: rgb(19, 34, 53);
+}
+#followBtn:hover {
+  background-color: rgb(19, 34, 53);
+}
+#MessageBtn:hover {
+  background-color: rgb(19, 34, 53);
+}
+
+#followBtn, #MessageBtn {
+  color: #6ddad3;
+  border: 2px solid #6ddad3;
+  border-radius: 10px;
+  width: 60px;
+  margin: 4px;
+}
+
+#moreAction {
+  width: 140px;
+}
+
+#editDiary {
+  display: none;
+}
+
+#progressLink {
+  text-decoration:none;
+  color: black;
 }

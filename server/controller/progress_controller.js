@@ -2,6 +2,7 @@ const Progress = require('../model/progress_model.js');
 const Diary = require('../model/diary_model.js');
 require('dotenv').config();
 
+
 const addProgress = async (req, res, next) => {
   try {
     //insert progress table
@@ -209,6 +210,99 @@ const selectProgressTime = async (req, res, next) => {
   }
 };
 
+const selectProgressChart = async (req, res, next) => {
+  try {
+    //req.body = { year: '2019', month: '10', datatype: 'mood' };
+    // req.query parameter 傳回 { progressid: '1' };
+    let data;
+    let {year, month, datatype} = req.body
+    let {progressid} = req.query
+    let page = (req.query.paging) * 8;
+    let sql = {
+      year,
+      month,
+      datatype,
+      progressid
+    }
+    let progressInfo = await Progress.selectProgress(req.query);
+    if (progressInfo.progress.public == "1") {
+      if (req.user.identity == "author") {
+        if (datatype == "心情") {
+          data = await Diary.selectDiaryMood(sql)
+          //X,Y object
+        } else {
+          data = await Diary.selectDiaryChart(sql);
+        }
+        //拿diary
+        let diarySql = {
+          year,
+          month,
+          progressid,
+          page
+        }
+        //加入日記資料
+        let diarydata = await Diary.selectDiaryPage(diarySql);
+        data.diarys = diarydata.diarys;
+        if (req.query.paging == 0 && diarydata.allResultsLength > 8) {
+          data.next_paging = 1;
+        } else if (req.query.paging < diarydata.allPages - 1) {
+          data.next_paging = parseInt(req.query.paging) + 1;
+        }
+      } else {data={}};
+    } else if (progressInfo.progress.public == "0") {
+      if (datatype == "心情") {
+        data = await Diary.selectDiaryMood(sql)
+        //X,Y object
+      } else {
+        data = await Diary.selectDiaryChart(sql);
+      }
+      //拿diary
+      let diarySql = {
+        year,
+        month,
+        progressid,
+        page
+      }
+      //加入日記資料
+      let diarydata = await Diary.selectDiaryPage(diarySql);
+      data.diarys = diarydata.diarys;
+      if (req.query.paging == 0 && diarydata.allResultsLength > 8) {
+        data.next_paging = 1;
+      } else if (req.query.paging < diarydata.allPages - 1) {
+        data.next_paging = parseInt(req.query.paging) + 1;
+      }
+    };
+    res.status(200).send(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const selectProgressWithDiarys = async (req, res, next) => {
+  try {
+    let data;
+    // req.query parameter 傳回 { progressid: '1' };
+    if (req.user.identity == "author") {
+      data = await Progress.selectProgressWithDiarys(req.query.progressid);
+    } else if (req.user.identity == "vistor") {
+      data = await Progress.selectProgressWithDiarysVistor(req.query.progressid);
+    }
+    res.status(200).send(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const selectProgressAuthor = async (req, res, next) => {
+  try {
+    // req.query parameter 傳回 { progressid: '1' };
+    let data = await Progress.selectProgressAuthor(req.query.progressid);
+    data.vistor = req.user.id
+    res.status(200).send(data);
+  } catch (err) {
+    next(err);
+  }
+};
 
 
 
@@ -216,5 +310,8 @@ module.exports = {
   addProgress,
   editProgress,
   selectProgress,
-  selectProgressTime
+  selectProgressTime,
+  selectProgressChart,
+  selectProgressWithDiarys,
+  selectProgressAuthor
 };

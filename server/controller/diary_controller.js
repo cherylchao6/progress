@@ -1,4 +1,6 @@
 const Diary = require('../model/diary_model.js');
+const Progress = require('../model/progress_model.js');
+
 const addDiary = async (req, res, next) => {
   try {
     //insert diary table
@@ -30,7 +32,6 @@ const addDiary = async (req, res, next) => {
       };
     };
     let insertDiaryId= await Diary.addDiary(diaryData); 
-    
     //insert diaryImages table
 
     if (reqImages["images"]) {
@@ -67,11 +68,25 @@ const addDiary = async (req, res, next) => {
 
 const selectDiary = async (req, res, next) => {
   try {
-    let {diaryid} = req.query;
-    let diaryData = await Diary.selectDiary(diaryid);
-    res.status(200).send({
-      data : diaryData
-    });
+    let {diaryid,progressid} = req.query;
+    let progressData = await Progress.selectProgress(req.query);
+    if (progressData.progress.public == "1") {
+      if (req.user.identity == "author") {
+        let diaryData = await Diary.selectDiary(diaryid);
+        let progressInfo = await Progress.selectProgressBasicInfo(progressid);
+        res.status(200).send({
+          data : diaryData,
+          progressInfo
+        });
+      } else {res.status(200).send({});}
+    } else if (progressData.progress.public == "0") {
+        let diaryData = await Diary.selectDiary(diaryid);
+        let progressInfo = await Progress.selectProgressBasicInfo(progressid);
+        res.status(200).send({
+          data : diaryData,
+          progressInfo
+        });
+      }
   } catch (err) {
     next(err);
   }
