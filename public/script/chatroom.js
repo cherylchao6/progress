@@ -63,13 +63,35 @@ socket.on("roomList", roomList => {
     link.className = "clearfix";
     frinedLi.appendChild(link);
     let friendImg = document.createElement("img");
-    friendImg.src=roomList[k].image;
+    if (roomList[k].image == "") {
+      console.log(roomList[k].room_id)
+      for (let p in roomList[k].member) {
+        // console.log(roomList[k].member[p])
+        if (roomList[k].member[p].name !== myName) {
+          friendImg.src= roomList[k].member[p].photo;
+        } else {
+          friendImg.src= roomList[k].member[p].photo;
+        }
+      }
+    } else {
+      friendImg.src=roomList[k].image;
+    }
     friendImg.className = "img-circle friendImg";
     link.appendChild(friendImg);
     let NameDiv = document.createElement("div");
     NameDiv.className = "friend-name";
     let Name = document.createElement("strong");
-    Name.innerHTML = roomList[k].name;
+    if (roomList[k].name == "") {
+      for (let j in roomList[k].member) {
+        if (roomList[k].member[j].name !== myName) {
+          Name.innerHTML = roomList[k].member[j].name;
+        } else {
+          Name.innerHTML = roomList[k].member[j].name;
+        }
+      }
+    } else {
+      Name.innerHTML = roomList[k].name;
+    }  
     link.appendChild(Name);
     let msgDiv = document.createElement("div");
     msgDiv.className = "last-message text-muted";
@@ -107,6 +129,7 @@ socket.on("roomList", roomList => {
 function getMsg (roomID) {
   console.log(`get room ${roomID}`);
   socket.emit("getRoomMsg", roomID);
+  
 }
 
 

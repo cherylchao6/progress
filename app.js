@@ -36,6 +36,11 @@ io.on('connection', (socket) => {
   //給前端連線者資料
   socket.emit("userInfo", socket.userInfo);
   ChatModel.selectRooms(socket);
+  socket.on("getRoomMsg", roomID =>{
+    console.log("getRoomMsg");
+    ChatModel.getRoomMsg(roomID);
+  });
+  
 
 
   // socket.on("paging", paging => {
