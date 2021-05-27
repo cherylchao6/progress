@@ -37,6 +37,7 @@ function getProgressTimeData () {
     })
     .then (timedata => {
       if (timedata) {
+        console.log(timedata);
         //appendColumns
         data = timedata;
         let column1 = document.querySelector("#column1");
@@ -49,11 +50,15 @@ function getProgressTimeData () {
         let options = selectOptionsArray.join('');
         column1.innerHTML = options;
         let monthArray = [];
+        console.log(timedata[recentYear]);
         for (let k in timedata[recentYear]) {
-          for (const key of Object.keys(timedata[recentYear][k])) {
-            monthArray.push(key);
+          if (timedata[recentYear][k] !== null) {
+            for (const key of Object.keys(timedata[recentYear][k])) {
+              monthArray.push(key);
+            }
           }
         }
+        console.log(monthArray);
         monthArray.unshift("All");
         let selectOptionsMonthArray = monthArray.map(month => `<option value=${month} name=${month}>${month}</option>`);
         let recentMonth = monthArray[monthArray.length-1];

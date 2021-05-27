@@ -8,16 +8,13 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server)
-const Chat = require('./server/model/chat_model.js');
+const ChatModel = require('./server/model/chat_model.js');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-
-
 //socket 
 //middleware
 io.use((socket, next) => {
   const token = socket.handshake.auth.token;
-  console.log(token);
   if (token === null) {
     const err = new Error("未登入");
     next(err);
@@ -34,22 +31,42 @@ io.use((socket, next) => {
 });
 
 io.on('connection', (socket) => {
-  console.log(socket.userInfo)
+  // console.log("connect")
+  // console.log(socket.userInfo);
+  //給前端連線者資料
   socket.emit("userInfo", socket.userInfo);
+  ChatModel.selectRooms(socket);
+
+
+  // socket.on("paging", paging => {
+  //   console.log(socket);
+  //   console.log(`hear ${paging}`);
+    
+  // });
+  // 拿userID去選出room;
+  
   //emit userName
   //登入localstorage放userName
   //room事件
   // 拿userID去選出room;
-  // 丟user姓名，跟該所有room的資訊給前端？
   // sql拿回來是一個array;
   // sql room Array 
   // [
   //   {
   //     roomid: 1,
-  //     userPicture:網址,
-  //     userName:趙姿涵,
-  //     lastMessage: gerhabes,
-  //     lastMessageTime:ddvcw,
+        //  room_image: 預設是聊天的對象頭貼網址(若是progress開的群聊就是progrespic);
+        //  room_name: 預設是聊天的對象(若是progress開的群聊就是progressName);
+        //  lastMessage: gerhabes,
+  //        lastMessageTime:ddvcw,
+        // },
+
+        //  members:{
+        //    1:{
+        //      name:趙姿涵,
+        //      picture:網址,
+        //    }
+        //  }
+
   //     message:[
   //       {msg,
   //        sourse(名字),

@@ -240,9 +240,36 @@ body {
 
 #friend-list {
   height: calc(100vh - 160px);
-  overflow-y:auto;
+  overflow-y:scroll;
 }
 #chat-message {
   height: calc(100vh - 69px);
   overflow-y:auto;
+}
+
+
+
+.friendImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.unreadNum {
+  background-color: rgb(170, 35, 35);
+  border-radius: 10px;
+  height: 20px;
+  width: 40px;
+  margin-top: 1px;
+  color: #eee;
+  padding-top: 1px;
+}
+
+.clearfix > strong {
+  color: #eee;
+  letter-spacing: 1px;
+}
+
+#noRoomSelected {
+  display: none;
 }

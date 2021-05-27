@@ -1,5 +1,6 @@
 const Progress = require('../model/progress_model.js');
 const Diary = require('../model/diary_model.js');
+const ChatModel = require('../model/chat_model.js');
 require('dotenv').config();
 
 
@@ -297,6 +298,32 @@ const selectProgressAuthor = async (req, res, next) => {
   try {
     // req.query parameter 傳回 { progressid: '1' };
     let data = await Progress.selectProgressAuthor(req.query.progressid);
+    let authorID = data.author;
+    let vistorID = req.user.id;
+    //看有沒有聊過天
+    if (authorID !== vistorID) {
+      let authorRooms = await ChatModel.selectRoomCount(authorID);
+      let vistorRooms = await ChatModel.selectRoomCount(vistorID);
+      let authorRoomsArr = [];
+      for (let k in authorRooms) {
+        authorRoomsArr.push(authorRooms[k].room_id);
+      };
+      let vistorRoomsArr = [];
+      for (let i in vistorRooms) {
+        vistorRoomsArr.push(vistorRooms[i].room_id);
+      };
+      console.log(authorRoomsArr);
+      console.log(vistorRoomsArr);
+      let shareRoomID = "no"
+      for (let j in authorRoomsArr) {
+        if (vistorRoomsArr.indexOf(authorRoomsArr[j])!== -1) {
+          shareRoomID = authorRoomsArr[j];
+        }
+      }
+      data.shareRoomID = shareRoomID;
+    }
+
+    
     data.vistor = req.user.id
     res.status(200).send(data);
   } catch (err) {

@@ -1,20 +1,46 @@
 require('dotenv').config();
-const { query } = require('./mysql');
-const chat = (req) => {
-  const io = req.app.get("io");
-  console.log("here");
-  io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
-}
+const { pool } = require('./mysql');
+
+
+const selectRooms = async (socket) => {
+  let userID = socket.userInfo.id;
+  let chatRoomsList = await pool.query(`SELECT room_user.room_id, room.name, room.image, MAX(message.sqltime) AS latest_time FROM room_user JOIN room ON room_user.room_id = room.id JOIN message ON room_user.room_id = message.room_id WHERE user=${userID} GROUP BY message.room_id ORDER BY message.sqltime DESC`);
+  for (let k in chatRoomsList[0]) {
+    let roomID = chatRoomsList[0][k].room_id;
+    let MsgArray = await pool.query(`SELECT room_id, source_id, source_name, msg, time, sqltime FROM message WHERE room_id = ${roomID} ORDER BY sqltime DESC`);
+    let readStatusArray = await pool.query(`SELECT room_id, status, COUNT(*) FROM message WHERE room_id = ${roomID} AND status = 0 GROUP BY status;`);
+    if (readStatusArray[0].length > 0) {
+      let unReadStatusLength = readStatusArray[0][0]['COUNT(*)'];
+      chatRoomsList[0][k].unReadMsgNum = unReadStatusLength;
+    } else {
+      chatRoomsList[0][k].unReadMsgNum = 0;
+    } 
+    let latestMsg = MsgArray[0][0];
+    chatRoomsList[0][k].sourceID = latestMsg.source_id;
+    chatRoomsList[0][k].sourceName = latestMsg.source_name;
+    chatRoomsList[0][k].latestMsg = latestMsg.msg;
+    chatRoomsList[0][k].latestTime = latestMsg.time;
+    
+    chatRoomsList[0][k].image = `${process.env.IMAGE_PATH}${chatRoomsList[0][k].image}`;
+    // console.log(chatRoomsList[0][k]);
+  }
+  // console.log(chatRoomsList[0]);
+  let roomList = chatRoomsList[0]
+  socket.emit("roomList", roomList);
+};
+
+const selectRoomCount = async (userID) => {
+  let chatRoomsList = await pool.query(`SELECT room_user.room_id FROM room_user JOIN room ON room_user.room_id = room.id WHERE room_user.user=${userID} AND NOT room.category = "group"`);
+  // console.log("------------------------");
+  // console.log(chatRoomsList[0]);
+  return (chatRoomsList[0]);
+};
 
 
 
 module.exports = {
-  chat
+  selectRoomCount,
+  selectRooms
 };
 
 
