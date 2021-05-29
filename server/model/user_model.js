@@ -50,6 +50,15 @@ const signIn = async (email, password) => {
   }
 };
 
+const selectUserPic = async (userID) => {
+  try {   
+    let result = await pool.query (`SELECT photo FROM users WHERE id =${userID}`);
+    let userPic = result[0][0].photo;
+    return userPic;
+  } catch (error) {
+    return {error}
+  }
+};
 
 function encryptPassword(password) {
   const hash = crypto.createHash('sha1');
@@ -59,5 +68,6 @@ function encryptPassword(password) {
 
 module.exports = {
   signUp,
-  signIn
+  signIn,
+  selectUserPic
 };

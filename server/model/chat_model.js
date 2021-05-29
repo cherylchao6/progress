@@ -3,60 +3,154 @@ const { pool } = require('./mysql');
 
 
 const selectRooms = async (socket) => {
-  let userID = socket.userInfo.id;
-  let chatRoomsList = await pool.query(`SELECT room_user.room_id, room.name, room.image, MAX(message.sqltime) AS latest_time FROM room_user JOIN room ON room_user.room_id = room.id JOIN message ON room_user.room_id = message.room_id WHERE user=${userID} GROUP BY message.room_id ORDER BY message.sqltime DESC`);
-  for (let k in chatRoomsList[0]) {
-    let roomID = chatRoomsList[0][k].room_id;
-    let member = await pool.query(`SELECT room_user.room_id, room_user.user, users.name, users.photo FROM room_user JOIN users ON room_user.user = users.id WHERE room_user.room_id = ${roomID}`);
-    for (let l in member[0]) {
-      member[0][l].photo = `${process.env.IMAGE_PATH}${member[0][l].photo}`;
+  try{
+    let userID = socket.userInfo.id;
+    // `SELECT COUNT(*) FROM message WHERE room_id=${roomID} AND id > ${msgID}`
+    let chatRoomsList = await pool.query(`SELECT room_user.room_id, room.name, room.image, MAX(message.sqltime) AS latest_time FROM room_user JOIN room ON room_user.room_id = room.id JOIN message ON room_user.room_id = message.room_id WHERE user=${userID} GROUP BY message.room_id ORDER BY message.sqltime DESC`);
+    for (let k in chatRoomsList[0]) {
+      let roomID = chatRoomsList[0][k].room_id;
+      socket.join(roomID);
+      let member = await pool.query(`SELECT room_user.room_id, room_user.user, users.name, users.photo FROM room_user JOIN users ON room_user.user = users.id WHERE room_user.room_id = ${roomID}`);
+      for (let l in member[0]) {
+        member[0][l].photo = `${process.env.IMAGE_PATH}${member[0][l].photo}`;
+      }
+      let MsgArray = await pool.query(`SELECT room_id, source_id, source_name, msg, time, sqltime FROM message WHERE room_id = ${roomID} ORDER BY sqltime DESC`);
+      //改
+      let lastReadMsgArr = await pool.query(`SELECT msg_id FROM last_read_msg WHERE room_id=${roomID} AND user_id=${userID}`);
+      let lastReadMsgID = lastReadMsgArr[0][0].msg_id;
+      let lastReadLengthArr = await pool.query(`SELECT COUNT(*) FROM message WHERE room_id=${roomID} AND id > ${lastReadMsgID}`);
+      let lastReadMsgNum = lastReadLengthArr[0][0]['COUNT(*)'];
+      chatRoomsList[0][k].unReadMsgNum = lastReadMsgNum ;
+      // let readStatusArray = await pool.query(`SELECT room_id, status, COUNT(*) FROM message WHERE room_id = ${roomID} AND status = 0 GROUP BY status;`);
+      // if (readStatusArray[0].length > 0) {
+      //   let unReadStatusLength = readStatusArray[0][0]['COUNT(*)'];
+      //   chatRoomsList[0][k].unReadMsgNum = unReadStatusLength;
+      // } else {
+      //   chatRoomsList[0][k].unReadMsgNum = 0;
+      // } 
+      let latestMsg = MsgArray[0][0];
+      chatRoomsList[0][k].sourceID = latestMsg.source_id;
+      chatRoomsList[0][k].sourceName = latestMsg.source_name;
+      chatRoomsList[0][k].latestMsg = latestMsg.msg;
+      chatRoomsList[0][k].latestTime = latestMsg.time;
+      if (chatRoomsList[0][k].image !== "") {
+        chatRoomsList[0][k].image = `${process.env.IMAGE_PATH}${chatRoomsList[0][k].image}`;
+      }
+      chatRoomsList[0][k].member = member[0];
     }
-    let MsgArray = await pool.query(`SELECT room_id, source_id, source_name, msg, time, sqltime FROM message WHERE room_id = ${roomID} ORDER BY sqltime DESC`);
-    let readStatusArray = await pool.query(`SELECT room_id, status, COUNT(*) FROM message WHERE room_id = ${roomID} AND status = 0 GROUP BY status;`);
-    if (readStatusArray[0].length > 0) {
-      let unReadStatusLength = readStatusArray[0][0]['COUNT(*)'];
-      chatRoomsList[0][k].unReadMsgNum = unReadStatusLength;
-    } else {
-      chatRoomsList[0][k].unReadMsgNum = 0;
-    } 
-    let latestMsg = MsgArray[0][0];
-    chatRoomsList[0][k].sourceID = latestMsg.source_id;
-    chatRoomsList[0][k].sourceName = latestMsg.source_name;
-
-    chatRoomsList[0][k].latestMsg = latestMsg.msg;
-    chatRoomsList[0][k].latestTime = latestMsg.time;
-    if (chatRoomsList[0][k].image !== "") {
-      chatRoomsList[0][k].image = `${process.env.IMAGE_PATH}${chatRoomsList[0][k].image}`;
-    }
-    chatRoomsList[0][k].member = member[0];
-    // console.log(chatRoomsList[0][k]);
+    let roomList = chatRoomsList[0]
+    socket.emit("roomList", roomList);
+  } catch(err){
+    console.log(err);
+    return (err);
   }
-  // console.log(chatRoomsList[0]);
-  let roomList = chatRoomsList[0]
-  socket.emit("roomList", roomList);
+  
 };
 
+//看有無共同房間
 const selectRoomCount = async (userID) => {
-  let chatRoomsList = await pool.query(`SELECT room_user.room_id FROM room_user JOIN room ON room_user.room_id = room.id WHERE room_user.user=${userID} AND NOT room.category = "group"`);
-  // console.log("------------------------");
-  // console.log(chatRoomsList[0]);
-  return (chatRoomsList[0]);
+  try {
+    let chatRoomsList = await pool.query(`SELECT room_user.room_id FROM room_user JOIN room ON room_user.room_id = room.id WHERE room_user.user=${userID} AND NOT room.category = "group"`);
+    // console.log("------------------------");
+    // console.log(chatRoomsList[0]);
+    return (chatRoomsList[0]);
+  } catch(err){
+    console.log(err);
+    return (err);
+  } 
+  
 };
 
-const getRoomMsg = async (roomID) => {
-  console.log(roomID);
-  let roomMsg = await pool.query(`SELECT source_id, source_name, msg, time WHERE room_id = ${roomID} ORDER BY sqltime`);
-  console.log(roomMsg[0]);
-
-  console.log("------------------------");
+const getRoomMsg = async (socket,roomID) => {
+  try{
+    let roomMsg = await pool.query(`SELECT id, source_id, source_name, source_pic, msg, time FROM message WHERE room_id = ${roomID} ORDER BY sqltime`);
+    for (let i in roomMsg[0]) {
+      roomMsg[0][i].source_pic = `${process.env.IMAGE_PATH}${roomMsg[0][i].source_pic}`;
+    }
+    let data = {
+      roomID: roomID,
+      msg:roomMsg[0]
+    };
+    socket.emit("getRoomMsg", data);
+    } catch(err){
+      console.log(err);
+      return (err);
+    }
 };
 
+const updateLastRead = async (socket,roomID) => {
+  try {
+    let userID = socket.userInfo.id;
+    //先選出該聊天室新的一則msg
+    let lattestMsgIDArr = await pool.query(`SELECT MAX(id) FROM message WHERE room_id=${roomID}`);
+    let lattestMsgID = lattestMsgIDArr[0][0]['MAX(id)'];
+    //update該user的最後一則已讀訊息
+    await pool.query(`UPDATE last_read_msg SET msg_id = ${lattestMsgID} WHERE room_id=${roomID} AND user_id=${userID}`);
+  } catch (err) {
+    console.log(err);
+    return (err);
+  }
+  
+};
 
+const selectOnlineRoomMembers = async (userID, roomID) => {
+  try {
+    let result = await pool.query(`SELECT room_user.user FROM room_user JOIN users on users.id = room_user.user WHERE room_user.room_id =${roomID} and users.online=1`);
+    let onlineRoomMemberArr = [];
+    for (let j in result[0]) {
+      if (parseInt(result[0][j].user) !== userID) {
+        onlineRoomMemberArr.push(result[0][j].user);
+      }
+    }
+    return onlineRoomMemberArr;
+  } catch (err) {
+    console.log(err);
+    return (err);
+  }
+};
+
+const insertMsg = async (msgInfo) => {
+  try {
+    let result = await pool.query(`INSERT INTO message (room_id, source_id, source_name, source_pic, msg, time) VALUES (${msgInfo.room_id}, ${msgInfo.source_id}, '${msgInfo.source_name}', '${msgInfo.source_pic}', '${msgInfo.msg}', '${msgInfo.time}')`);
+    let insertMsgID = result[0].insertId
+    return insertMsgID;
+  } catch (err) {
+    console.log(err);
+    return (err);
+  }
+};
+
+const selectLastReadMsg = async (roomID, userID) => {
+  try {
+    let result = await pool.query(`SELECT msg_id FROM last_read_msg WHERE room_id=${roomID} AND user_id=${userID}`);
+    let lastReadMsgID = result[0][0].msg_id
+    return lastReadMsgID;
+  } catch (err) {
+    console.log(err);
+    return (err);
+  }
+};
+
+const selectRoomName = async (roomID) => {
+  try {
+    let result = await pool.query(`SELECT name, image FROM room WHERE id=${roomID}`);
+    //{ name: '', image: '' }
+    return result[0][0]
+  } catch (err) {
+    console.log(err);
+    return (err);
+  }
+};
 
 module.exports = {
   selectRoomCount,
   selectRooms,
-  getRoomMsg
+  getRoomMsg,
+  updateLastRead,
+  selectOnlineRoomMembers,
+  insertMsg,
+  selectLastReadMsg,
+  selectRoomName
 };
 
 

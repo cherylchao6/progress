@@ -9,6 +9,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server)
 const ChatModel = require('./server/model/chat_model.js');
+const User = require('./server/model/user_model.js');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 //socket 
@@ -19,11 +20,14 @@ io.use((socket, next) => {
     const err = new Error("未登入");
     next(err);
   } else {
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, result) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, result) => {
       if (err) {
         const err = new Error("登入逾期");
         next(err);
       }
+      let userPicture = await User.selectUserPic(result.id);
+      result.photo = userPicture;
+      result.photoURL= `${process.env.IMAGE_PATH}${userPicture}`;
       socket.userInfo = result;
       next();
     });
@@ -36,70 +40,46 @@ io.on('connection', (socket) => {
   //給前端連線者資料
   socket.emit("userInfo", socket.userInfo);
   ChatModel.selectRooms(socket);
+
   socket.on("getRoomMsg", roomID =>{
     console.log("getRoomMsg");
-    ChatModel.getRoomMsg(roomID);
+    ChatModel.updateLastRead(socket, roomID)
+    ChatModel.getRoomMsg(socket,roomID);
+  });
+
+  socket.on("sendMsg", async (msgInfo)=>{
+    //1.存sql則會拿到插入的msgID
+    let insertMsgID = await ChatModel.insertMsg(msgInfo);
+    //自己發的訊息一定已讀自己
+    ChatModel.updateLastRead(socket, msgInfo.room_id);
+    //如果是群組聊天的話要回傳群組名字跟頭貼
+    let roomNameImg = await ChatModel.selectRoomName(msgInfo.room_id);
+    //回傳給聊天室的人
+    msgInfo.source_pic = `${process.env.IMAGE_PATH}${msgInfo.source_pic}`;
+    msgInfo.name = roomNameImg.name;
+    if (roomNameImg.image !== '') {
+      msgInfo.image = `${process.env.IMAGE_PATH}${roomNameImg.image}`;
+    } else {
+      msgInfo.image = roomNameImg.image;
+    } 
+    socket.to(msgInfo.room_id).emit("newMsg", msgInfo);
+    // console.log('insertMsgID');
+    // console.log(insertMsgID);
+    //判斷在不在線上;
+    //判斷roomMemberArray在不在線上(不包含自己)
+    // let onlineRoomMember = await ChatModel.selectOnlineRoomMembers(msgInfo.source_id, msgInfo.room_id);
+    
+    // for (let j in onlineRoomMember) {
+    //   let lastReadMsg = await ChatModel.selectLastReadMsg(msgInfo.room_id,onlineRoomMember[j]);
+    //   console.log("lastReadMsg");
+    //   console.log(lastReadMsg);
+    //   if (lastReadMsg !== insertMsgID) {
+    //   }   
+    // }
+    //如果不在線上就不要update最近未讀msg   
   });
   
-
-
-  // socket.on("paging", paging => {
-  //   console.log(socket);
-  //   console.log(`hear ${paging}`);
-    
-  // });
-  // 拿userID去選出room;
-  
-  //emit userName
-  //登入localstorage放userName
-  //room事件
-  // 拿userID去選出room;
-  // sql拿回來是一個array;
-  // sql room Array 
-  // [
-  //   {
-  //     roomid: 1,
-        //  room_image: 預設是聊天的對象頭貼網址(若是progress開的群聊就是progrespic);
-        //  room_name: 預設是聊天的對象(若是progress開的群聊就是progressName);
-        //  lastMessage: gerhabes,
-  //        lastMessageTime:ddvcw,
-        // },
-
-        //  members:{
-        //    1:{
-        //      name:趙姿涵,
-        //      picture:網址,
-        //    }
-        //  }
-
-  //     message:[
-  //       {msg,
-  //        sourse(名字),
-  //        time
-  //       },
-  //       { msg,
-  //         sourse,
-  //         time
-  //        },
-  //     ]
-        
-
-  //   },
-  //   {
-  //     roomid: 2,
-  //     userPicture:網址,
-  //     userName:趙姿涵,
-  //     lastMessage: gerhabes,
-  //     lastMessageTime:ddvcw
-  //   },
-  // ]
-  // socket.emit("rooms", rooms);
-
-
   console.log('a user connected');
-  socket.on('chat message', (msg) => {
-    console.log('message: ' + msg);
-  })
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
@@ -146,7 +126,7 @@ res.sendStatus(404);
 
 
 //fakedata 
-const { query } = require('./server/model/mysql');
+const { query, pool } = require('./server/model/mysql');
 function getRandom(min,max){
   return Math.floor(Math.random()*(max-min+1))+min;
 };
