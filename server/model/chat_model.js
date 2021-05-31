@@ -2,11 +2,11 @@ require('dotenv').config();
 const { pool } = require('./mysql');
 
 
+
 const selectRooms = async (socket) => {
   try{
     let userID = socket.userInfo.id;
-    // `SELECT COUNT(*) FROM message WHERE room_id=${roomID} AND id > ${msgID}`
-    let chatRoomsList = await pool.query(`SELECT room_user.room_id, room.name, room.image, MAX(message.sqltime) AS latest_time FROM room_user JOIN room ON room_user.room_id = room.id JOIN message ON room_user.room_id = message.room_id WHERE user=${userID} GROUP BY message.room_id ORDER BY message.sqltime DESC`);
+    let chatRoomsList = await pool.query(`SELECT room_user.room_id, room.name, room.image, MAX(message.sqltime) AS latest_time FROM room_user JOIN room ON room_user.room_id = room.id JOIN message ON room_user.room_id = message.room_id WHERE user=${userID} GROUP BY message.room_id ORDER BY MAX(message.sqltime) DESC`);
     for (let k in chatRoomsList[0]) {
       let roomID = chatRoomsList[0][k].room_id;
       let MsgArray = await pool.query(`SELECT room_id, source_id, source_name, msg, time, sqltime FROM message WHERE room_id = ${roomID} ORDER BY sqltime DESC`);
@@ -99,16 +99,24 @@ const updateLastRead = async (socket,roomID) => {
   
 };
 
-const selectOnlineRoomMembers = async (userID, roomID) => {
+const selectRoomMembersOnlineStatus = async (userID, roomID) => {
   try {
-    let result = await pool.query(`SELECT room_user.user FROM room_user JOIN users on users.id = room_user.user WHERE room_user.room_id =${roomID} and users.online=1`);
-    let onlineRoomMemberArr = [];
-    for (let j in result[0]) {
-      if (parseInt(result[0][j].user) !== userID) {
-        onlineRoomMemberArr.push(result[0][j].user);
-      }
-    }
-    return onlineRoomMemberArr;
+    let result = await pool.query(`SELECT room_user.user, users.online FROM room_user JOIN users on users.id = room_user.user WHERE room_user.room_id =${roomID} AND NOT room_user.user=${userID}`);
+    // let onlineRoomMemberArr = [];
+    // let offlineRoomMemberArr = [];
+    // for (let j in result[0]) {
+    //   if (result[0].online == "1") {
+    //     onlineRoomMemberArr.push(result[0].online);
+    //   } else {
+    //     offlineRoomMemberArr.push(result[0].online);
+    //   }
+    // }
+    // for (let j in result[0]) {
+    //   if (parseInt(result[0][j].user) !== userID) {
+    //     onlineRoomMemberArr.push(result[0][j].user);
+    //   }
+    // }
+    return result[0];
   } catch (err) {
     console.log(err);
     return (err);
@@ -177,18 +185,58 @@ const selectRoomMembersInfo = async (users) => {
   }
 };
 
+//一連線就要告訴他有無新訊息
+const checkNewMsgUnread = async (userID) => {
+  try {
+    console.log('checkNewMsgUnread');
+    let result = await pool.query(`SELECT new_msg FROM new_msg_status WHERE user_id = ${userID}`);
+    console.log(result[0]);
+    return result[0][0].new_msg;
+  } catch (err) {
+    console.log(err);
+    return (err);
+  }
+};
+
+//離線的人就要告訴他有未讀
+const upDatenewMsgUnread = async (userID) => {
+  try {
+    console.log('upDatenewMsgUnread');
+    let result = await pool.query(`UPDATE new_msg_status SET new_msg = '1' WHERE user_id =${userID}`);
+  } catch (err) {
+    console.log(err);
+    return (err);
+  }
+};
+
+//使用者進入聊天室要改成沒有新訊息通知
+const NoNewMsgUnread = async (userID) => {
+  try {
+    console.log(' Model NoNewMsgUnread');
+    let result = await pool.query(`UPDATE new_msg_status SET new_msg = '0' WHERE user_id =${userID}`);
+    console.log(result[0])
+  } catch (err) {
+    console.log(err);
+    return (err);
+  }
+};
+
+
 
 module.exports = {
   selectRoomCount,
   selectRooms,
   getRoomMsg,
   updateLastRead,
-  selectOnlineRoomMembers,
+  selectRoomMembersOnlineStatus,
   insertMsg,
   selectLastReadMsg,
   selectRoomName,
   createRoom,
-  selectRoomMembersInfo
+  selectRoomMembersInfo,
+  checkNewMsgUnread,
+  upDatenewMsgUnread,
+  NoNewMsgUnread
 };
 
 

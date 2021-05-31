@@ -89,15 +89,26 @@ const selectUserInfo = async (userID) => {
   }
 };
 
+const logOut = async (userID) => {
+  try {   
+    let result = await pool.query (`UPDATE users SET online="0" where id =${userID}`);
+  } catch (error) {
+    return {error}
+  }
+};
+
 function encryptPassword(password) {
   const hash = crypto.createHash('sha1');
   hash.update(password);
   return hash.digest('hex');
 }
 
+
+
 module.exports = {
   signUp,
   signIn,
   selectUserPic,
-  selectUserInfo
+  selectUserInfo,
+  logOut
 };

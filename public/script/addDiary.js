@@ -4,6 +4,57 @@ const urlParams = new URLSearchParams(window.location.search);
 const progressId = urlParams.get("progressid");
 
 getProgressData ();
+//socket
+let myID;
+let myName;
+let myPic;
+let myPicURL;
+let noteBadge = document.querySelector('#noteBadge');
+let msgBadge = document.querySelector('#msgBadge');
+
+const socket = io({
+  auth: {
+  token
+}
+});
+
+socket.on('connect', () => {
+  console.log("connect to socket!!!");
+});
+
+socket.on("connect_error", (err) => {
+  console.log(err.message);
+  if (err.message) {
+    alert(err.message);
+    return window.location.assign('/signin');
+  }
+});
+
+socket.on('userInfo', (userInfo)=>{
+  console.log(userInfo);
+  myID =  userInfo.id
+  myName = userInfo.name;
+  myPic = userInfo.photo;
+  myPicURL = userInfo.photoURL;
+  //localStorage只能存string
+  localStorage.setItem('userInfo', JSON.stringify(userInfo));
+});
+
+//看距離上次連線間有沒有未讀訊息(除了聊天室每頁都要有)
+socket.on ("checknewMsgNotification", hasUnread => {
+  console.log("checknewMsgNotification");
+  if (hasUnread == "true") {
+    msgBadge.style.display = 'block';
+  }
+});
+//上線狀態但在看別頁的時候有人密我
+socket.on(`newMsgNotification`, toWhom => {
+  console.log("newMsg but I am not in room");
+  if (toWhom == myID) {
+    console.log("This msg is for me");
+    msgBadge.style.display = 'block';
+  }
+});
 
 //get progress data
 function getProgressData () {
@@ -122,3 +173,30 @@ form.addEventListener ("submit", function(ev){
   })
   ev.preventDefault();
 }, false);      
+
+function signOut () {
+  Swal.fire({
+    title:"確定要登出嗎？",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#132235',
+    cancelButtonColor: '#6ddad3',
+    confirmButtonText: '確定',
+    cancelButtonText:'取消'
+  }).then(result=>{
+    if (result.value) {
+      Swal.fire(
+        {
+          title:"登出成功",
+          type:"success",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      );
+      setTimeout(function(){ window.location.assign('/signin'); }, 4000);
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("userInfo");
+      socket.emit("logOut", "true");
+    }
+  });
+}

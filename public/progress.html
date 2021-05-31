@@ -45,10 +45,29 @@
                 <li><a class="dropdown-item" href="#">烹飪</a></li>
                 <li><a class="dropdown-item" href="#">作品</a></li>
               </ul>
+            </li>
           </ul>
-          <a href="#" class="notification">
-            <i class="fa-solid fa-envelope"></i>
-            <span class="badge"></span>
+          <!-- 功能icon -->
+          <a href="#" class="notification" id="signOut" onclick="signOut()">
+            <i class="fas fa-sign-out-alt icon" data-bs-toggle="tooltip" data-bs-placement="bottom" title="登出" id="signOutIcon"></i>
+          </a>
+          <div class="notification dropdown" id="newNote">
+            <i class="far fa-bell icon dropdown-toggle" id="newNoteIcon" role="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="noteUl">
+              <li><a class="dropdown-item" href="#">運動</a></li>
+              <li><a class="dropdown-item" href="#">成長</a></li>
+              <li><a class="dropdown-item" href="#">體態外表</a></li>
+              <li><a class="dropdown-item" href="#">園藝</a></li>
+              <li><a class="dropdown-item" href="#">學習</a></li>
+              <li><a class="dropdown-item" href="#">居家</a></li>
+              <li><a class="dropdown-item" href="#">烹飪</a></li>
+              <li><a class="dropdown-item" href="#">作品</a></li>
+            </ul>
+            <div class="iconBagde badge" id="noteBadge"> </div>
+          </div>
+          <a href="/chatroom.html" class="notification" id="message">
+            <i class="far fa-envelope icon" id="msgIcon"></i>
+            <div class="iconBagde badge" id="msgBadge"> </div>
           </a>
           <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="有人完成過......" aria-label="Search">
@@ -151,7 +170,8 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
-
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script src="./script/progress.js"></script>
   <script src="./script/gif.js"></script>
 </body>

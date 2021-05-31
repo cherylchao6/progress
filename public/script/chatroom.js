@@ -1,4 +1,4 @@
-
+//一進聊天室就要改變訊息讀取狀態！都改成沒有未讀訊息
 let token = localStorage.getItem("token");
 let myID;
 let myName;
@@ -49,6 +49,8 @@ socket.on("connect_error", (err) => {
   }
 });
 
+socket.emit("InTheChatRoom", "true");
+
 socket.on("newRoomInfo", newRoomInfo=>{
   console.log("got newRoomInfo");
   for (let i in newRoomInfo.memberInfo) {
@@ -74,16 +76,15 @@ socket.on("newRoomInvitation", data => {
   }
 });
 
+
 socket.on('userInfo', (userInfo)=>{
   console.log(userInfo);
-  myID =  userInfo.id
+  myID =  userInfo.id;
   myName = userInfo.name;
   myPic = userInfo.photo;
   myPicURL = userInfo.photoURL;
   //localStorage只能存string
   localStorage.setItem('userInfo', JSON.stringify(userInfo));
-  // var cat = localStorage.getItem('userInfo');
-  // console.log(JSON.parse(cat).name);
 });
 
 

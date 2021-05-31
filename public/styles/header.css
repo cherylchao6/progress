@@ -52,3 +52,42 @@ header {
 .navbar-nav {
   margin-right: 10px;
 }
+
+/* 通知icon */
+
+.notification {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.notification .dropdown-toggle::after {
+  display: none;
+}
+
+#message {
+  margin-right: 40px;
+}
+
+#newNote, #signOut {
+  margin-right: 20px;
+}
+
+.icon {
+  font-size: 30px;
+  color: #6ddad3;
+}
+
+.iconBagde {
+  position: absolute;
+  top: 0px;
+  right: -5px;
+  padding: 5px 5px;
+  border-radius: 50%;
+  background: red;
+  display: none;
+}
+
+#noteUl {
+  width: 300px;
+}

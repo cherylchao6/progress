@@ -35,14 +35,26 @@ io.use((socket, next) => {
 });
 
 //全域變數存user 跟 socketid pair 
-io.on('connection', (socket) => {
-  // console.log("connect")
-  // console.log(socket.userInfo);
+io.on('connection', async (socket) => {
+  //使用者進入聊天室要改成沒有新訊息通知
+  socket.on("InTheChatRoom", async (status) => {
+    console.log("server NoMsgUnread");
+    await ChatModel.NoNewMsgUnread(socket.userInfo.id);
+  });
+  socket.on("logOut", async(status) =>{
+    console.log("user has log out");
+    await User.logOut(socket.userInfo.id);
+  });
   //給前端連線者資料
-
   socket.emit("userInfo", socket.userInfo);
-  ChatModel.selectRooms(socket);
-
+  await ChatModel.selectRooms(socket);
+  //幫使用者檢查有沒有新訊息通知
+  let newMsgStatus = await ChatModel.checkNewMsgUnread(socket.userInfo.id);
+  if (newMsgStatus == "1") {
+    console.log("checknewMsgNotification");
+    socket.emit("checknewMsgNotification", "true");
+  } 
+  
   socket.on("getRoomMsg", roomID => {
     console.log("getRoomMsg");
     ChatModel.updateLastRead(socket, roomID);
@@ -90,14 +102,31 @@ io.on('connection', (socket) => {
     // console.log('insertMsgID');
     // console.log(insertMsgID);
     //判斷在不在線上;
-    //判斷roomMemberArray在不在線上(不包含自己)
-    // let onlineRoomMember = await ChatModel.selectOnlineRoomMembers(msgInfo.source_id, msgInfo.room_id);
-    //user_id
+    // 判斷roomMember在線狀況(不包含自己)
+    let RoomMembersOnlineStatus = await ChatModel.selectRoomMembersOnlineStatus(msgInfo.source_id, msgInfo.room_id);
+    console.log(RoomMembersOnlineStatus);
+    let onlineRoomMemberArr = [];
+    let offlineRoomMemberArr = [];
+    for (let j in RoomMembersOnlineStatus) {
+      if (RoomMembersOnlineStatus[0].online == "1") {
+        onlineRoomMemberArr.push(RoomMembersOnlineStatus[0].user);
+      } else {
+        offlineRoomMemberArr.push(RoomMembersOnlineStatus[0].user);
+      }
+    };
+    console.log("check onlikne status");
+    console.log(onlineRoomMemberArr);
+    console.log(offlineRoomMemberArr);
     //送通知給在線上的會員 有room才能通知
-    // for (let i in roomMemberArray) {
-      //io.emit("newMsgNotefication${roomMemberArray[i]}",)
-    // }
-    
+    for (let i in onlineRoomMemberArr) {
+      let user_id = parseInt(onlineRoomMemberArr[i]);
+      io.emit(`newMsgNotification`, `${user_id}`);
+      await ChatModel.upDatenewMsgUnread(onlineRoomMemberArr[i]);
+    }
+    //不在線上的話要改變new_msg_status改成有新訊息
+    for (let j in offlineRoomMemberArr) {
+      await ChatModel.upDatenewMsgUnread(offlineRoomMemberArr[j]);
+    }
     
     // for (let j in onlineRoomMember) {
     //   let lastReadMsg = await ChatModel.selectLastReadMsg(msgInfo.room_id,onlineRoomMember[j]);

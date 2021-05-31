@@ -205,44 +205,6 @@ img {
 }
 
 
-/* 通知icon */
-
-.notification {
-  position: relative;
-  display: inline-block;
-  text-decoration: none;
-}
-
-.notification .dropdown-toggle::after {
-  display: none;
-}
-
-#message {
-  margin-right: 40px;
-}
-
-#newNote, #signOut {
-  margin-right: 20px;
-}
-
-.icon {
-  font-size: 30px;
-  color: #6ddad3;
-}
-
-.iconBagde {
-  position: absolute;
-  top: 0px;
-  right: -5px;
-  padding: 5px 5px;
-  border-radius: 50%;
-  background: red;
-  display: block;
-}
-
-#noteUl {
-  width: 300px;
-}
 
 #userPictureCol {
   padding-top: 30px;
