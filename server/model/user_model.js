@@ -36,7 +36,7 @@ const signIn = async (email, password) => {
       if (checkUser[0].length == 0) {
           return {error: 'user is not registered'};
       } else if (inputPassword != user.password){
-          return {error: 'password is wrong'}
+          return {error: 'password is wrong'};
       } else {
           user.token = jwt.sign({
               id: user.id,
@@ -60,6 +60,35 @@ const selectUserPic = async (userID) => {
   }
 };
 
+const selectUserInfo = async (userID) => {
+  try {
+    let userBasicInfo = await pool.query(`SELECT id, name, photo, motto FROM users WHERE id=${userID}`);
+    // {
+    //   id: 1,
+    //   name: '趙姿涵',
+    //   photo: 'cat5.jpeg',
+    //   motto: '我的改變----你看得見！！！！！'
+    // }
+    let finishedProgress = await pool.query (`SELECT id FROM progress WHERE user_id=${userID} AND status =1`);
+    let unfinishedProgress = await pool.query (`SELECT id FROM progress WHERE user_id=${userID} AND status =0`);
+    let follower = await pool.query (`SELECT follower_id FROM follow WHERE following_id = ${userID}`);
+    let following = await pool.query (`SELECT following_id FROM follow WHERE follower_id = ${userID}`);
+    let data = {
+      author: userBasicInfo[0][0].id,
+      name: userBasicInfo[0][0].name,
+      photo: `${process.env.IMAGE_PATH}${userBasicInfo[0][0].photo}`,
+      motto: userBasicInfo[0][0].motto,
+      finishedProgress: finishedProgress[0].length,
+      unfinishedProgress: unfinishedProgress[0].length,
+      follower: follower[0].length,
+      following: following[0].length,
+    }
+    return data;
+  } catch (error) {
+    return {error}
+  }
+};
+
 function encryptPassword(password) {
   const hash = crypto.createHash('sha1');
   hash.update(password);
@@ -69,5 +98,6 @@ function encryptPassword(password) {
 module.exports = {
   signUp,
   signIn,
-  selectUserPic
+  selectUserPic,
+  selectUserInfo
 };

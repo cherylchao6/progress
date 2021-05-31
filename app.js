@@ -34,20 +34,44 @@ io.use((socket, next) => {
   }
 });
 
+//全域變數存user 跟 socketid pair 
 io.on('connection', (socket) => {
   // console.log("connect")
   // console.log(socket.userInfo);
   //給前端連線者資料
+
   socket.emit("userInfo", socket.userInfo);
   ChatModel.selectRooms(socket);
 
-  socket.on("getRoomMsg", roomID =>{
+  socket.on("getRoomMsg", roomID => {
     console.log("getRoomMsg");
-    ChatModel.updateLastRead(socket, roomID)
+    ChatModel.updateLastRead(socket, roomID);
     ChatModel.getRoomMsg(socket,roomID);
   });
 
+
+  socket.on("createRoom", async (users)=>{
+    console.log("create New room in server");
+    let newRoomID = await ChatModel.createRoom(users);
+    let memberInfo = await ChatModel.selectRoomMembersInfo(users);
+    let data = {
+      newRoomID,
+      memberInfo,
+      memberArr: users
+    }
+    //給所有人
+    io.emit('newRoomInvitation',data);
+    socket.emit("newRoomInfo", data);
+  });
+
+  socket.on("letMeJoinRoom", newRoomID => {
+    console.log("server let Me Join Room");
+    socket.join(newRoomID.toString());
+  });
   socket.on("sendMsg", async (msgInfo)=>{
+    console.log("newMsg");
+    console.log(msgInfo);
+    // let receiver = msgInfo.receiver;
     //1.存sql則會拿到插入的msgID
     let insertMsgID = await ChatModel.insertMsg(msgInfo);
     //自己發的訊息一定已讀自己
@@ -62,12 +86,18 @@ io.on('connection', (socket) => {
     } else {
       msgInfo.image = roomNameImg.image;
     } 
-    socket.to(msgInfo.room_id).emit("newMsg", msgInfo);
+    socket.to((msgInfo.room_id).toString()).emit("newMsg", msgInfo);
     // console.log('insertMsgID');
     // console.log(insertMsgID);
     //判斷在不在線上;
     //判斷roomMemberArray在不在線上(不包含自己)
     // let onlineRoomMember = await ChatModel.selectOnlineRoomMembers(msgInfo.source_id, msgInfo.room_id);
+    //user_id
+    //送通知給在線上的會員 有room才能通知
+    // for (let i in roomMemberArray) {
+      //io.emit("newMsgNotefication${roomMemberArray[i]}",)
+    // }
+    
     
     // for (let j in onlineRoomMember) {
     //   let lastReadMsg = await ChatModel.selectLastReadMsg(msgInfo.room_id,onlineRoomMember[j]);

@@ -3,7 +3,8 @@ const router = express.Router();
 const path = require('path');
 router.use(express.json());
 router.use(express.urlencoded({ extended: false }));
-const {signUp, signIn} = require("../controller/user_controller");
+const {signUp, signIn, selectUserInfo} = require("../controller/user_controller");
+const { verifyToken } = require('../utils/util');
 
 
 //signup
@@ -17,7 +18,7 @@ router.get('/signin', (req, res) => {
 });
 router.post('/signin',signIn);
 
-
+router.get("/api/1.0/user", verifyToken, selectUserInfo);
 
 
 

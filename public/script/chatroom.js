@@ -7,21 +7,14 @@ let myPicURL;
 let NowAtRoomID;
 let socketID;
 let order =0;
+let newRoomUserName;
+let newRoomUserPic;
 const urlParams = new URLSearchParams(window.location.search);
 const roomID = urlParams.get("roomid");
-console.log(roomID);
+const user1ID = urlParams.get("user1id");
+const user2ID = urlParams.get("user2id");
 let rightSide = document.querySelector("#rightSide");
 let noRoomSelected = document.querySelector("#noRoomSelected");
-
-
-if (!roomID) {
-  rightSide.style.display = "none";
-  noRoomSelected.style.display = "inline";
-} 
-
-
-
-
 
 const socket = io({
   auth: {
@@ -29,12 +22,23 @@ const socket = io({
 }
 });
 
+if (!roomID) {
+  rightSide.style.display = "none";
+  noRoomSelected.style.display = "inline";
+} else if (roomID == 'no') {
+  //生成房間ＲＲＲＲ
+  //避免重新生成要再socket一次確保兩個人沒有shareroom
+  let users = [user1ID,user2ID];
+  socket.emit("createRoom", users);
+} else if (roomID !== "no") {
+  NowAtRoomID = roomID;
+  //拿聊天室訊息同時也要跟server更新最新的一則未讀;
+  socket.emit("getRoomMsg", roomID);
+}
 
 socket.on('connect', () => {
-  // 講整段code放入此處 表示連線後才能執行
   socketID = socket.id;
   console.log(socket.id);
-  // socket.emit(“in room”, “test”); // 按按鈕才會送出！？
 });
 
 socket.on("connect_error", (err) => {
@@ -42,6 +46,31 @@ socket.on("connect_error", (err) => {
   if (err.message) {
     alert(err.message);
     return window.location.assign('/signin');
+  }
+});
+
+socket.on("newRoomInfo", newRoomInfo=>{
+  console.log("got newRoomInfo");
+  for (let i in newRoomInfo.memberInfo) {
+    if (newRoomInfo.memberInfo[i].user !== myID) {
+      newRoomUserName = newRoomInfo.memberInfo[i].name;
+      newRoomUserPic = newRoomInfo.memberInfo[i].photo;
+    }
+  }
+  NowAtRoomID = newRoomInfo.newRoomID;
+});
+//看新創的room有沒有自己,有的話告訴server把我加進去
+socket.on("newRoomInvitation", data => {
+  console.log("newRoomInvitation");
+  console.log(data);
+  let {memberArr} = data;
+  let memberIntArr = [];
+  for (let i in memberArr) {
+    memberIntArr.push(parseInt(memberArr[i]));
+  }
+  if (memberIntArr.indexOf(myID) !== -1) {
+    console.log("I join the room")
+    socket.emit("letMeJoinRoom", data.newRoomID);
   }
 });
 
@@ -95,7 +124,7 @@ socket.on("roomList", roomList => {
       }
     } else {
       Name.innerHTML = roomList[k].name;
-    }  
+    }
     link.appendChild(Name);
     let msgDiv = document.createElement("div");
     msgDiv.className = "last-message text-muted";
@@ -229,6 +258,8 @@ socket.on("getRoomMsg",data =>{
       text.innerHTML = msgArr[i].msg;
       chatBodyDiv.appendChild(text);
     }
+    let chatRoom = document.querySelector("#chat-message");
+    chatRoom.scrollTo(0, chatRoom.scrollHeight);
   }
 });
 
@@ -238,6 +269,7 @@ function sendMsg () {
   let msg = document.querySelector("#msgInput");
   console.log("sendMsg");
   if (msg.value) {
+    //要讓server知道要給誰
     let msgInfo = {
       socket_id: socketID,
       room_id: NowAtRoomID,
@@ -279,14 +311,16 @@ function sendMsg () {
     let text = document.createElement("p");
     text.innerHTML = msg.value;
     chatBodyDiv.appendChild(text);
-    //更改聊天室的最新時間和訊息
-    let lastMsg = document.querySelector(`#room${NowAtRoomID}Msg`);
-    let lastTime = document.querySelector(`#room${NowAtRoomID}Time`);
-    lastMsg.innerHTML = msg.value;
-    lastTime.innerHTML = currentTime;
+    let chatRoom = document.querySelector("#chat-message");
+    chatRoom.scrollTo(0, chatRoom.scrollHeight)
     //要把當前的聊天室移到列表的第一個;(前提是這個聊天室本來就在聊天列表，如果沒有就要創一個新的(表示這兩個人之前沒有聊過天))
     let roomLi = document.querySelector(`#room${NowAtRoomID}`);
     if (roomLi) {
+      //更改聊天室的最新時間和訊息
+      let lastMsg = document.querySelector(`#room${NowAtRoomID}Msg`);
+      let lastTime = document.querySelector(`#room${NowAtRoomID}Time`);
+      lastMsg.innerHTML = msg.value;
+      lastTime.innerHTML = currentTime;
       roomLi.style.order = order-1;
       order -= 1;
       //更改已讀狀態為已回覆
@@ -298,13 +332,56 @@ function sendMsg () {
       let icon = document.createElement("i");
       icon.className = "fa fa-reply";
       readStatus.appendChild(icon);
+    } else {
+      //新的聊天室沒有roomLi要新創一個並且移到對頂端
+      let friendul = document.querySelector("#friendul");
+      let frinedLi = document.createElement("li");
+      let link = document.createElement('a');
+      frinedLi.setAttribute("onclick", `getMsg('${NowAtRoomID}')`);
+      frinedLi.id = `room${NowAtRoomID}`;
+      link.href = `#`;
+      link.className = "clearfix";
+      frinedLi.appendChild(link);
+      let friendImg = document.createElement("img");
+      friendImg.src= newRoomUserPic
+      friendImg.className = "img-circle friendImg";
+      link.appendChild(friendImg);
+      let NameDiv = document.createElement("div");
+      NameDiv.className = "friend-name";
+      let Name = document.createElement("strong");
+      Name.innerHTML = newRoomUserName;
+      link.appendChild(Name);
+      let msgDiv = document.createElement("div");
+      msgDiv.className = "last-message text-muted";
+      msgDiv.id = `room${NowAtRoomID}Msg`;
+      msgDiv.innerHTML = msg.value;
+      link.appendChild(msgDiv);
+      let time = document.createElement("small");
+      time.className = "time text-muted";
+      time.id = `room${NowAtRoomID}Time`
+      time.innerHTML = currentTime;
+      link.appendChild(time);
+      let replayStatus = document.createElement("small");
+      replayStatus.id = `room${NowAtRoomID}ReadStatus`;
+      replayStatus.className = 'chat-alert text-muted';
+      let icon = document.createElement("i");
+      icon.className = "fa fa-reply";
+      replayStatus.appendChild(icon);
+      link.appendChild(replayStatus);
+      friendul.appendChild(frinedLi);
+      let newRoomLi = document.querySelector(`#room${NowAtRoomID}`);
+      newRoomLi.style.order = order-1;
+      order -= 1
     }
+
+
+
     msg.value = '';
   }
 
 
 }
-//收到傳來聊天室的新訊息
+
 socket.on("newMsg", msgInfo => {
   console.log(msgInfo);
   console.log("here");
@@ -340,6 +417,8 @@ socket.on("newMsg", msgInfo => {
     let text = document.createElement("p");
     text.innerHTML = msgInfo.msg;
     chatBodyDiv.appendChild(text);
+    let chatRoom = document.querySelector("#chat-message");
+    chatRoom.scrollTo(0, chatRoom.scrollHeight)
   }
   //把該訊息聊天室移到列表的第一個(前提是這個聊天室本來就在聊天列表，如果沒有就要創一個新的(表示這兩個人之前沒有聊過天))
   let roomLi = document.querySelector(`#room${msgInfo.room_id}`);
@@ -382,6 +461,45 @@ socket.on("newMsg", msgInfo => {
         readStatus.innerHTML = 1;
       }
     }
+  } else {
+    //新的聊天室沒有roomLi要新創一個並且移到對頂端
+    let friendul = document.querySelector("#friendul");
+    let frinedLi = document.createElement("li");
+    let link = document.createElement('a');
+    frinedLi.setAttribute("onclick", `getMsg('${msgInfo.room_id}')`);
+    frinedLi.id = `room${msgInfo.room_id}`;
+    link.href = `#`;
+    link.className = "clearfix";
+    frinedLi.appendChild(link);
+    let friendImg = document.createElement("img");
+    friendImg.src= msgInfo.source_pic
+    friendImg.className = "img-circle friendImg";
+    link.appendChild(friendImg);
+    let NameDiv = document.createElement("div");
+    NameDiv.className = "friend-name";
+    let Name = document.createElement("strong");
+    Name.innerHTML = msgInfo.source_name;
+    link.appendChild(Name);
+    let msgDiv = document.createElement("div");
+    msgDiv.className = "last-message text-muted";
+    msgDiv.id = `room${msgInfo.room_id}Msg`;
+    msgDiv.innerHTML = `${msgInfo.msg}`
+    link.appendChild(msgDiv);
+    let time = document.createElement("small");
+    time.className = "time text-muted";
+    time.id = `room${msgInfo.room_id}Time`
+    time.innerHTML = `${msgInfo.time}`
+    link.appendChild(time);
+    //直接是一則新訊息未讀的狀態
+    let unRead = document.createElement("small");
+    unRead.id = `room${msgInfo.room_id}ReadStatus`;
+    unRead.className = "chat-alert label label-danger text-center unreadNum";
+    unRead.innerHTML = 1;
+    link.appendChild(unRead);
+    friendul.appendChild(frinedLi);
+    let newRoomLi = document.querySelector(`#room${msgInfo.room_id}`);
+    newRoomLi.style.order = order-1;
+    order -= 1
   }
 
 })

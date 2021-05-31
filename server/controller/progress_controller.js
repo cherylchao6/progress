@@ -322,8 +322,6 @@ const selectProgressAuthor = async (req, res, next) => {
       }
       data.shareRoomID = shareRoomID;
     }
-
-    
     data.vistor = req.user.id
     res.status(200).send(data);
   } catch (err) {

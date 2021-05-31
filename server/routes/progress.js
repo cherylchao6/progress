@@ -20,6 +20,10 @@ router.get('/editProgress', (req, res) => {
   res.sendFile(path.join(__dirname + '../../../public/' + 'editProgress.html'));
 });
 
+router.get('/myProgress', (req, res) => {
+  res.sendFile(path.join(__dirname + '../../../public/' + 'myProgress.html'));
+});
+
 router.post("/editprogress", verifyAuthor, upload.single("picture"), editProgress);
 router.get("/api/1.0/progress", verifyToken, selectProgress);
 router.get("/api/1.0/progress/diarys", verifyVistor, selectProgressWithDiarys);

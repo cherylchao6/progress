@@ -104,9 +104,13 @@ function getAuthorProfile () {
         let editProfile = document.querySelector('#editProfile');
         let editProgress = document.querySelector('#editProgress');
         let editProgressLink = document.querySelector('#editProgressLink');
+        let followBtn = document.querySelector("#followBtn");
+        let msgBtn = document.querySelector('#MessageBtn');
         if (data.author == data.vistor) {
           editProfile.style.display = "flex";
           editProgress.style.display = "block";
+          followBtn.style.display = "none";
+          msgBtn.style.display = "none";
           //在這裡改連結
           editProgressLink.href=`/editProgress?progressid=${progressId}`;
         }
