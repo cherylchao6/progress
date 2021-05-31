@@ -1,5 +1,6 @@
 const User = require('../model/user_model.js');
 const ChatModel = require('../model/chat_model.js');
+require('dotenv').config();
 
 const signUp = async (req, res, next) => {
   try {
@@ -71,8 +72,6 @@ const selectUserInfo = async (req, res, next) => {
       for (let i in vistorRooms) {
         vistorRoomsArr.push(vistorRooms[i].room_id);
       };
-      console.log(authorRoomsArr);
-      console.log(vistorRoomsArr);
       let shareRoomID = "no";
       for (let j in authorRoomsArr) {
         if (vistorRoomsArr.indexOf(authorRoomsArr[j])!== -1) {
@@ -88,9 +87,39 @@ const selectUserInfo = async (req, res, next) => {
   }
 };
 
+const updateUserProfile = async (req, res, next) => {
+  try {
+    console.log("updateUserProfile");
+    console.log(req.body);
+    let userData;
+    let reqData = JSON.parse(JSON.stringify(req.body));
+    console.log(reqData);
+    console.log(req.file);
+    if (req.file) {
+      userData = {
+        id: req.user.id,
+        motto: reqData.updatemotto,
+        photo: req.file.filename
+      };
+    } else {
+      userData = {
+        id: req.user.id,
+        motto: reqData.updatemotto,
+        photo: 'default-person.png'
+      };
+    }
+    await User.updateUserProfile(userData);
+    userData.photo = `${process.env.IMAGE_PATH}${userData.photo}`
+    res.status(200).send(userData);
+  } catch (err) {
+    next(err);
+  }
+};
+
 
 module.exports = {
   signUp,
   signIn,
-  selectUserInfo
+  selectUserInfo,
+  updateUserProfile
 };

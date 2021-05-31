@@ -102,20 +102,6 @@ const updateLastRead = async (socket,roomID) => {
 const selectRoomMembersOnlineStatus = async (userID, roomID) => {
   try {
     let result = await pool.query(`SELECT room_user.user, users.online FROM room_user JOIN users on users.id = room_user.user WHERE room_user.room_id =${roomID} AND NOT room_user.user=${userID}`);
-    // let onlineRoomMemberArr = [];
-    // let offlineRoomMemberArr = [];
-    // for (let j in result[0]) {
-    //   if (result[0].online == "1") {
-    //     onlineRoomMemberArr.push(result[0].online);
-    //   } else {
-    //     offlineRoomMemberArr.push(result[0].online);
-    //   }
-    // }
-    // for (let j in result[0]) {
-    //   if (parseInt(result[0][j].user) !== userID) {
-    //     onlineRoomMemberArr.push(result[0][j].user);
-    //   }
-    // }
     return result[0];
   } catch (err) {
     console.log(err);

@@ -475,3 +475,43 @@ function signOut () {
   });
 }
 
+function editProfile() {
+  Swal.fire({
+    title: '上傳自己的帥照美照吧',
+    width: '600px',
+    showCancelButton: true,
+    confirmButtonColor: '#132235',
+    cancelButtonColor: '#6ddad3',
+    confirmButtonText: '確定',
+    cancelButtonText:'取消',
+    html:
+    `<form method='POST' enctype='multipart/form-data' name='uploadNewUserInfo' id="uploadNewUserInfo">`+
+      `<input type="text" id="updatemotto" name="updatemotto" class="swal2-input" placeholder="請輸入座右銘">`+
+      `<input type="file" id="uploaduserPic" name="picture" class="swal2-input" accept="image/*">`+
+    `</form>`,
+  }).then (result =>{
+    if (result.value) {
+      let form = document.forms.namedItem("uploadNewUserInfo");
+      let data = new FormData(form);
+      fetch('/updateUserProfile', {
+        method: 'POST',
+        body: data,
+        headers: { 'authorization': `Bearer ${token}` },
+      })
+      .then(response =>{
+        if (response.status === 200) {
+          return response.json();
+        } 
+      })
+      .then(data =>{
+        if(data) {
+          let motto = document.querySelector('#motto');
+          motto.innerHTML = data.motto;
+          let userPicture = document.querySelector('#userPicture');
+          userPicture.src = data.photo;
+        }
+      });
+    }
+  });
+}
+

@@ -21,6 +21,10 @@ const signUp = async (name, email, password) => {
     user.id = signUpResult[0].insertId;
     let token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '86400s' });
     user.token = token;
+    //改變上線狀態
+    await pool.query(`UPDATE users SET online='1' WHERE id=${signUpResult[0].insertId}`);
+    //同時插入未讀訊息通知表
+    await pool.query(`INSERT INTO new_msg_status (user_id) VALUES (${signUpResult[0].insertId})`);
     return user;
   } catch (error) {
     console.log(error);
@@ -31,7 +35,7 @@ const signIn = async (email, password) => {
   try {   
       let queryStr = 'SELECT id, name, email, password FROM users WHERE email = ?';
       let checkUser = await pool.query(queryStr, email);
-      let user = checkUser[0][0]
+      let user = checkUser[0][0];
       let inputPassword = encryptPassword(password);
       if (checkUser[0].length == 0) {
           return {error: 'user is not registered'};
@@ -42,7 +46,9 @@ const signIn = async (email, password) => {
               id: user.id,
               name: user.name,
               email: user.email,
-          }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '86400s' })
+          }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '86400s' });
+          //改變為上線狀態
+          await pool.query(`UPDATE users SET online='1' WHERE id=${checkUser[0][0].id}`);
           return user;
       }
   } catch (error) {
@@ -97,6 +103,16 @@ const logOut = async (userID) => {
   }
 };
 
+const updateUserProfile = async (userData) => {
+  try {  
+    let {id, motto, photo} = userData;
+    let result = await pool.query (`UPDATE users SET motto="${motto}", photo='${photo}' WHERE id=${id}`);
+  } catch (error) {
+    console.log(error)
+    return {error}
+  }
+};
+
 function encryptPassword(password) {
   const hash = crypto.createHash('sha1');
   hash.update(password);
@@ -110,5 +126,6 @@ module.exports = {
   signIn,
   selectUserPic,
   selectUserInfo,
-  logOut
+  logOut,
+  updateUserProfile
 };

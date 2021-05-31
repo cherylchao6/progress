@@ -81,16 +81,15 @@ io.on('connection', async (socket) => {
     socket.join(newRoomID.toString());
   });
   socket.on("sendMsg", async (msgInfo)=>{
-    console.log("newMsg");
+    console.log("new Sent Msg");
     console.log(msgInfo);
-    // let receiver = msgInfo.receiver;
     //1.存sql則會拿到插入的msgID
     let insertMsgID = await ChatModel.insertMsg(msgInfo);
-    //自己發的訊息一定已讀自己
+    //2.自己發的訊息一定已讀自己
     ChatModel.updateLastRead(socket, msgInfo.room_id);
-    //如果是群組聊天的話要回傳群組名字跟頭貼
+    //3.如果是群組聊天的話要回傳群組名字跟頭貼
     let roomNameImg = await ChatModel.selectRoomName(msgInfo.room_id);
-    //回傳給聊天室的人
+    //即時回傳給所有在聊天室的人
     msgInfo.source_pic = `${process.env.IMAGE_PATH}${msgInfo.source_pic}`;
     msgInfo.name = roomNameImg.name;
     if (roomNameImg.image !== '') {
@@ -99,12 +98,9 @@ io.on('connection', async (socket) => {
       msgInfo.image = roomNameImg.image;
     } 
     socket.to((msgInfo.room_id).toString()).emit("newMsg", msgInfo);
-    // console.log('insertMsgID');
-    // console.log(insertMsgID);
-    //判斷在不在線上;
+    // 新訊息icon通知
     // 判斷roomMember在線狀況(不包含自己)
     let RoomMembersOnlineStatus = await ChatModel.selectRoomMembersOnlineStatus(msgInfo.source_id, msgInfo.room_id);
-    console.log(RoomMembersOnlineStatus);
     let onlineRoomMemberArr = [];
     let offlineRoomMemberArr = [];
     for (let j in RoomMembersOnlineStatus) {
@@ -114,10 +110,8 @@ io.on('connection', async (socket) => {
         offlineRoomMemberArr.push(RoomMembersOnlineStatus[0].user);
       }
     };
-    console.log("check onlikne status");
-    console.log(onlineRoomMemberArr);
-    console.log(offlineRoomMemberArr);
-    //送通知給在線上的會員 有room才能通知
+    console.log("check roomber online status");
+    //送新訊息icon通知給在線上的會員 有在線上才能通知
     for (let i in onlineRoomMemberArr) {
       let user_id = parseInt(onlineRoomMemberArr[i]);
       io.emit(`newMsgNotification`, `${user_id}`);
@@ -126,16 +120,7 @@ io.on('connection', async (socket) => {
     //不在線上的話要改變new_msg_status改成有新訊息
     for (let j in offlineRoomMemberArr) {
       await ChatModel.upDatenewMsgUnread(offlineRoomMemberArr[j]);
-    }
-    
-    // for (let j in onlineRoomMember) {
-    //   let lastReadMsg = await ChatModel.selectLastReadMsg(msgInfo.room_id,onlineRoomMember[j]);
-    //   console.log("lastReadMsg");
-    //   console.log(lastReadMsg);
-    //   if (lastReadMsg !== insertMsgID) {
-    //   }   
-    // }
-    //如果不在線上就不要update最近未讀msg   
+    }  
   });
   
   console.log('a user connected');
@@ -144,13 +129,6 @@ io.on('connection', async (socket) => {
   });
   ;
 });
-
-
-// app.set("io", io);
-// const chat = require('./server/model/chat_model.js').chat
-// app.get('/chatroom',(req)=>{
-//   chat(req);
-// })
 
 
 
