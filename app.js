@@ -36,6 +36,33 @@ io.use((socket, next) => {
 
 //全域變數存user 跟 socketid pair 
 io.on('connection', async (socket) => {
+  socket.on("checkShareRoom", async (users) => {
+    console.log("server checkShareRoom");
+    console.log(users);
+    let user1RoomList = await ChatModel.selectRoomCount(users[0]);
+    let user2RoomList = await ChatModel.selectRoomCount(users[1]);
+    let user1RoomArr=[];
+    let user2RoomArr=[];
+    for (let j in user1RoomList) {
+      user1RoomArr.push(user1RoomList[j].room_id);
+    };
+    for (let k in user2RoomList) {
+      user2RoomArr.push(user2RoomList[k].room_id);
+    }
+    let shareRoom="no";
+    for (let l in user1RoomArr) {
+      if (user2RoomArr.indexOf(user1RoomArr[l]) !== -1) {
+        shareRoom = user1RoomArr[l];
+      }
+    }
+    console.log(shareRoom);
+    socket.emit("checkShareRoomResult", shareRoom);
+  });
+  socket.on("getRoomMsg", roomID => {
+    console.log("getRoomMsg");
+    ChatModel.updateLastRead(socket, roomID);
+    ChatModel.getRoomMsg(socket,roomID);
+  });
   //使用者進入聊天室要改成沒有新訊息通知
   socket.on("InTheChatRoom", async (status) => {
     console.log("server NoMsgUnread");
@@ -47,20 +74,6 @@ io.on('connection', async (socket) => {
   });
   //給前端連線者資料
   socket.emit("userInfo", socket.userInfo);
-  await ChatModel.selectRooms(socket);
-  //幫使用者檢查有沒有新訊息通知
-  let newMsgStatus = await ChatModel.checkNewMsgUnread(socket.userInfo.id);
-  if (newMsgStatus == "1") {
-    console.log("checknewMsgNotification");
-    socket.emit("checknewMsgNotification", "true");
-  } 
-  
-  socket.on("getRoomMsg", roomID => {
-    console.log("getRoomMsg");
-    ChatModel.updateLastRead(socket, roomID);
-    ChatModel.getRoomMsg(socket,roomID);
-  });
-
 
   socket.on("createRoom", async (users)=>{
     console.log("create New room in server");
@@ -75,6 +88,15 @@ io.on('connection', async (socket) => {
     io.emit('newRoomInvitation',data);
     socket.emit("newRoomInfo", data);
   });
+
+  await ChatModel.selectRooms(socket);
+  //幫使用者檢查有沒有新訊息通知
+  let newMsgStatus = await ChatModel.checkNewMsgUnread(socket.userInfo.id);
+  if (newMsgStatus == "1") {
+    console.log("checknewMsgNotification");
+    socket.emit("checknewMsgNotification", "true");
+  } 
+
 
   socket.on("letMeJoinRoom", newRoomID => {
     console.log("server let Me Join Room");

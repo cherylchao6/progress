@@ -85,8 +85,6 @@ function getUserInfo () {
         fans.innerHTML = `粉絲 ${data.follower}`;
         let idols = document.querySelector('#idols');
         idols.innerHTML = `偶像 ${data.following}`;
-        // let finishedProgress = document.querySelector('#finishedProgress');
-        // finishedProgress.innerHTML = data.finishedProgress;
         let motto = document.querySelector('#motto');
         motto.innerHTML = data.motto;
         let userPicture = document.querySelector('#userPicture');

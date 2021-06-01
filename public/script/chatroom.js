@@ -29,13 +29,23 @@ if (!roomID) {
   //生成房間ＲＲＲＲ
   //避免重新生成要再socket一次確保兩個人沒有shareroom
   let users = [user1ID,user2ID];
-  socket.emit("createRoom", users);
+  console.log("checkShareRoom");
+  socket.emit("checkShareRoom", users);
 } else if (roomID !== "no") {
   NowAtRoomID = roomID;
   //拿聊天室訊息同時也要跟server更新最新的一則未讀;
   socket.emit("getRoomMsg", roomID);
 }
 
+socket.on("checkShareRoomResult", shareRoom => {
+  console.log("checkShareRoomResult");
+  console.log(shareRoom);
+  if (shareRoom == "no") {
+    console.log("ok no share room create a room");
+    let users = [user1ID,user2ID];
+    socket.emit("createRoom", users);
+  }
+})
 socket.on('connect', () => {
   socketID = socket.id;
   console.log(socket.id);
@@ -49,7 +59,8 @@ socket.on("connect_error", (err) => {
   }
 });
 
-socket.emit("InTheChatRoom", "true");
+setTimeout(function(){ socket.emit("InTheChatRoom", "true"); }, 2000);
+
 
 socket.on("newRoomInfo", newRoomInfo=>{
   console.log("got newRoomInfo");

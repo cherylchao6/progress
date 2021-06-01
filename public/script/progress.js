@@ -142,6 +142,10 @@ function getAuthorProfile () {
     .then (data => {
       if (data) {
         console.log(data);
+        if (data.shareRoomID) {
+          let msgLink = document.querySelector('#msgLink');
+          msgLink.href = `/chatroom.html?roomid=${data.shareRoomID}&user1id=${data.author}&user2id=${data.vistor}`;
+        }
         let userName = document.querySelector('#userName');
         userName.innerHTML = data.name;
         let fans = document.querySelector('#fans');

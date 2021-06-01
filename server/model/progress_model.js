@@ -77,7 +77,7 @@ const selectProgressWithDiarysVistor = async (progressId) => {
     if (progress[0].length !== 0) {
       progress[0][0].picture = `${process.env.IMAGE_PATH}${progress[0][0].picture}`
       let progressData = await pool.query(`SELECT name, unit FROM progress_data WHERE progress_id=${progressId}`);
-      let diarys = await query(`SELECT date, main_image FROM diary WHERE progress_id=${progressId} ORDER BY date`);
+      let diarys = await pool.query(`SELECT date, main_image FROM diary WHERE progress_id=${progressId} ORDER BY date`);
       for ( let i in diarys[0]) {
         diarys[0][i].main_image = `${process.env.IMAGE_PATH}${diarys[0][i].main_image}`
       }
