@@ -329,7 +329,243 @@ const selectProgressAuthor = async (req, res, next) => {
   }
 };
 
+const addGroupProgress = async (req, res, next) => {
+  try {
+    let invivationCode = randomWord()
+    //insert groupProgress table
+    let progressData;
+    let reqData = JSON.parse(JSON.stringify(req.body));
+    console.log("addGroupProgress Controller");
+    console.log(reqData);
+    console.log(req.file);
+    let creatorID = req.user.id
+    if (req.file) {
+      progressData = {
+        name: reqData.progressName,
+        motivation: reqData.motivation,
+        category: reqData.category,
+        start_date: reqData.startDate,
+        end_date: reqData.endDate,
+        goal_verb: reqData.goalVerb,
+        goal_num: reqData.goalNumber,
+        goal_unit: reqData.goalUnit,
+        picture: req.file.filename,
+        invitation_code: invivationCode
+      }
+    } else {
+      progressData = {
+        name: reqData.progressName,
+        motivation: reqData.motivation,
+        category: reqData.category,
+        start_date: reqData.startDate,
+        end_date: reqData.endDate,
+        goal_verb: reqData.goalVerb,
+        goal_num: reqData.goalNumber,
+        goal_unit: reqData.goalUnit,
+        picture: "goalDefault.png",
+        invitation_code: invivationCode
+      }
+    }
+    let insertGroupProgressId = await Progress.addGroupProgress(progressData);
+    console.log(insertGroupProgressId);
+    //插入groupProrgess_user table
+    await Progress.isnertGroupProgressUser(creatorID, insertGroupProgressId);
+    //創群組聊天室
+    let groupRoomData;
+    if (req.file) {
+      groupRoomData = {
+        name: reqData.progressName,
+        image: req.file.filename,
+        category: "group"
+      }
+    } else {
+      groupRoomData = {
+        name: reqData.progressName,
+        image: "goalDefault.png",
+        category: "group"
+      }
+    }
+    //創群組聊天室
+    let insertRoomID = await ChatModel.createGroupRoom(groupRoomData);
+    //把創辨人加進去聊天室
+    await ChatModel.addGroupChatMember(creatorID, insertRoomID);
+    //把group Progress 插入room_id
+    await Progress.insertGroupRoomID(insertRoomID, insertGroupProgressId)
+    let data = {
+      insertGroupProgressId
+    }
+    res.status(200).send(data);
+  } catch (err) {
+    next(err);
+  }
+};
 
+const selectGroupProgress = async (req, res, next) => {
+  try {
+    // req.query parameter 傳回 { id: '1' };
+    console.log("selectGroupProgress controller")
+    let userID = req.user.id
+    let groupProgressID = req.query.id;
+    let groupProgressBasicInfo = await Progress.selectGroupProgressBasicInfo(userID, groupProgressID)
+    console.log(groupProgressBasicInfo);
+    res.status(200).send(groupProgressBasicInfo);
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+const addGroupPersonalProgress = async (req, res, next) => {
+  try {
+    // req.query parameter 傳回 { id: '1' };
+    console.log("addGroupPersonalProgress controller..............")
+    console.log(req.body);
+    let groupProgressBasicInfo = await Progress.addGroupPersonalProgress(req.body);
+    console.log(groupProgressBasicInfo);
+    res.status(200).send(groupProgressBasicInfo);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const editGroupProgress = async (req, res, next) => {
+  try {
+    console.log("editGroupProgress controller........");
+    let progressData;
+    let reqData = JSON.parse(JSON.stringify(req.body));
+    console.log(reqData);
+    console.log(req.file);
+    let {src} = reqData;
+    let splitArray = src.split('/');
+    let index = splitArray.length - 1;
+    let encodefilename = splitArray[index];
+    //如果是中文檔名
+    let filename = decodeURIComponent(encodefilename);
+    if (!req.file) {
+      //沒改照片或是remove本來的照片
+      let groupProgressData = await Progress.selectGroupProgressBasicInfo(req.user.id, req.query.id);
+      let originPicSrc = groupProgressData.basicInfo.picture;
+      let originPicSrcSplitArr = originPicSrc.split('/');
+      let index2 = originPicSrcSplitArr.length - 1;
+      let originPicName = originPicSrcSplitArr[index2];
+      if (filename == originPicName) {
+        console.log("same...........")
+        progressData = {
+          ID: req.query.id,
+          name: reqData.progressName,
+          motivation: reqData.motivation,
+          category: reqData.category,
+          startDate: reqData.startDate,
+          endDate: reqData.endDate,
+          goalVerb: reqData.goalVerb,
+          goalNum: reqData.goalNumber,
+          goalUnit: reqData.goalUnit,
+          picture: filename
+        }
+      } else {
+        //remove照片
+        console.log("removePIC.......")
+        progressData = {
+          ID: req.query.id,
+          name: reqData.progressName,
+          motivation: reqData.motivation,
+          category: reqData.category,
+          startDate: reqData.startDate,
+          endDate: reqData.endDate,
+          goalVerb: reqData.goalVerb,
+          goalNum: reqData.goalNumber,
+          goalUnit: reqData.goalUnit,
+          picture: "goalDefault.png"
+        }
+      }
+    } else {
+      console.log("change a new pic")
+      progressData = {
+        ID: req.query.id,
+        name: reqData.progressName,
+        motivation: reqData.motivation,
+        category: reqData.category,
+        startDate: reqData.startDate,
+        endDate: reqData.endDate,
+        goalVerb: reqData.goalVerb,
+        goalNum: reqData.goalNumber,
+        goalUnit: reqData.goalUnit,
+        picture: req.file.filename
+      }
+    }
+    await Progress.editGroupProgress(progressData);
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const selectGroupRoomInfo = async (req, res, next) => {
+  try {
+    // req.query parameter 傳回 { id: '1' };
+    console.log("selectGroupRoomInfo controller..............")
+    console.log(req.query);
+    let selectGroupRoomInfo = await ChatModel.selectGroupRoomInfo(req.query.id);
+    console.log(selectGroupRoomInfo);
+    res.status(200).send(selectGroupRoomInfo);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const joinGroupProgress = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    console.log("joinGroupProgress controller..............")
+    //先依照邀請碼找出房間
+    let groupProgressIDRoomID = await Progress.selectGroupProgressIDRoomID(req.body.invitationCode);
+    console.log(groupProgressIDRoomID);
+    if (!groupProgressIDRoomID) {
+      res.sendStatus(403);
+      return;
+    }
+    //把user加入該groupProgress
+    await Progress.isnertGroupProgressUser(req.user.id, groupProgressIDRoomID.id);
+    //把user加進去聊天室
+    await ChatModel.addGroupChatMember(req.user.id, groupProgressIDRoomID.room_id);
+    let data = {
+      groupProgressID: groupProgressIDRoomID.id
+    };
+    res.status(200).send(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const selectMyProgress = async (req, res, next) => {
+  try {
+    console.log("selectMyProgress controller");
+     let vistorID = req.user.id
+     let authorID = req.query.userid
+     console.log(vistorID)
+     console.log(authorID )
+     let authorProgress;
+     if (vistorID == authorID) {
+      console.log("hererere");
+      authorProgress = await Progress.selectMyProgress('author',req.query.userid);
+     } else {
+      authorProgress = await Progress.selectMyProgress('vistor',req.query.userid);
+     }
+    res.status(200).send(authorProgress);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const selectNewProgress = async (req, res, next) => {
+  try {
+    console.log("selectNewProgress controller");
+    let data = await Progress.selectNewProgress()
+    res.status(200).send(data);
+  } catch (err) {
+    next(err);
+  }
+};
 
 module.exports = {
   addProgress,
@@ -338,5 +574,29 @@ module.exports = {
   selectProgressTime,
   selectProgressChart,
   selectProgressWithDiarys,
-  selectProgressAuthor
+  selectProgressAuthor,
+  addGroupProgress,
+  selectGroupProgress,
+  addGroupPersonalProgress,
+  selectGroupRoomInfo,
+  editGroupProgress,
+  joinGroupProgress,
+  selectMyProgress,
+  selectNewProgress
 };
+
+//產生邀請碼
+function randomWord() {
+    let str = "",
+    arr = [
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+    'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+    'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9',];
+    
+    for (let i = 0; i < 8; i++) {
+    pos = Math.round(Math.random() * (arr.length - 1));
+    str += arr[pos];
+    }
+    return str;
+  }

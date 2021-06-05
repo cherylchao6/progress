@@ -91,6 +91,17 @@ function getProgressTimeData () {
     .then (timedata => {
       if (timedata) {
         console.log(timedata);
+        if (Object.keys(timedata).length === 0) { 
+          console.log("沒有日記");
+          // let diaryMain = document.querySelector("#diaryMain");
+          // diaryMain.display = "none";
+          let noDiary = document.querySelector("#noDiary");
+          noDiary.style.display = "flex";
+          let chart = document.querySelector("#chart");
+          chart.style.display = "none";
+          let timescale = document.querySelector(".timescale");
+          timescale.style.display = "none";
+        };
         //appendColumns
         data = timedata;
         let column1 = document.querySelector("#column1");
@@ -161,15 +172,19 @@ function getAuthorProfile () {
         let editProfile = document.querySelector('#editProfile');
         let editProgress = document.querySelector('#editProgress');
         let editProgressLink = document.querySelector('#editProgressLink');
+        let addDiary = document.querySelector('#addDiary');
+        let addDiaryLink = document.querySelector('#addDiaryLink');
         let followBtn = document.querySelector("#followBtn");
         let msgBtn = document.querySelector('#MessageBtn');
         if (data.author == data.vistor) {
           editProfile.style.display = "flex";
-          editProgress.style.display = "block";
+          editProgress.style.display = "flex";
+          addDiary.style.display = "flex";
           followBtn.style.display = "none";
           msgBtn.style.display = "none";
           //在這裡改連結
           editProgressLink.href=`/editProgress?progressid=${progressId}`;
+          addDiaryLink.href=`/addDiary?progressid=${progressId}`;
         }
       }
     });
@@ -195,55 +210,57 @@ function getProgressData () {
       if (data) {
         console.log(data);
         //做gif
-        let images = [];
-        for (let i in data.diarys) {
-          let image = {
-            src: data.diarys[i].main_image
+        if (data.diarys.length !== 0) { 
+          let images = [];
+          for (let i in data.diarys) {
+            let image = {
+              src: data.diarys[i].main_image
+            }
+            images.push(image);
           }
-          images.push(image);
-        }
-        gifshot.createGIF({
-          'images': images,
-          'interval': 1,
-        },function(obj) {
-        if(!obj.error) {
-          var src = obj.image;
-          let diaryPicture = document.querySelector('#diaryPicture');
-          diaryPicture.src = src;
-        }
-        });
-        //append datatype column 
-        let column3 = document.querySelector("#column3");
+          gifshot.createGIF({
+            'images': images,
+            'interval': 1,
+          },function(obj) {
+          if(!obj.error) {
+            var src = obj.image;
+            let diaryPicture = document.querySelector('#diaryPicture');
+            diaryPicture.src = src;
+          }
+          });
+          //append datatype column 
+          let column3 = document.querySelector("#column3");
 
-        let dataArray = ['心情'];
-        for (let i in data.datatype) {
-          dataArray.push(data.datatype[i].name);
+          let dataArray = ['心情'];
+          for (let i in data.datatype) {
+            dataArray.push(data.datatype[i].name);
+          }
+          let selectOptionsdataArray = dataArray.map(data => `<option value=${data} name=${data}>${data}</option>`);
+          selectOptionsdataArray[0] = `<option selected value='心情' name='心情'>心情</option>`;
+          let moodOptions = selectOptionsdataArray.join('');
+          column3.innerHTML = moodOptions;
+          let diaryDay = document.querySelector("#diaryDay");
+          let firstDate = data.diarys[0].date;
+          let lastDate = data.diarys[data.diarys.length-1].date;
+          //計算progress總天數
+          let progressDays = function (firstDate, lastDate) { 
+            let date, date1, date2, days;
+            date = firstDate.split("/")
+            date1 = new Date(date[1] + '/' + date[2] + '/' + date[0]); // 轉換為 06/18/2016 格式
+            date = lastDate.split("/")
+            date2 = new Date(date[1] + '/' + date[2] + '/' + date[0]);
+            days = parseInt(Math.abs(date1 - date2) / 1000 / 60 / 60 / 24); // 把相差的毫秒數轉換為天數
+            return days;
+          };
+          let totalDays = progressDays(firstDate, lastDate);
+          diaryDay.innerHTML = `${totalDays}</br>Days`;
         }
-        let selectOptionsdataArray = dataArray.map(data => `<option value=${data} name=${data}>${data}</option>`);
-        selectOptionsdataArray[0] = `<option selected value='心情' name='心情'>心情</option>`;
-        let moodOptions = selectOptionsdataArray.join('');
-        column3.innerHTML = moodOptions;
         let progressName = document.querySelector("#progressName");
         progressName.innerHTML = data.name;
         let category = document.querySelector("#category");
         category.innerHTML = `類別：${data.category}`;
         let motivation = document.querySelector("#motivation");
         motivation.innerHTML = data.motivation;
-        let diaryDay = document.querySelector("#diaryDay");
-        let firstDate = data.diarys[0].date;
-        let lastDate = data.diarys[data.diarys.length-1].date;
-        //計算progress總天數
-        let progressDays = function (firstDate, lastDate) { 
-          let date, date1, date2, days;
-          date = firstDate.split("/")
-          date1 = new Date(date[1] + '/' + date[2] + '/' + date[0]); // 轉換為 06/18/2016 格式
-          date = lastDate.split("/")
-          date2 = new Date(date[1] + '/' + date[2] + '/' + date[0]);
-          days = parseInt(Math.abs(date1 - date2) / 1000 / 60 / 60 / 24); // 把相差的毫秒數轉換為天數
-          return days;
-        };
-        let totalDays = progressDays(firstDate, lastDate);
-        diaryDay.innerHTML = `${totalDays}</br>Days`;
       }
     });
 }
@@ -362,92 +379,99 @@ function sendDate () {
   .then(data => {
     if (data) {
       console.log(data);
-      myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-              labels: data.Xs,
-              datasets: [{
-                  data: data.Ys,
-                  backgroundColor: [
-                      'rgba(255, 99, 132, 0.2)',
-                      'rgba(54, 162, 235, 0.2)',
-                      'rgba(255, 206, 86, 0.2)',
-                      'rgba(75, 192, 192, 0.2)',
-                      'rgba(153, 102, 255, 0.2)',
-                      'rgba(255, 159, 64, 0.2)'
-                  ],
-                  borderColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)',
-                      'rgba(255, 159, 64, 1)'
-                  ],
-                  borderWidth: 1
-              }]
-          },
-          options: {
-              scales: {
-                  y: {
-                      ticks: {
-                        // forces step size to be 50 units
-                        stepSize: 50
-                      }
+      if (data.diarys.length == 0) {
+        let chart = document.querySelector("#chart");
+        chart.style.display = "none";
+      }
+      if (data.diarys.length !== 0) {
+          myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.Xs,
+                datasets: [{
+                    data: data.Ys,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        ticks: {
+                          // forces step size to be 50 units
+                          stepSize: 50
+                        }
+                    }
+                },
+                plugins: {
+                  legend: {
+                    display: false
                   }
-              },
-              plugins: {
-                legend: {
-                  display: false
                 }
-              }
-          },
-      });
-      // ------圖表分隔線------------------------------------
-      let nextBtn = document.querySelector("#nextBtn");
-      let previousBtn = document.querySelector("#previousBtn");
-      if (data.next_paging == 1) {
-        previousBtn.style.display = "none";
-        nextBtn.style.display = "inline";
-      } else if (!data.next_paging) {
-        previousBtn.style.display = "inline";
-        nextBtn.style.display = "none";
-      } else {
-        nextBtn.style.display = "inline";
-        previousBtn.style.display = "inline";
+            },
+        });
+        // ------圖表分隔線------------------------------------
+        let nextBtn = document.querySelector("#nextBtn");
+        let previousBtn = document.querySelector("#previousBtn");
+        if (data.next_paging == 1) {
+          previousBtn.style.display = "none";
+          nextBtn.style.display = "inline";
+        } else if (!data.next_paging) {
+          previousBtn.style.display = "inline";
+          nextBtn.style.display = "none";
+        } else {
+          nextBtn.style.display = "inline";
+          previousBtn.style.display = "inline";
+        }
+        // -------顯示日記--------------
+        let diarys = document.querySelector("#diarys");
+        diarys.innerHTML="";
+        for (let i in data.diarys) {
+          let diaryInfo = document.createElement("div");
+          diaryInfo.className = "col-3 diaryInfo";
+          diaryInfo.dataset.bsToggle = "tooltip";
+          diaryInfo.dataset.bsPlacement = "bottom";
+          diaryInfo.title = `${data.diarys[i].content}`;
+          diarys.appendChild(diaryInfo);
+          let diaryLink = document.createElement("a");
+          diaryLink.href = `/diary?progressid=${progressId}&diaryid=${data.diarys[i].id}`;
+          diaryLink.style = "text-decoration:none;"
+          diaryInfo.appendChild(diaryLink);
+          let diaryInfoBorder = document.createElement("div");
+          diaryInfoBorder.id = "diaryInfoBorder";
+          diaryLink.appendChild(diaryInfoBorder);
+          let date = document.createElement("div");
+          date.className = "text-center";
+          date.id = "date";
+          let dateTitle = document.createElement("p");
+          dateTitle.id = "dateFont";
+          dateTitle.innerHTML = `${data.diarys[i].date}`;
+          date.appendChild(dateTitle);
+          diaryInfoBorder.appendChild(date);
+          let imgDiv = document.createElement("div");
+          let img = document.createElement("img");
+          img.className = "diaryImage";
+          img.src =`${data.diarys[i].main_image}`
+          imgDiv.appendChild(img);
+          diaryInfoBorder.appendChild(imgDiv);
+        }
       }
-      // -------顯示日記--------------
-      let diarys = document.querySelector("#diarys");
-      diarys.innerHTML="";
-      for (let i in data.diarys) {
-        let diaryInfo = document.createElement("div");
-        diaryInfo.className = "col-3 diaryInfo";
-        diaryInfo.dataset.bsToggle = "tooltip";
-        diaryInfo.dataset.bsPlacement = "bottom";
-        diaryInfo.title = `${data.diarys[i].content}`;
-        diarys.appendChild(diaryInfo);
-        let diaryLink = document.createElement("a");
-        diaryLink.href = `/diary?progressid=${progressId}&diaryid=${data.diarys[i].id}`;
-        diaryLink.style = "text-decoration:none;"
-        diaryInfo.appendChild(diaryLink);
-        let diaryInfoBorder = document.createElement("div");
-        diaryInfoBorder.id = "diaryInfoBorder";
-        diaryLink.appendChild(diaryInfoBorder);
-        let date = document.createElement("div");
-        date.className = "text-center";
-        date.id = "date";
-        let dateTitle = document.createElement("p");
-        dateTitle.id = "dateFont";
-        dateTitle.innerHTML = `${data.diarys[i].date}`;
-        date.appendChild(dateTitle);
-        diaryInfoBorder.appendChild(date);
-        let imgDiv = document.createElement("div");
-        let img = document.createElement("img");
-        img.className = "diaryImage";
-        img.src =`${data.diarys[i].main_image}`
-        imgDiv.appendChild(img);
-        diaryInfoBorder.appendChild(imgDiv);
-      }
+      
     }
   })
 }   
@@ -455,7 +479,7 @@ function sendDate () {
 function signOut () {
   Swal.fire({
     title:"確定要登出嗎？",
-    type: 'warning',
+    icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#132235',
     cancelButtonColor: '#6ddad3',
@@ -466,7 +490,7 @@ function signOut () {
       Swal.fire(
         {
           title:"登出成功",
-          type:"success",
+          icon:"success",
           confirmButtonColor: '#132235',
           confirmButtonText: 'OK',
         }

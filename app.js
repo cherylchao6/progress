@@ -25,6 +25,7 @@ io.use((socket, next) => {
         const err = new Error("登入逾期");
         next(err);
       }
+      console.log(result);
       let userPicture = await User.selectUserPic(result.id);
       result.photo = userPicture;
       result.photoURL= `${process.env.IMAGE_PATH}${userPicture}`;
@@ -83,7 +84,7 @@ io.on('connection', async (socket) => {
       newRoomID,
       memberInfo,
       memberArr: users
-    }
+    };
     //給所有人
     io.emit('newRoomInvitation',data);
     socket.emit("newRoomInfo", data);
@@ -102,6 +103,8 @@ io.on('connection', async (socket) => {
     console.log("server let Me Join Room");
     socket.join(newRoomID.toString());
   });
+
+    
   socket.on("sendMsg", async (msgInfo)=>{
     console.log("new Sent Msg");
     console.log(msgInfo);

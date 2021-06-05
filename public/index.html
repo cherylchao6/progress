@@ -6,12 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="./styles/reset.css" rel="stylesheet">
   <title>Diary</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"></link>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"></link>
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
   <script src="https://kit.fontawesome.com/55390fb95c.js" crossorigin="anonymous"></script>
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
   <link href="./styles/header.css" rel="stylesheet">
-  <link href="./styles/myProgress.css" rel="stylesheet">
+  <link href="./styles/index.css" rel="stylesheet">
 </head>
 <body>
   <header>
@@ -78,63 +82,112 @@
     </nav>
   </header>
   <main>
-    <div class="row row1" >
-      <div class="col-4" id="userPictureCol">
-        <div class="row">
-          <div class="col-6 user1 userProfile">
-            <div class="container" id ="userDetail">
-              <div class="userDetail" id="userName"></div>
-              <div id="fansidols">
-                <div class="userDetail" id="fans"></div>
-                <div class="userDetail" id="idols"></div>
-              </div>
-            </div>
-            <a id="editProfileLink" href="#"><div class="row userDetail" id="editProfile" onclick="editProfile()">編輯個人檔案</div></a>
-            <div class="row" id="moreAction">
-              <div class="col-6" id="followBtn">追蹤</div>
-              <div class="col-6" id="MessageBtn"><a id="msgLink" href="#">私訊</a></div>
-            </div>
-          </div>
-          <div class="col-6 user2">
-            <img id="userPicture">
-          </div>
-        </div>
-      </div>
-
-      <div class="col-3 finishedProgress">
-        <div class="raw progressDay" ><h2 id="finishedProgress"></br>Progress</br>Finished</br></h2></div>
-      </div>
-
-      <div class="col-3 unfinishedProgress">
-        <div class="raw progressDay" ><h2 id="unfinishedProgress"></br>Progress</br>To Go</br></h2></div>
-      </div>
-    </div>
-    <div id="hint">
-      <div class="row row2 text-center"><h3 id="motto">我的改變～你看得見</h3></div>
-    </div>
     <!-- 主文 -->
-    <div class="container">
-      <div class="row" id="addBtnRow">
-        <button class="btn btn-outline-dark addBtn"><a id="addProgressLink" href="/addProgress">新增Progress</a></button>
-        <button class="btn btn-outline-dark addBtn"><a id="addGroupProgressLink" href="/addGroupProgress">新增群組Progress</a></button>
-        <button class="btn btn-outline-dark addBtn" onclick="joinGroupProgress()">加入群組Progress</button>
-      </div>
-      <div class="row">
-        <div class="col-11 myProgrssMain container">
-          <div class="row" id="progresses">
-            
-            
-
-          </div>
+    <div class="container-fluid" id="banner">
+      <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="5" aria-label="Slide 6"></button>
         </div>
-        
+        <div class="carousel-inner">
+          <div class="carousel-item active imgDiv">
+            <img src="./images/plant_banner.jpg" class="d-block w-100 bannerImg">
+          </div>
+          <div class="carousel-item imgDiv">
+            <img src="./images/painter_banner.jpg" class="d-block w-100 bannerImg img2">
+          </div>
+          <div class="carousel-item imgDiv">
+            <img src="./images/training.jpg" class="d-block w-100 bannerImg img3">
+          </div>
+          <div class="carousel-item imgDiv">
+            <img src="./images/meal_banner.jpg" class="d-block w-100 bannerImg">
+          </div>
+          <div class="carousel-item imgDiv">
+            <img src="./images/running_banner.jpg" class="d-block w-100 bannerImg">
+          </div>
+          <div class="carousel-item imgDiv">
+            <img src="./images/house_banner.jpg" class="d-block w-100 bannerImg">
+          </div>        
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
       </div>
+    </div>
+    <div class="container-fluid" id="main">
+      <div class="row progressRow">
+        <div class="text-center category">運動</div>
+        <div class="owl-carousel owl-theme sport">
+          
+          
+          
+  
+        </div> 
+      </div>
+      <div class="row progressRow">
+        <div class="text-center category">成長</div>
+        <div class="owl-carousel owl-theme growth">
+
+        </div> 
+      </div>
+      
+      <div class="row progressRow">
+        <div class="text-center category">體態外表</div>
+        <div class="owl-carousel owl-theme outlook">
+          
+        </div>
+      </div>
+      
+      <div class="row progressRow">
+        <div class="text-center category">園藝</div>
+        <div class="owl-carousel owl-theme garden">
+          
+        </div>
+      </div>
+      
+      <div class="row progressRow">
+        <div class="text-center category">學習</div>
+        <div class="owl-carousel owl-theme learn">
+          
+        </div>
+      </div>
+      
+      <div class="row progressRow">
+        <div class="text-center category">居家</div>
+        <div class="owl-carousel owl-theme house">
+          
+        </div> 
+      </div>
+      
+      <div class="row progressRow">
+        <div class="text-center category">烹飪</div>
+        <div class="owl-carousel owl-theme cook">
+          
+        </div>
+      </div>
+      
+      <div class="row progressRow">
+        <div class="text-center category">作品</div>
+        <div class="owl-carousel owl-theme art">
+          
+        </div>
+      </div>
+      
     </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="./script/myProgress.js"></script>
+  <script src="./script/index.js"></script>
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

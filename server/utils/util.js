@@ -98,6 +98,33 @@ function verifyAdminToken (req, res, next) {
   }
 }
 
+function vefifyGroupMember (req, res, next) {
+  const authHeader = req.headers.authorization; 
+  //if (authHeader) then do authHeader.split(' ')[1] -> token = undefined or is token
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) {
+    console.log("no token");
+    res.sendStatus(401);
+  } else {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.sendStatus(403);
+      };
+      req.user = result;
+      let groupProgressID = req.query.id;
+      let userID = result.id;
+      let sql = `SELECT * FROM group_progress_user WHERE group_progress_id = ${groupProgressID} AND user_id = ${userID}`;
+      let checkUser = await pool.query(sql);
+      console.log(checkUser);
+      if (checkUser[0].length == 0) {
+        res.sendStatus(405);
+      } else if (checkUser[0].length !== 0) {
+        next();
+      };
+    });
+  }
+}
 
 
 
@@ -115,5 +142,6 @@ module.exports = {
   verifyAdminToken,
   verifyAuthor,
   verifyVistor,
+  vefifyGroupMember,
   upload
 }

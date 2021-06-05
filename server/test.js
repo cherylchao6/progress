@@ -101,3 +101,11 @@ msgBtn.style.display = "none";
 #uploaduserPic {
   padding-top: 9px;
 }
+
+function step (n){
+  if (n=1) {
+    return 1
+  } else {
+    return n * step(n-1);
+  }
+}

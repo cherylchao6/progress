@@ -79,6 +79,10 @@ function getAuthorProfile () {
       if (data) {
         console.log(data);
         //看是不是本人
+        if (data.shareRoomID) {
+          let msgLink = document.querySelector('#msgLink');
+          msgLink.href = `/chatroom.html?roomid=${data.shareRoomID}&user1id=${data.author}&user2id=${data.vistor}`;
+        }
         let editProfile = document.querySelector('#editProfile');
         let editDiary = document.querySelector('#editDiary');
         let editDiaryLink = document.querySelector('#editDiaryLink');
@@ -207,7 +211,7 @@ function getDiary () {
 function signOut () {
   Swal.fire({
     title:"確定要登出嗎？",
-    type: 'warning',
+    icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#132235',
     cancelButtonColor: '#6ddad3',
@@ -218,7 +222,7 @@ function signOut () {
       Swal.fire(
         {
           title:"登出成功",
-          type:"success",
+          icon:"success",
           confirmButtonColor: '#132235',
           confirmButtonText: 'OK',
         }

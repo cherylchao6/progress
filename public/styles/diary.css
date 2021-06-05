@@ -190,3 +190,8 @@ img {
 #uploaduserPic {
   padding-top: 9px;
 }
+
+#msgLink {
+  text-decoration: none;
+  color: #6ddad3;
+}

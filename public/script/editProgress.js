@@ -176,7 +176,7 @@ form.addEventListener ("submit", function(ev){
 function signOut () {
   Swal.fire({
     title:"確定要登出嗎？",
-    type: 'warning',
+    icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#132235',
     cancelButtonColor: '#6ddad3',
@@ -187,7 +187,7 @@ function signOut () {
       Swal.fire(
         {
           title:"登出成功",
-          type:"success",
+          icon:"success",
           confirmButtonColor: '#132235',
           confirmButtonText: 'OK',
         }

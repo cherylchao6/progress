@@ -1,3 +1,4 @@
+
 //一進聊天室就要改變訊息讀取狀態！都改成沒有未讀訊息
 let token = localStorage.getItem("token");
 let myID;
@@ -279,6 +280,7 @@ socket.on("getRoomMsg",data =>{
 function sendMsg () {
   let currentTime = new Date().toLocaleString();
   let msg = document.querySelector("#msgInput");
+  let msgValue = msg.value;
   console.log("sendMsg");
   if (msg.value) {
     //要讓server知道要給誰
@@ -354,20 +356,51 @@ function sendMsg () {
       link.href = `#`;
       link.className = "clearfix";
       frinedLi.appendChild(link);
-      let friendImg = document.createElement("img");
-      friendImg.src= newRoomUserPic
-      friendImg.className = "img-circle friendImg";
-      link.appendChild(friendImg);
-      let NameDiv = document.createElement("div");
-      NameDiv.className = "friend-name";
-      let Name = document.createElement("strong");
-      Name.innerHTML = newRoomUserName;
-      link.appendChild(Name);
-      let msgDiv = document.createElement("div");
-      msgDiv.className = "last-message text-muted";
-      msgDiv.id = `room${NowAtRoomID}Msg`;
-      msgDiv.innerHTML = msg.value;
-      link.appendChild(msgDiv);
+      if (newRoomUserPic) {
+        let friendImg = document.createElement("img");
+        friendImg.src= newRoomUserPic
+        friendImg.className = "img-circle friendImg";
+        link.appendChild(friendImg);
+        let NameDiv = document.createElement("div");
+        NameDiv.className = "friend-name";
+        let Name = document.createElement("strong");
+        Name.innerHTML = newRoomUserName;
+        link.appendChild(Name);
+        let msgDiv = document.createElement("div");
+        msgDiv.className = "last-message text-muted";
+        msgDiv.id = `room${NowAtRoomID}Msg`;
+        msgDiv.innerHTML = msgValue;
+        link.appendChild(msgDiv);
+      } else {
+        //群組聊天室開場白
+          fetch(`/api/1.0/selectGroupChat?id=${roomID}`,{
+            method: "GET",
+          }).then(response => {
+            if (response.status === 200 ) {
+              console.log("hihihihihihi");
+              return response.json();
+            }
+          }).then(data=>{
+            if (data) {
+              console.log("here");
+              console.log(data)
+              let friendImg = document.createElement("img");
+              friendImg.src= data.image;
+              friendImg.className = "img-circle friendImg";
+              link.appendChild(friendImg);
+              let NameDiv = document.createElement("div");
+              NameDiv.className = "friend-name";
+              let Name = document.createElement("strong");
+              Name.innerHTML = data.name;
+              link.appendChild(Name);
+              let msgDiv = document.createElement("div");
+              msgDiv.className = "last-message text-muted";
+              msgDiv.id = `room${NowAtRoomID}Msg`;
+              msgDiv.innerHTML = msgValue;
+              link.appendChild(msgDiv);
+            }
+          })
+      } 
       let time = document.createElement("small");
       time.className = "time text-muted";
       time.id = `room${NowAtRoomID}Time`
@@ -385,9 +418,6 @@ function sendMsg () {
       newRoomLi.style.order = order-1;
       order -= 1
     }
-
-
-
     msg.value = '';
   }
 

@@ -198,7 +198,7 @@ const upDatenewMsgUnread = async (userID) => {
 //使用者進入聊天室要改成沒有新訊息通知
 const NoNewMsgUnread = async (userID) => {
   try {
-    console.log(' Model NoNewMsgUnread');
+    console.log('Model NoNewMsgUnread');
     let result = await pool.query(`UPDATE new_msg_status SET new_msg = '0' WHERE user_id =${userID}`);
     console.log(result[0])
   } catch (err) {
@@ -207,6 +207,61 @@ const NoNewMsgUnread = async (userID) => {
   }
 };
 
+
+const createGroupRoom = async (groupRoomData) => {
+  try {
+    console.log('createGroupRoom');
+    console.log(groupRoomData)
+    let result = await pool.query(`INSERT INTO room SET?`, groupRoomData);
+    console.log(result[0]);
+    return result[0].insertId;
+  } catch (err) {
+    console.log(err);
+    return (err);
+  }
+};
+
+
+const addGroupChatMember = async (userID, groupRoomID) => {
+  try {
+    //先檢查該聊天室有沒有超過八個人或重複加入
+    let member = await pool.query(`SELECT user FROM room_user WHERE room_id = ${groupRoomID}`)
+    console.log(member[0]);
+    if (member[0].length == 8) {
+      return "群組人數達上限"
+    } else {
+      //避免重複加入
+      let memberArr=[];
+      for (let i in member[0]) {
+        memberArr.push(member[0][i].user_id);
+      } 
+      if (memberArr.indexOf(userID.toString()) == -1) {
+        let data = {
+          room_id: groupRoomID,
+          user: userID
+        }
+        let result  = await pool.query('INSERT INTO room_user SET ?', data);
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    return (err);
+  }
+};
+
+const selectGroupRoomInfo = async (groupRoomID) => {
+  try {
+    console.log('selectGroupRoomInfo controller');
+    console.log(groupRoomID)
+    let result = await pool.query(`SELECT name, image FROM room WHERE id=${groupRoomID}`);
+    console.log(result[0]);
+    result[0][0].image = `${process.env.IMAGE_PATH}${result[0][0].image}`;
+    return result[0][0];
+  } catch (err) {
+    console.log(err);
+    return (err);
+  }
+};
 
 
 module.exports = {
@@ -222,7 +277,10 @@ module.exports = {
   selectRoomMembersInfo,
   checkNewMsgUnread,
   upDatenewMsgUnread,
-  NoNewMsgUnread
+  NoNewMsgUnread,
+  createGroupRoom,
+  addGroupChatMember,
+  selectGroupRoomInfo
 };
 
 

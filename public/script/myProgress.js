@@ -2,7 +2,8 @@
 let token = localStorage.getItem("token");
 const urlParams = new URLSearchParams(window.location.search);
 const userId = urlParams.get("userid");
-getUserInfo ();
+getUserInfo();
+getMyProgressData();
 //socket
 let myID;
 let myName;
@@ -92,10 +93,12 @@ function getUserInfo () {
         let editProfile = document.querySelector('#editProfile');
         let followBtn = document.querySelector("#followBtn");
         let msgBtn = document.querySelector('#MessageBtn');
+        let addBtnRow = document.querySelector('#addBtnRow');
         if (data.author == data.vistor) {
           editProfile.style.display = "flex";
           followBtn.style.display = "none";
           msgBtn.style.display = "none";
+          addBtnRow.style.display = "flex";
         }
         let finishedProgress = document.querySelector('#finishedProgress');
         let unfinishedProgress = document.querySelector('#unfinishedProgress');
@@ -108,7 +111,7 @@ function getUserInfo () {
 function signOut () {
   Swal.fire({
     title:"確定要登出嗎？",
-    type: 'warning',
+    icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#132235',
     cancelButtonColor: '#6ddad3',
@@ -119,7 +122,7 @@ function signOut () {
       Swal.fire(
         {
           title:"登出成功",
-          type:"success",
+          icon:"success",
           confirmButtonColor: '#132235',
           confirmButtonText: 'OK',
         }
@@ -170,4 +173,146 @@ function editProfile() {
       });
     }
   });
+}
+
+function joinGroupProgress() {
+  Swal.fire({
+    title: '請輸入邀請碼',
+    width: '400px',
+    imageUrl: 'https://i.imgur.com/yptcZAT.png',
+    imageWidth: 350,
+    imageHeight: 233,
+    showCancelButton: true,
+    confirmButtonColor: '#132235',
+    cancelButtonColor: '#6ddad3',
+    confirmButtonText: '確定',
+    cancelButtonText:'取消',
+    html:
+      `<input type="text" id="invitationCodeinput" name="invitationCodeinput" class="swal2-input">`
+  }).then (result => {
+    let invitationCode = document.querySelector("#invitationCodeinput").value;
+    if (result.value && invitationCode.value !== "") {
+      let data = {
+        invitationCode
+      }
+      fetch('/checkInvitation', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'authorization': `Bearer ${token}`,
+                'content-type': 'application/json'},
+      })
+      .then(response =>{
+        if (response.status === 200) {
+          return response.json();
+        } else if (response.status === 403) {
+          console.log("請輸入正確邀請碼");
+          Swal.fire(
+            {
+              title:"請輸入正確邀請碼",
+              icon:"error",
+              confirmButtonColor: '#132235',
+              confirmButtonText: 'OK',
+            }
+          );
+        }
+      })
+      .then(data =>{
+        // suppose會是groupprogress id
+        if(data) {
+          console.log("join.....")
+          console.log(data);
+          Swal.fire(
+            {
+              title:"加入成功",
+              text: "將進入群組 Progress",
+              icon:"success",
+              confirmButtonColor: '#132235',
+              confirmButtonText: 'OK',
+            }
+          );
+          setTimeout(function(){ window.location.assign(`/groupProgress?id=${data.groupProgressID}`); }, 2000);
+        }
+      });
+    }
+  });
+}
+
+function getMyProgressData () {
+  fetch(`/api/1.0/myprogress?userid=${userId}`,{
+    method: "GET",
+    headers: { 'authorization': `Bearer ${token}` },
+  }).then(response => {
+    if (response.status === 200 ) {
+      return response.json();
+    } else if (response.status === 401) {
+      alert('請先登入');
+      return window.location.assign('/signin');
+      } else if (response.status === 403) {
+        alert('登入逾期');
+        return window.location.assign('/signin');
+      }
+    })
+    .then (data => {
+      if (data) {
+        console.log(data);
+        //先append個人的
+        let progresses = document.querySelector('#progresses');
+        for (let i in data.personal) {
+          let progressDiv = document.createElement('div');
+          progressDiv.className = "col-3";
+          progresses.appendChild(progressDiv);
+          let progressLink = document.createElement("a");
+          progressLink.className = "progressLink";
+          progressLink.href=`/progress?progressid=${data.personal[i].id}`;
+          progressDiv.appendChild(progressLink);
+          progressInfoBorder = document.createElement('div');
+          progressInfoBorder.className = "progressInfoBorder";
+          progressLink.appendChild(progressInfoBorder);
+          let progressNameDiv = document.createElement("div");
+          progressNameDiv.className = "text-center progressName";
+          progressInfoBorder.appendChild(progressNameDiv);
+          let name = document.createElement('p');
+          name.className = "progressNameFont";
+          name.innerHTML = data.personal[i].name;
+          progressNameDiv.appendChild(name);
+          let imgDiv = document.createElement("div");
+          imgDiv.className = "imageDiv";
+          progressInfoBorder.appendChild(imgDiv);
+          let img = document.createElement('img');
+          img.src = data.personal[i].picture;
+          img.className = 'progressImage';
+          imgDiv.appendChild(img);
+        }
+        for (let k in data.group) {
+          let progressDiv = document.createElement('div');
+          progressDiv.className = "col-3 groupProgress";
+          progresses.appendChild(progressDiv);
+          let progressLink = document.createElement("a");
+          progressLink.className = "progressLink";
+          progressLink.href=`/groupProgress?id=${data.group[k].id}`;
+          progressDiv.appendChild(progressLink);
+          progressInfoBorder = document.createElement('div');
+          progressInfoBorder.className = "progressInfoBorder";
+          progressLink.appendChild(progressInfoBorder);
+          let progressNameDiv = document.createElement("div");
+          progressNameDiv.className = "text-center progressName";
+          progressInfoBorder.appendChild(progressNameDiv);
+          let name = document.createElement('p');
+          name.className = "progressNameFont";
+          name.innerHTML = data.group[k].name;
+          progressNameDiv.appendChild(name);
+          let imgDiv = document.createElement("div");
+          imgDiv.className = "imageDiv";
+          progressInfoBorder.appendChild(imgDiv);
+          let img = document.createElement('img');
+          img.src = data.group[k].picture;
+          img.className = 'progressImage';
+          imgDiv.appendChild(img);
+          let iconImg = document.createElement("img");
+          iconImg.src="./images/networking.png";
+          iconImg.className = 'groupIcon';
+          progressDiv.appendChild(iconImg);
+        }
+      }
+    });
 }

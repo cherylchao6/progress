@@ -151,10 +151,7 @@ img {
   height: 270px;
   border-radius: 10px;
 }
-#addDiary {
-  font-size: 160px;
-  text-align: center;
-}
+
 .timescale {
   justify-content: center;
   align-items: center;
@@ -204,9 +201,7 @@ img {
   border-radius: 10px;  
   display: none;
 }
-#editProfileLink, #editProgressLink {
-  text-decoration:none
-}
+
 
 #editProfile:hover {
   background-color: rgb(19, 34, 53);
@@ -218,6 +213,11 @@ img {
   background-color: rgb(19, 34, 53);
 }
 
+/* #addDiaryBtn:hover {
+  background-color: rgb(19, 34, 53);
+} */
+
+
 #followBtn, #MessageBtn {
   color: #6ddad3;
   border: 2px solid #6ddad3;
@@ -225,15 +225,35 @@ img {
   width: 60px;
   margin: 4px;
 }
+/* 
+#addDiaryBtn {
+  color: #6ddad3;
+  border: 2px solid #6ddad3;
+  border-radius: 10px;
+  width: 100px;
+  margin: 4px;
+  margin-top: 30px;
+  margin-left: 0;
+  margin-right: 0;
+} */
+
+/* .addBtn {
+  width: 100px;
+  margin-right: 10px;
+  margin-left: 20px;
+}
+
+.addBtn a {
+  text-decoration: none;
+  color: #6ddad3;
+} */
 
 
 #moreAction {
   width: 140px;
 }
 
-#editProgress {
-  display: none;
-}
+
 
 #updatemotto {
   width: 447px;
@@ -245,4 +265,37 @@ img {
 #msgLink {
   text-decoration: none;
   color: #6ddad3;
+}
+
+/* 編輯按鈕 */
+#buttonrow {
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonCol{
+  width: 160px;
+}
+
+#editProfileLink, #editProgressLink, #addDiaryLink{
+  text-decoration:none
+}
+
+#editProgress, #addDiary {
+  display: none;
+}
+
+#mainRow {
+  align-items: center;
+  justify-content: center;
+}
+
+#noDiary {
+  display: none;
+}
+
+#addDiaryLink {
+  text-decoration:none;
+  color: #6ddad3;
+  width: 100px
 }
