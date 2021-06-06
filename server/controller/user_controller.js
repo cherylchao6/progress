@@ -116,10 +116,22 @@ const updateUserProfile = async (req, res, next) => {
   }
 };
 
+const follow = async (req, res, next) => {
+  try {
+    console.log("follow conttroller");
+    console.log(req.body);
+    await User.follow(req.body);
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
+};
+
 
 module.exports = {
   signUp,
   signIn,
   selectUserInfo,
-  updateUserProfile
+  updateUserProfile,
+  follow
 };

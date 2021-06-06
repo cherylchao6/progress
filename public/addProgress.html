@@ -15,7 +15,7 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid" id="header">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/progressClub.html">
           <img src="./images/logo.jpg" id="logo">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,14 +34,13 @@
                 類別
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">運動</a></li>
-                <li><a class="dropdown-item" href="#">成長</a></li>
-                <li><a class="dropdown-item" href="#">體態外表</a></li>
-                <li><a class="dropdown-item" href="#">園藝</a></li>
-                <li><a class="dropdown-item" href="#">學習</a></li>
-                <li><a class="dropdown-item" href="#">居家</a></li>
-                <li><a class="dropdown-item" href="#">烹飪</a></li>
-                <li><a class="dropdown-item" href="#">作品</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=運動">運動</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=成長">成長</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=體態外表">體態外表</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=園藝">園藝</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=學習">學習</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=居家">居家</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=烹飪">烹飪</a></li>
               </ul>
             </li>
           </ul>
@@ -52,14 +51,7 @@
           <div class="notification dropdown" id="newNote">
             <i class="far fa-bell icon dropdown-toggle" id="newNoteIcon" role="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="noteUl">
-              <li><a class="dropdown-item" href="#">運動</a></li>
-              <li><a class="dropdown-item" href="#">成長</a></li>
-              <li><a class="dropdown-item" href="#">體態外表</a></li>
-              <li><a class="dropdown-item" href="#">園藝</a></li>
-              <li><a class="dropdown-item" href="#">學習</a></li>
-              <li><a class="dropdown-item" href="#">居家</a></li>
-              <li><a class="dropdown-item" href="#">烹飪</a></li>
-              <li><a class="dropdown-item" href="#">作品</a></li>
+              <li><a class="dropdown-item" href="#">尚無通知</a></li>
             </ul>
             <div class="iconBagde badge" id="noteBadge"> </div>
           </div>
@@ -68,8 +60,8 @@
             <div class="iconBagde badge" id="msgBadge"> </div>
           </a>
           <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="有人完成過......" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
+            <input id="search" class="form-control me-2" type="search" placeholder="有人完成過......" aria-label="Search">
+            <div class="btn btn-outline-success" onclick="search()">Search</div>
           </form>
         </div>
       </div>
@@ -84,11 +76,11 @@
       <div class="row"> 
         <div class="col-10">
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="progressName" name="progressName" placeholder="讓你堅持下去的原因！">
+            <input type="text" class="form-control" id="progressName" name="progressName" placeholder="讓你堅持下去的原因！" required>
             <label for="progressName">Progress名字</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="motivation" name="motivation" placeholder="讓你堅持下去的原因！">
+            <input type="text" class="form-control" id="motivation" name="motivation" placeholder="讓你堅持下去的原因！" required>
             <label for="motivation">動機</label>
           </div>
           <select class="form-select mb-3" aria-label="Default select example" name="category">

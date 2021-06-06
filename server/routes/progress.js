@@ -4,7 +4,7 @@ const path = require('path');
 router.use(express.json());
 router.use(express.urlencoded({ extended: false }));
 const { verifyToken, verifyAuthor, verifyAdminToken, verifyVistor, vefifyGroupMember, upload} = require('../utils/util');
-const {addProgress, editProgress, selectProgress,selectProgressTime,selectProgressChart,selectProgressWithDiarys,selectProgressAuthor, addGroupProgress, selectGroupProgress, addGroupPersonalProgress,selectGroupRoomInfo, editGroupProgress, joinGroupProgress,selectMyProgress,selectNewProgress} = require("../controller/progress_controller");
+const {addProgress, editProgress, selectProgress,selectProgressTime,selectProgressChart,selectProgressWithDiarys,selectProgressAuthor, addGroupProgress, selectGroupProgress, addGroupPersonalProgress,selectGroupRoomInfo, editGroupProgress, joinGroupProgress,selectMyProgress,selectNewProgress,finishProgress} = require("../controller/progress_controller");
 
 //addProgress
 router.get('/addProgress', (req, res) => {
@@ -36,6 +36,8 @@ router.get('/editGroupProgress', (req, res) => {
   res.sendFile(path.join(__dirname + '../../../public/' + 'editGroupProgress.html'));
 });
 
+
+
 router.post('/addGroupProgress',verifyToken, upload.single("picture"), addGroupProgress);
 
 router.post("/editprogress", verifyAuthor, upload.single("picture"), editProgress);
@@ -51,6 +53,7 @@ router.post('/editGroupProgress',vefifyGroupMember, upload.single("picture"), ed
 router.post("/checkInvitation", verifyToken, joinGroupProgress);
 router.get("/api/1.0/myprogress", verifyToken, selectMyProgress);
 router.get("/api/1.0/topProgresses", verifyToken, selectNewProgress);
+router.post("/finishProgress", verifyAuthor, finishProgress);
 module.exports = router;
 
 

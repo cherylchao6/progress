@@ -299,3 +299,14 @@ img {
   color: #6ddad3;
   width: 100px
 }
+
+#finishProgress {
+  display: none;
+}
+
+#unfinishProgressCol {
+  display: none;
+}
+/* #buttonrow {
+  display: none;
+} */

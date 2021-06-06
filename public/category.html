@@ -6,10 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="./styles/reset.css" rel="stylesheet">
   <title>Diary</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
   <script src="https://kit.fontawesome.com/55390fb95c.js" crossorigin="anonymous"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
   <link href="./styles/header.css" rel="stylesheet">
-  <link href="./styles/diary.css" rel="stylesheet">
+  <link href="./styles/myProgress.css" rel="stylesheet">
 </head>
 <body>
   <header>
@@ -43,7 +45,7 @@
                 <li><a class="dropdown-item" href="/category.html?category=烹飪">烹飪</a></li>
                 <li><a class="dropdown-item" href="/category.html?category=作品">作品</a></li>
               </ul>
-            </li>
+            </li>  
           </ul>
           <!-- 功能icon -->
           <a href="#" class="notification" id="signOut" onclick="signOut()">
@@ -69,80 +71,26 @@
     </nav>
   </header>
   <main>
-    <div class="row row1" >
-      <div class="col-4 row">
-        <div class="col-6 user1 userProfile">
-
-          <div class="container" id ="userDetail">
-            <div class="row userDetail" id="userName"></div>
-            <div class="row userDetail" id="fans"></div>
-            <div class="row userDetail" id="idols"></div>
-            <div class="row userDetail">完成</div>
-            <div class="row userDetail" id="finishedProgress"></div>
-            <div class="row userDetail">個Progress</div>
-          </div>
-          <a id="editProfileLink" href="#"><div class="row userDetail" id="editProfile" onclick="editProfile()">編輯個人檔案</div></a>
-          <div class="row" id="moreAction">
-            <div class="col-6" id="followBtn" onclick="follow()">追蹤</div>
-            <div class="col-6" id="MessageBtn"><a id="msgLink" href="#">私訊</a></div>
-          </div>
-        </div>
-        <div class="col-6 user2">
-          <a href="#" id="userLink"><img id="userPicture"></a>
-        </div>
-        <div class="row" id="motto">
-          
-        </div>
-      </div>
-      <div class="col-2 progressFile">
-        <div>
-          <div class="row userDetail text-center"><h4>Progress<h4></div>
-          <a id="progressLink" href="#"><div class="row userDetail text-center"><h4 id="progressName"><h4></div></a>
-          <div class="row userDetail text-center"><h4 id="category"></h4></div>
-        </div>
-      </div>
-      <div class="col-3 diaryPicture">
-        <img id="diaryPicture">
-      </div>
-      <div class="col-3 diaryTime">
-        <div class="raw diaryDay" ><h1 id="diaryDay"></h1></div>
-        <div class="raw diaryDate"><h4 id="diaryDate"></h4></div>
-      </div>
-    </div>
-    <div id="hint">
-      <div class="row row2 text-center"><h3 id="motivation"></h3></div>
-      <div class="row row3 text-center"><h3 id="mood"></h3></div>
-    </div>
-    
     <div class="container">
-      <div class="row">
-        <div class="col-11 diaryMain">
-          <div class="row" id="data">
-          </div>
-          <div class="row diaryContent">
-            <p id="diaryContent"></p>
-          </div>
-          <!-- diaryImages -->
-          <div class="row" id="diaryImages">
-            
-          </div>
-
-
-
+      <div class="row noresult">
+        <div class="col-8">
+          <img src="./images/Search-rafiki (2).jpg">
         </div>
       </div>
-      <!-- 編輯按鈕 -->
-      <a id="editDiaryLink" href='#'>
-        <div id="editDiary" class="text-center">
-          <button class="btn btn-outline-dark">編輯日記</button>
+      <div class="row">
+        <div class="col-11 myProgrssMain container">
+          <div class="row" id="progresses">
+
+          </div>
         </div>
-      </a>
-    
+        
+      </div>
+    </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
   <script src="/socket.io/socket.io.js"></script>
+  <script src="./script/category.js"></script>
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="./script/diary.js"></script>
 </body>
 </html>

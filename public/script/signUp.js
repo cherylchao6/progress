@@ -20,16 +20,30 @@ function signUp () {
     if (response.status === 200 ) {
       return response.json();
     } else if (response.status === 403) {
-      alert('此email已被註冊過');
-      return window.location.assign('/signup');
+      Swal.fire(
+        {
+          title:"此信箱已被註冊過",
+          icon:"warning",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      );
     }
     })
     .then(data => {
       if (data) {
-        alert('註冊成功');
         let token = data.data['access_token'];
         window.localStorage.setItem('token', `${token}`);
-        // return window.location.assign('/index.html');
+        Swal.fire(
+          {
+            title:"註冊成功",
+            icon:"success",
+            confirmButtonColor: '#132235',
+            confirmButtonText: 'OK',
+          }
+        ).then(()=>{
+          window.location.assign('/progressClub.html');
+        });
       } 
     });
 }

@@ -2,7 +2,7 @@
 let token = localStorage.getItem("token");
 const urlParams = new URLSearchParams(window.location.search);
 const progressId = urlParams.get("progressid");
-
+let authorID;
 let data;
 getProgressTimeData();
 setTimeout(function(){sendDate()}, 1200);
@@ -18,6 +18,7 @@ function minusPage () {
     page -= 1;
   }
 };
+let statusNum;
 
 //socket
 let myID;
@@ -53,6 +54,8 @@ socket.on('userInfo', (userInfo)=>{
   myPicURL = userInfo.photoURL;
   //localStorage只能存string
   localStorage.setItem('userInfo', JSON.stringify(userInfo));
+  let myprogress = document.querySelector("#myprogress");
+  myprogress.href = `myProgress?userid=${myID}`;
 });
 
 //看距離上次連線間有沒有未讀訊息(除了聊天室每頁都要有)
@@ -153,10 +156,13 @@ function getAuthorProfile () {
     .then (data => {
       if (data) {
         console.log(data);
+        authorID = data.author
         if (data.shareRoomID) {
           let msgLink = document.querySelector('#msgLink');
           msgLink.href = `/chatroom.html?roomid=${data.shareRoomID}&user1id=${data.author}&user2id=${data.vistor}`;
         }
+        let userLink = document.querySelector("#userLink");
+        userLink.href = `/myProgress?userid=${data.author}`;
         let userName = document.querySelector('#userName');
         userName.innerHTML = data.name;
         let fans = document.querySelector('#fans');
@@ -174,12 +180,22 @@ function getAuthorProfile () {
         let editProgressLink = document.querySelector('#editProgressLink');
         let addDiary = document.querySelector('#addDiary');
         let addDiaryLink = document.querySelector('#addDiaryLink');
+        let finishProgress = document.querySelector("#finishProgress")
+        let unfinishProgress = document.querySelector('#unfinishProgress')
+        let unfinishProgressCol = document.querySelector('#unfinishProgressCol');
         let followBtn = document.querySelector("#followBtn");
         let msgBtn = document.querySelector('#MessageBtn');
+        console.log(statusNum);
+        if (data.author == data.vistor && statusNum == 1) {
+          console.log(unfinishProgressCol);
+          unfinishProgressCol.style.display = "flex";
+        } else if (data.author == data.vistor && statusNum == 0) {
+          finishProgress.style.display = "flex";
+          addDiary.style.display = "flex";
+        }
         if (data.author == data.vistor) {
           editProfile.style.display = "flex";
           editProgress.style.display = "flex";
-          addDiary.style.display = "flex";
           followBtn.style.display = "none";
           msgBtn.style.display = "none";
           //在這裡改連結
@@ -210,6 +226,13 @@ function getProgressData () {
       if (data) {
         console.log(data);
         //做gif
+        statusNum = data.status;
+        let status = document.querySelector('#status');
+        if (data.status == 1) {
+          status.innerHTML = '狀態：已完成'
+        } else {
+          status.innerHTML = '狀態：未完成'
+        }
         if (data.diarys.length !== 0) { 
           let images = [];
           for (let i in data.diarys) {
@@ -474,7 +497,11 @@ function sendDate () {
       
     }
   })
-}   
+} 
+
+// if (statusNum == 1) {
+  
+// }
 
 function signOut () {
   Swal.fire({
@@ -543,3 +570,152 @@ function editProfile() {
   });
 }
 
+function search () {
+  let keyword = document.querySelector('#search').value;
+  if (keyword !== '') {
+    window.location.assign(`/category.html?keyword=${keyword}`);
+  } 
+}
+
+function finishProgress() {
+  fetch(`/finishProgress?status=1&progressid=${progressId}`,{
+    method: "POST",
+    headers: { 'authorization': `Bearer ${token}`,
+                'content-type': 'application/json'},
+  }).then(response => {
+    if (response.status === 200 ) {
+      Swal.fire(
+        {
+          title:"恭喜您完成Progress!!!!",
+          icon:"success",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      ).then(()=>{
+        window.location.assign(`/progress?progressid=${progressId}`);
+      })
+      return response.json();
+    } else if (response.status === 401) {
+      Swal.fire(
+        {
+          title:"請先登入",
+          icon:"warning",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      );
+      } else if (response.status === 403) {
+        Swal.fire(
+          {
+            title:"登入逾期",
+            icon:"error",
+            confirmButtonColor: '#132235',
+            confirmButtonText: 'OK',
+          }
+        );
+      } else if (response.status === 405) {
+        Swal.fire(
+          {
+            title:"無權限操作",
+            icon:"error",
+            confirmButtonColor: '#132235',
+            confirmButtonText: 'OK',
+          }
+        );
+      }
+    })
+}
+
+function unfinishProgress() {
+  fetch(`/finishProgress?status=0&progressid=${progressId}`,{
+    method: "POST",
+    headers: { 'authorization': `Bearer ${token}`,
+                'content-type': 'application/json'},
+  }).then(response => {
+    if (response.status === 200 ) {
+      Swal.fire(
+        {
+          title:"很好！很有鬥志！繼續努力",
+          icon:"success",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      ).then(()=>{
+        window.location.assign(`/progress?progressid=${progressId}`);
+      })
+      return response.json();
+    } else if (response.status === 401) {
+      Swal.fire(
+        {
+          title:"請先登入",
+          icon:"warning",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      );
+      } else if (response.status === 403) {
+        Swal.fire(
+          {
+            title:"登入逾期",
+            icon:"error",
+            confirmButtonColor: '#132235',
+            confirmButtonText: 'OK',
+          }
+        );
+      } else if (response.status === 405) {
+        Swal.fire(
+          {
+            title:"無權限操作",
+            icon:"error",
+            confirmButtonColor: '#132235',
+            confirmButtonText: 'OK',
+          }
+        );
+      }
+    })
+}
+
+function follow() {
+  let data = {
+    fans: myID,
+    idol: authorID
+  }
+  fetch(`/follow`,{
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { 'authorization': `Bearer ${token}`,
+                'content-type': 'application/json'},
+  }).then(response => {
+    if (response.status === 200 ) {
+      Swal.fire(
+        {
+          title:"追蹤成功",
+          icon:"success",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      ).then(()=>{
+        window.location.assign(`/progress?progressid=${progressId}`);
+      })
+      return response.json();
+    } else if (response.status === 401) {
+      Swal.fire(
+        {
+          title:"請先登入",
+          icon:"warning",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      );
+      } else if (response.status === 403) {
+        Swal.fire(
+          {
+            title:"登入逾期",
+            icon:"error",
+            confirmButtonColor: '#132235',
+            confirmButtonText: 'OK',
+          }
+        );
+      } 
+    })
+}

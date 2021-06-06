@@ -14,6 +14,7 @@ let myPic;
 let myPicURL;
 let noteBadge = document.querySelector('#noteBadge');
 let msgBadge = document.querySelector('#msgBadge');
+let authorID;
 
 const socket = io({
   auth: {
@@ -41,6 +42,8 @@ socket.on('userInfo', (userInfo)=>{
   myPicURL = userInfo.photoURL;
   //localStorage只能存string
   localStorage.setItem('userInfo', JSON.stringify(userInfo));
+  let myprogress = document.querySelector("#myprogress");
+  myprogress.href = `myProgress?userid=${myID}`;
 });
 
 //看距離上次連線間有沒有未讀訊息(除了聊天室每頁都要有)
@@ -79,6 +82,7 @@ function getAuthorProfile () {
       if (data) {
         console.log(data);
         //看是不是本人
+        authorID = data.author;
         if (data.shareRoomID) {
           let msgLink = document.querySelector('#msgLink');
           msgLink.href = `/chatroom.html?roomid=${data.shareRoomID}&user1id=${data.author}&user2id=${data.vistor}`;
@@ -96,6 +100,8 @@ function getAuthorProfile () {
           //在這裡改連結
           editDiaryLink.href=`/editDiary?progressid=${progressId}&diaryid=${diaryId}`;
         }
+        let userLink = document.querySelector("#userLink");
+        userLink.href = `/myProgress?userid=${data.author}`;
         let userName = document.querySelector('#userName');
         userName.innerHTML = data.name;
         let fans = document.querySelector('#fans');
@@ -273,4 +279,56 @@ function editProfile() {
       });
     }
   });
+}
+
+function search () {
+  let keyword = document.querySelector('#search').value;
+  if (keyword !== '') {
+    window.location.assign(`/category.html?keyword=${keyword}`);
+  } 
+}
+
+function follow() {
+  let data = {
+    fans: myID,
+    idol: authorID
+  }
+  fetch(`/follow`,{
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { 'authorization': `Bearer ${token}`,
+                'content-type': 'application/json'},
+  }).then(response => {
+    if (response.status === 200 ) {
+      Swal.fire(
+        {
+          title:"追蹤成功",
+          icon:"success",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      ).then(()=>{
+        window.location.assign(`/progress?progressid=${progressId}`);
+      })
+      return response.json();
+    } else if (response.status === 401) {
+      Swal.fire(
+        {
+          title:"請先登入",
+          icon:"warning",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      );
+      } else if (response.status === 403) {
+        Swal.fire(
+          {
+            title:"登入逾期",
+            icon:"error",
+            confirmButtonColor: '#132235',
+            confirmButtonText: 'OK',
+          }
+        );
+      } 
+    })
 }

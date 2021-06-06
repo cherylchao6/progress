@@ -34,6 +34,8 @@ socket.on('userInfo', (userInfo)=>{
   myPicURL = userInfo.photoURL;
   //localStorage只能存string
   localStorage.setItem('userInfo', JSON.stringify(userInfo));
+  let myprogress = document.querySelector("#myprogress");
+  myprogress.href = `myProgress?userid=${myID}`;
 });
 
 //看距離上次連線間有沒有未讀訊息(除了聊天室每頁都要有)
@@ -339,11 +341,13 @@ function getProgress () {
           $('.art').trigger('add.owl.carousel',[itemDiv,0]);
         }
         owl8.trigger('refresh.owl.carousel');
-
-
-
-
-        // ..........................
       }
     });
+}
+
+function search () {
+  let keyword = document.querySelector('#search').value;
+  if (keyword !== '') {
+    window.location.assign(`/category.html?keyword=${keyword}`);
+  } 
 }

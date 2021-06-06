@@ -61,6 +61,7 @@ const addDiary = async (req, res, next) => {
     if (diaryDataArray.length !== 0) {
       await Diary.addDiaryData(diaryDataArray);
     }
+    res.sendStatus(200); 
   } catch (err) {
     next(err);
   }
@@ -211,7 +212,7 @@ const editDiary = async (req, res, next) => {
       diaryDataArray.push(inputData);
     }
     await Diary.editDiaryData(diaryDataArray);
-
+    res.sendStatus(200); 
   } catch (err) {
     next(err);
   }

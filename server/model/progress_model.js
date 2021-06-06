@@ -399,6 +399,58 @@ const selectNewProgress = async () => {
   }
 }
 
+const selectProgressCategory = async (requestInfo) => {
+  try {
+    console.log(requestInfo);
+    console.log("selectProgressCategory model........");
+    let category = requestInfo.category;
+    let result = await pool.query(`SELECT * FROM progress WHERE category='${category}' AND public NOT IN ('1') ORDER BY id DESC`);
+    console.log(result[0]);
+    for (let i in result[0]) {
+      result[0][i].picture = `${process.env.IMAGE_PATH}${result[0][i].picture}`
+    }
+    let data = {
+      data:result[0]
+    }
+    return data;
+  } catch (error) {
+      console.log(error);
+      return {error};
+  }
+}
+
+const selectProgressSearch = async (requestInfo) => {
+  try {
+    console.log(requestInfo);
+    console.log("selectProgressSearch model........");
+    let keyword = requestInfo.keyword;
+    let result = await pool.query(`SELECT * FROM progress WHERE name LIKE '%${keyword}%' AND public NOT IN ('1') ORDER BY id DESC`);
+    console.log(result[0]);
+    for (let i in result[0]) {
+      result[0][i].picture = `${process.env.IMAGE_PATH}${result[0][i].picture}`
+    }
+    let data = {
+      data:result[0]
+    }
+    return data;
+  } catch (error) {
+      console.log(error);
+      return {error};
+  }
+}
+
+const finishProgress = async (request) => {
+  try {
+    let updateStatus = request.status;
+    let progressID = request.progressid;
+    console.log("finishProgress model........");
+    let result = await pool.query(`UPDATE progress SET status=${updateStatus} WHERE id=${progressID}`);
+  } catch (error) {
+      console.log(error);
+      return {error};
+  }
+}
+
 module.exports = {
   addProgress,
   addProgressData,
@@ -418,5 +470,8 @@ module.exports = {
   editGroupProgress,
   selectGroupProgressIDRoomID,
   selectMyProgress,
-  selectNewProgress
+  selectNewProgress,
+  selectProgressCategory,
+  selectProgressSearch,
+  finishProgress
 }

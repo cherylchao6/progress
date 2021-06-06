@@ -45,6 +45,8 @@ socket.on('userInfo', (userInfo)=>{
   myPicURL = userInfo.photoURL;
   //localStorage只能存string
   localStorage.setItem('userInfo', JSON.stringify(userInfo));
+  let myprogress = document.querySelector("#myprogress");
+  myprogress.href = `myProgress?userid=${myID}`;
 });
 
 //看距離上次連線間有沒有未讀訊息(除了聊天室每頁都要有)
@@ -98,6 +100,17 @@ form.addEventListener ("submit", function(ev){
   })
   .then(function (response) {
     if (response.status === 200) {
+      console.log("here");
+      Swal.fire(
+        {
+          title:"新增Progress成功",
+          icon:"success",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      ).then(()=>{
+        window.location.assign(`/myProgress?userid=${myID}`);
+      });
       return response.json();
     } else if (response.status === 401) {
       alert("請先登入");
@@ -135,4 +148,11 @@ function signOut () {
       socket.emit("logOut", "true");
     }
   });
+}
+
+function search () {
+  let keyword = document.querySelector('#search').value;
+  if (keyword !== '') {
+    window.location.assign(`/category.html?keyword=${keyword}`);
+  } 
 }

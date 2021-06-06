@@ -66,7 +66,8 @@ const addProgress = async (req, res, next) => {
     }
     if (progressDataArray.length !== 0) {
       await Progress.addProgressData(progressDataArray);
-    } 
+    }
+    res.sendStatus(200); 
   } catch (err) {
     next(err);
   }
@@ -180,6 +181,7 @@ const editProgress = async (req, res, next) => {
         }
       }
     }
+    res.sendStatus(200); 
   } catch (err) {
     next(err);
   }
@@ -188,13 +190,22 @@ const editProgress = async (req, res, next) => {
 const selectProgress = async (req, res, next) => {
   try {
     // req.query parameter 傳回 { progressid: '1' }
-    let progressInfo = await Progress.selectProgress(req.query);
-    let pictureName = progressInfo.progress.picture;
-    let pictureWithPath = `${process.env.IMAGE_PATH}${pictureName}`;
-    progressInfo.progress.picture = pictureWithPath;
-    let data = {
-      data: progressInfo
+    let data;
+    if (req.query.progressid){
+      let progressInfo = await Progress.selectProgress(req.query);
+      let pictureName = progressInfo.progress.picture;
+      let pictureWithPath = `${process.env.IMAGE_PATH}${pictureName}`;
+      progressInfo.progress.picture = pictureWithPath;
+      data = {
+        data: progressInfo
+      }
     }
+    if (req.query.category) {
+      data = await Progress.selectProgressCategory(req.query);
+    }
+    if (req.query.keyword) {
+      data = await Progress.selectProgressSearch(req.query);
+    }  
     res.status(200).send(data);
   } catch (err) {
     next(err);
@@ -567,6 +578,16 @@ const selectNewProgress = async (req, res, next) => {
   }
 };
 
+const finishProgress = async (req, res, next) => {
+  try {
+    console.log("finishProgress controller");
+    await Progress.finishProgress(req.query);
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   addProgress,
   editProgress,
@@ -582,7 +603,8 @@ module.exports = {
   editGroupProgress,
   joinGroupProgress,
   selectMyProgress,
-  selectNewProgress
+  selectNewProgress,
+  finishProgress
 };
 
 //產生邀請碼

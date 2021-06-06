@@ -17,7 +17,7 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid" id="header">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/progressClub.html">
           <img src="./images/logo.jpg" id="logo">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,14 +36,14 @@
                 類別
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">運動</a></li>
-                <li><a class="dropdown-item" href="#">成長</a></li>
-                <li><a class="dropdown-item" href="#">體態外表</a></li>
-                <li><a class="dropdown-item" href="#">園藝</a></li>
-                <li><a class="dropdown-item" href="#">學習</a></li>
-                <li><a class="dropdown-item" href="#">居家</a></li>
-                <li><a class="dropdown-item" href="#">烹飪</a></li>
-                <li><a class="dropdown-item" href="#">作品</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=運動">愛心</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=成長">成長</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=體態外表">體態外表</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=園藝">園藝</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=學習">學習</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=居家">居家</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=烹飪">烹飪</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=作品">作品</a></li>
               </ul>
             </li>
           </ul>
@@ -54,14 +54,7 @@
           <div class="notification dropdown" id="newNote">
             <i class="far fa-bell icon dropdown-toggle" id="newNoteIcon" role="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="noteUl">
-              <li><a class="dropdown-item" href="#">運動</a></li>
-              <li><a class="dropdown-item" href="#">成長</a></li>
-              <li><a class="dropdown-item" href="#">體態外表</a></li>
-              <li><a class="dropdown-item" href="#">園藝</a></li>
-              <li><a class="dropdown-item" href="#">學習</a></li>
-              <li><a class="dropdown-item" href="#">居家</a></li>
-              <li><a class="dropdown-item" href="#">烹飪</a></li>
-              <li><a class="dropdown-item" href="#">作品</a></li>
+              <li><a class="dropdown-item" href="#">尚無通知</a></li>
             </ul>
             <div class="iconBagde badge" id="noteBadge"> </div>
           </div>
@@ -70,8 +63,8 @@
             <div class="iconBagde badge" id="msgBadge"> </div>
           </a>
           <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="有人完成過......" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
+            <input id="search" class="form-control me-2" type="search" placeholder="有人完成過......" aria-label="Search">
+            <div class="btn btn-outline-success" onclick="search()">Search</div>
           </form>
         </div>
       </div>
@@ -92,12 +85,12 @@
           </div>
           <a id="editProfileLink" href="#"><div class="row userDetail" id="editProfile" onclick="editProfile()">編輯個人檔案</div></a>
           <div class="row" id="moreAction">
-            <div class="col-6" id="followBtn">追蹤</div>
+            <div class="col-6" id="followBtn" onclick="follow()">追蹤</div>
             <div class="col-6" id="MessageBtn"><a id="msgLink" href="#">私訊</a></div>
           </div>
         </div>
         <div class="col-6 user2">
-          <img id="userPicture">
+          <a href="#" id="userLink"><img id="userPicture"></a>
         </div>
         <div class="row" id="motto">
 
@@ -107,6 +100,7 @@
         <div>
           <div class="userDetail text-center"><h4 id="progressName"><h4></div>
           <div class="userDetail text-center"><h4 id="category"></h4></div>
+          <div class="userDetail text-center"><h4 id="status"></h4></div>
           <!-- <button class="btn btn-outline-dark addBtn"><a id="addDiaryLink" href="/addProgress">新增日記</a></button> -->
           <!-- <div class="text-center" id="addDiaryDiv"><div class="text-center" id="addDiaryBtn"><a id="addDiaryLink" href="#">新增日記</a></div></div> -->
         </div>
@@ -128,7 +122,14 @@
         <div class="col-2 buttonCol">
           <a id="finishProgressLink">
             <div id="finishProgress" class="text-center">
-              <button class="btn btn-outline-dark">完成Progress</button>
+              <button class="btn btn-outline-dark" onclick="finishProgress()">完成Progress</button>
+            </div>
+          </a>
+        </div>
+        <div class="col-2 buttonCol" id="unfinishProgressCol">
+          <a id="unfinishProgressLink">
+            <div id="unfinishProgress" class="text-center">
+              <button class="btn btn-outline-dark" onclick="unfinishProgress()">繼續Progress</button>
             </div>
           </a>
         </div>
