@@ -271,11 +271,9 @@ const selectGroupProgressBasicInfo = async (userID, groupProgressID) => {
 
 const addGroupPersonalProgress = async (personalData) => {
   try {
-    console.log('addGroupPersonalProgress model');
-    console.log(personalData);
-    console.log(`SELECT * FROM group_progress_diary WHERE user_id=${personalData.user_id} AND date=${personalData.date}`);
+    console.log('addGroupPersonalProgress model..........');
     //先選看看有沒有再加
-    let result = await pool.query(`SELECT * FROM group_progress_diary WHERE user_id=${personalData.user_id} AND date='${personalData.date}'`);
+    let result = await pool.query(`SELECT * FROM group_progress_diary WHERE user_id=${personalData.user_id} AND date='${personalData.date}' AND group_progress_id = ${personalData.group_progress_id}`);
     if (result[0].length == 0) {
       let result2 = await pool.query("INSERT INTO group_progress_diary SET?", personalData);
     } else if (result[0].length !== 0) {
@@ -284,17 +282,14 @@ const addGroupPersonalProgress = async (personalData) => {
     //更新group_progress_user table
     //先選出progress goal
     let result4 = await pool.query(`SELECT goal_num FROM group_progress WHERE id=${personalData.group_progress_id}`);
-    console.log("....................");
     let goalNumber = result4[0][0].goal_num;
     //選出user加總
-    let result5 = await pool.query(`SELECT SUM(data_num) FROM group_progress_diary WHERE user_id = ${personalData.user_id}`);
+    let result5 = await pool.query(`SELECT SUM(data_num) FROM group_progress_diary WHERE user_id = ${personalData.user_id} AND group_progress_id = ${personalData.group_progress_id}`);
     let dataSum = result5[0][0]['SUM(data_num)'];
     let percent = Math.round(parseInt(dataSum)/parseInt(goalNumber)*100);
     if (percent > 100) {
       percent = 100;
     }
-    console.log(percent);
-    console.log(personalData.date);
     let result6 = await pool.query (`UPDATE group_progress_user SET last_date='${personalData.date}', percent=${percent} WHERE user_id=${personalData.user_id} and group_progress_id=${personalData.group_progress_id}`);
   } catch (error) {
       console.log(error);

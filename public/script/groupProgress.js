@@ -164,13 +164,22 @@ function getGroupData () {
               todayDate.style.display = "none";
               dataTodayDiv.style.display = "none";
               saveBtnDiv.style.display = "none";
+          } else if (data.basicInfo.start_date > today) {
+            let firstDate = today;
+            let lastDate = data.basicInfo.end_date;
+            let totalDays = progressDays(firstDate, lastDate);
+            groupDay.innerHTML = `Begins In</br>${totalDays}</br>Days`;
+            let personalProgressRow =document.querySelector("#personalProgressRow");
+            personalProgressRow.style.display = "none";
+            let memberProgressBars =document.querySelector("#memberProgressBars");
+            memberProgressBars.style.display = "none";
           } else {
             let firstDate = today;
             let lastDate = data.basicInfo.end_date;
             let totalDays = progressDays(firstDate, lastDate);
             groupDay.innerHTML = `${totalDays}</br>Days</br>TO GO`;
           }
-        }
+        } 
         //memberList
         if (data.members.length == 8) {
           let addMemberBtn = document.querySelector("#addMember");
