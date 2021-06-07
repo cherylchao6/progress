@@ -371,7 +371,7 @@ const selectNewProgress = async () => {
     let selectEight = async (category) => {
       console.log("here");
       let result = await pool.query(`SELECT * FROM (
-        SELECT * FROM progress WHERE category ="${category}" ORDER BY id DESC LIMIT 8 
+        SELECT * FROM progress WHERE category ="${category}" AND public NOT IN ('1') ORDER BY id DESC LIMIT 8 
      )Var1
         ORDER BY id ASC`)
       // console.log(result[0]);
