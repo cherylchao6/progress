@@ -219,3 +219,10 @@ function search () {
     window.location.assign(`/category.html?keyword=${keyword}`);
   } 
 }
+
+function waitingAlert () {
+  Swal.fire({
+    title:"上傳中請稍候",
+    icon: 'warning',
+  })
+}

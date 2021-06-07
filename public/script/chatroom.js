@@ -36,7 +36,7 @@ if (!roomID) {
   NowAtRoomID = roomID;
   //拿聊天室訊息同時也要跟server更新最新的一則未讀;
   socket.emit("getRoomMsg", roomID);
-}
+} 
 
 socket.on("checkShareRoomResult", shareRoom => {
   console.log("checkShareRoomResult");
@@ -46,7 +46,7 @@ socket.on("checkShareRoomResult", shareRoom => {
     let users = [user1ID,user2ID];
     socket.emit("createRoom", users);
   }
-})
+});
 socket.on('connect', () => {
   socketID = socket.id;
   console.log(socket.id);
