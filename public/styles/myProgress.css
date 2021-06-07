@@ -353,3 +353,7 @@ body{
 .modal-content {
   width: 400px;
 }
+
+#motto {
+  letter-spacing: 2px;
+}
