@@ -543,8 +543,11 @@ socket.on("newMsg", msgInfo => {
     newRoomLi.style.order = order-1;
     order -= 1
   }
-
 })
+
+function back () {
+  window.history.go(-1);
+}
 // let paging=0;
 // let friendList = document.querySelector("#friend-list");
 // // console.log(friendList.offsetHeight);
