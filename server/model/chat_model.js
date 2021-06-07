@@ -7,6 +7,8 @@ const selectRooms = async (socket) => {
   try{
     let userID = socket.userInfo.id;
     let chatRoomsList = await pool.query(`SELECT room_user.room_id, room.name, room.image, MAX(message.sqltime) AS latest_time FROM room_user JOIN room ON room_user.room_id = room.id JOIN message ON room_user.room_id = message.room_id WHERE user=${userID} GROUP BY message.room_id ORDER BY MAX(message.sqltime) DESC`);
+    console.log("selectRooms.....................................");
+    console.log(chatRoomsList[0]);
     for (let k in chatRoomsList[0]) {
       let roomID = chatRoomsList[0][k].room_id;
       let MsgArray = await pool.query(`SELECT room_id, source_id, source_name, msg, time, sqltime FROM message WHERE room_id = ${roomID} ORDER BY sqltime DESC`);

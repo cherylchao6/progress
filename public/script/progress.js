@@ -1,12 +1,15 @@
 // Get API query parameter
+
 let token = localStorage.getItem("token");
 const urlParams = new URLSearchParams(window.location.search);
 const progressId = urlParams.get("progressid");
+getProgressData ();
 let authorID;
 let data;
+
 getProgressTimeData();
 setTimeout(function(){sendDate()}, 1200);
-getProgressData ();
+
 getAuthorProfile();
 let page = 0;
 function addPage () {
