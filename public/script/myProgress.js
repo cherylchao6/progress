@@ -424,25 +424,3 @@ function follow() {
     })
 }
 
-// function getMyProgressData () {
-//   fetch(`/api/1.0/fansidols?userid=${userId}`,{
-//     method: "GET",
-//     headers: { 'authorization': `Bearer ${token}` },
-//   }).then(response => {
-//     if (response.status === 200 ) {
-//       return response.json();
-//     } else if (response.status === 401) {
-//       alert('請先登入');
-//       return window.location.assign('/signin');
-//       } else if (response.status === 403) {
-//         alert('登入逾期');
-//         return window.location.assign('/signin');
-//       }
-//     })
-//     .then (data => {
-//       if (data) {
-//         console.log(data);
-        
-//       }
-//     });
-// }

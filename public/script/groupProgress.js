@@ -89,6 +89,8 @@ function getGroupData () {
                 setTimeout(function(){ window.location.assign(`/groupProgress?id=${data.groupProgressID}`); }, 2000);
               }
             });
+          } else {
+            window.history.go(-1);
           }
         });
       }
