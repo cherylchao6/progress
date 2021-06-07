@@ -68,6 +68,7 @@ const selectUserPic = async (userID) => {
 
 const selectUserInfo = async (userID) => {
   try {
+    console.log("selectUserInfo model......");
     let userBasicInfo = await pool.query(`SELECT id, name, photo, motto FROM users WHERE id=${userID}`);
     // {
     //   id: 1,
@@ -77,8 +78,14 @@ const selectUserInfo = async (userID) => {
     // }
     let finishedProgress = await pool.query (`SELECT id FROM progress WHERE user_id=${userID} AND status =1`);
     let unfinishedProgress = await pool.query (`SELECT id FROM progress WHERE user_id=${userID} AND status =0`);
-    let follower = await pool.query (`SELECT follower_id FROM follow WHERE following_id = ${userID}`);
-    let following = await pool.query (`SELECT following_id FROM follow WHERE follower_id = ${userID}`);
+    let follower = await pool.query (`SELECT follow.follower_id, users.name, users.photo FROM follow JOIN users ON users.id = follow.follower_id WHERE following_id = ${userID}`);
+    for (let i in follower[0]) {
+      follower[0][i].photo = `${process.env.IMAGE_PATH}${follower[0][i].photo}`;
+    }
+    let following = await pool.query (`SELECT follow.following_id, users.name, users.photo FROM follow JOIN users ON users.id = follow.following_id WHERE follower_id = ${userID}`);
+    for (let i in following[0]) {
+      following[0][i].photo = `${process.env.IMAGE_PATH}${following[0][i].photo}`;
+    }
     let data = {
       author: userBasicInfo[0][0].id,
       name: userBasicInfo[0][0].name,
@@ -86,8 +93,8 @@ const selectUserInfo = async (userID) => {
       motto: userBasicInfo[0][0].motto,
       finishedProgress: finishedProgress[0].length,
       unfinishedProgress: unfinishedProgress[0].length,
-      follower: follower[0].length,
-      following: following[0].length,
+      follower: follower[0],
+      following: following[0]
     }
     return data;
   } catch (error) {

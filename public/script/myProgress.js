@@ -87,9 +87,9 @@ function getUserInfo () {
         let userName = document.querySelector('#userName');
         userName.innerHTML = data.name;
         let fans = document.querySelector('#fans');
-        fans.innerHTML = `粉絲 ${data.follower}`;
+        fans.innerHTML = `粉絲 ${data.follower.length}`;
         let idols = document.querySelector('#idols');
-        idols.innerHTML = `偶像 ${data.following}`;
+        idols.innerHTML = `偶像 ${data.following.length}`;
         let motto = document.querySelector('#motto');
         motto.innerHTML = data.motto;
         let userPicture = document.querySelector('#userPicture');
@@ -108,6 +108,53 @@ function getUserInfo () {
         let unfinishedProgress = document.querySelector('#unfinishedProgress');
         finishedProgress.innerHTML = `${data.finishedProgress}</br>Progress</br>Finished</br>`;
         unfinishedProgress.innerHTML = `${data.unfinishedProgress}</br>Progress</br>To Go</br>`;
+        //粉絲偶像modal
+        let fansList = document.querySelector("#fansList");
+        let idolList = document.querySelector('#idolList');
+        for (let i in data.follower) {
+          let listRow = document.createElement('div');
+          listRow.className = "row listRow";
+          fansList.appendChild(listRow);
+          let listImgDiv = document.createElement('div');
+          listImgDiv.className = "col-3 listImgDiv";
+          listRow.appendChild(listImgDiv);
+          let imgLink = document.createElement("a");
+          imgLink.href = `/myProgress?userid=${data.follower[i].follower_id}`
+          listImgDiv.appendChild(imgLink);
+          let listImg = document.createElement("img");
+          listImg.className = "listImg";
+          listImg.src = data.follower[i].photo;
+          imgLink.appendChild(listImg);
+          let listNameDiv = document.createElement("listNameDiv");
+          listNameDiv.className = "col-3 listNameDiv";
+          listRow.appendChild(listNameDiv);
+          let listName = document.createElement('p');
+          listName.className = "listName";
+          listName.innerHTML = data.follower[i].name;
+          listNameDiv.appendChild(listName);
+        }
+        for (let i in data.following) {
+          let listRow = document.createElement('div');
+          listRow.className = "row listRow";
+          idolList.appendChild(listRow);
+          let listImgDiv = document.createElement('div');
+          listImgDiv.className = "col-3 listImgDiv";
+          listRow.appendChild(listImgDiv);
+          let imgLink = document.createElement("a");
+          imgLink.href = `/myProgress?userid=${data.following[i].following_id}`
+          listImgDiv.appendChild(imgLink);
+          let listImg = document.createElement("img");
+          listImg.className = "listImg";
+          listImg.src = data.following[i].photo;
+          imgLink.appendChild(listImg);
+          let listNameDiv = document.createElement("listNameDiv");
+          listNameDiv.className = "col-3 listNameDiv";
+          listRow.appendChild(listNameDiv);
+          let listName = document.createElement('p');
+          listName.className = "listName";
+          listName.innerHTML = data.following[i].name;
+          listNameDiv.appendChild(listName);
+        }
       }
     });
 }
@@ -376,3 +423,26 @@ function follow() {
       } 
     })
 }
+
+// function getMyProgressData () {
+//   fetch(`/api/1.0/fansidols?userid=${userId}`,{
+//     method: "GET",
+//     headers: { 'authorization': `Bearer ${token}` },
+//   }).then(response => {
+//     if (response.status === 200 ) {
+//       return response.json();
+//     } else if (response.status === 401) {
+//       alert('請先登入');
+//       return window.location.assign('/signin');
+//       } else if (response.status === 403) {
+//         alert('登入逾期');
+//         return window.location.assign('/signin');
+//       }
+//     })
+//     .then (data => {
+//       if (data) {
+//         console.log(data);
+        
+//       }
+//     });
+// }

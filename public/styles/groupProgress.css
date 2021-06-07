@@ -188,7 +188,7 @@ img {
 }
 
 #history {
-  cursor: pointer;
+  cursor: url("../../images/journal.png"), auto;
   font-size: 10px;
   color: #6ddad3;
   margin-top: 10px;
@@ -259,6 +259,9 @@ img {
   color: #6ddad3;
 }
 
+body{
+  overflow-x:hidden;
+}
 
 
 

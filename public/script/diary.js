@@ -105,15 +105,60 @@ function getAuthorProfile () {
         let userName = document.querySelector('#userName');
         userName.innerHTML = data.name;
         let fans = document.querySelector('#fans');
-        fans.innerHTML = `粉絲 ${data.follower}`;
+        fans.innerHTML = `粉絲 ${data.follower.length}`;
         let idols = document.querySelector('#idols');
-        idols.innerHTML = `偶像 ${data.following}`;
-        let finishedProgress = document.querySelector('#finishedProgress');
-        finishedProgress.innerHTML = data.finishedProgress;
+        idols.innerHTML = `偶像 ${data.following.length}`;
         let motto = document.querySelector('#motto');
         motto.innerHTML = data.motto;
         let userPicture = document.querySelector('#userPicture');
         userPicture.src = data.photo;
+      }
+      //粉絲偶像modal
+      let fansList = document.querySelector("#fansList");
+      let idolList = document.querySelector('#idolList');
+      for (let i in data.follower) {
+        let listRow = document.createElement('div');
+        listRow.className = "row listRow";
+        fansList.appendChild(listRow);
+        let listImgDiv = document.createElement('div');
+        listImgDiv.className = "col-3 listImgDiv";
+        listRow.appendChild(listImgDiv);
+        let imgLink = document.createElement("a");
+        imgLink.href = `/myProgress?userid=${data.follower[i].follower_id}`
+        listImgDiv.appendChild(imgLink);
+        let listImg = document.createElement("img");
+        listImg.className = "listImg";
+        listImg.src = data.follower[i].photo;
+        imgLink.appendChild(listImg);
+        let listNameDiv = document.createElement("listNameDiv");
+        listNameDiv.className = "col-3 listNameDiv";
+        listRow.appendChild(listNameDiv);
+        let listName = document.createElement('p');
+        listName.className = "listName";
+        listName.innerHTML = data.follower[i].name;
+        listNameDiv.appendChild(listName);
+      }
+      for (let i in data.following) {
+        let listRow = document.createElement('div');
+        listRow.className = "row listRow";
+        idolList.appendChild(listRow);
+        let listImgDiv = document.createElement('div');
+        listImgDiv.className = "col-3 listImgDiv";
+        listRow.appendChild(listImgDiv);
+        let imgLink = document.createElement("a");
+        imgLink.href = `/myProgress?userid=${data.following[i].following_id}`
+        listImgDiv.appendChild(imgLink);
+        let listImg = document.createElement("img");
+        listImg.className = "listImg";
+        listImg.src = data.following[i].photo;
+        imgLink.appendChild(listImg);
+        let listNameDiv = document.createElement("listNameDiv");
+        listNameDiv.className = "col-3 listNameDiv";
+        listRow.appendChild(listNameDiv);
+        let listName = document.createElement('p');
+        listName.className = "listName";
+        listName.innerHTML = data.following[i].name;
+        listNameDiv.appendChild(listName);
       }
     });
 }

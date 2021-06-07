@@ -78,8 +78,8 @@
             <div class="container" id ="userDetail">
               <div class="userDetail" id="userName"></div>
               <div id="fansidols">
-                <div class="userDetail" id="fans"></div>
-                <div class="userDetail" id="idols"></div>
+                <div class="userDetail" id="fans" data-bs-toggle="modal" data-bs-target="#fansModal"></div>
+                <div class="userDetail" id="idols" data-bs-toggle="modal" data-bs-target="#idolModal"></div>
               </div>
             </div>
             <a id="editProfileLink" href="#"><div class="row userDetail" id="editProfile" onclick="editProfile()">編輯個人檔案</div></a>
@@ -125,7 +125,43 @@
 
           </div>
         </div>
-        
+      </div>
+
+    </div>
+
+    <!-- FansModal -->
+    <div class="modal fade" id="fansModal" tabindex="-1" aria-labelledby="fansLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header" id="fansHeader">
+            <h5 class="modal-title" id="fansModalLabel">粉絲</h5>
+          </div>
+          <div class="modal-body container" id="fansList">
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IdolModal -->
+    <div class="modal fade" id="idolModal" tabindex="-1" aria-labelledby="idolModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header" id="idolHeader">
+            <h5 class="modal-title" id="idolModalLabel">偶像</h5>
+          </div>
+          <div class="modal-body container" id="idolList">
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
   </main>

@@ -153,16 +153,22 @@ const selectProgressAuthor = async (progressid) => {
     let authorid = await pool.query (`SELECT user_id FROM progress WHERE id = ${progressid}`);
     let authorProfile = await pool.query (`SELECT id, name, photo, motto FROM users WHERE id=${authorid[0][0].user_id}`);
     let finishedProgress = await pool.query (`SELECT id FROM progress WHERE user_id=${authorid[0][0].user_id} AND status =1`);
-    let follower = await pool.query (`SELECT follower_id FROM follow WHERE following_id = ${authorid[0][0].user_id}`);
-    let following = await pool.query (`SELECT following_id FROM follow WHERE follower_id = ${authorid[0][0].user_id}`);
+    let follower = await pool.query (`SELECT follow.follower_id, users.name, users.photo FROM follow JOIN users ON users.id = follow.follower_id WHERE following_id = ${authorid[0][0].user_id}`);
+    let following = await pool.query (`SELECT follow.following_id, users.name, users.photo FROM follow JOIN users ON users.id = follow.following_id WHERE follower_id = ${authorid[0][0].user_id}`);
+    for (let i in follower[0]) {
+      follower[0][i].photo = `${process.env.IMAGE_PATH}${follower[0][i].photo}`;
+    }
+    for (let i in following[0]) {
+      following[0][i].photo = `${process.env.IMAGE_PATH}${following[0][i].photo}`;
+    }
     let data = {
       author: authorProfile[0][0].id,
       name: authorProfile[0][0].name,
       photo: `${process.env.IMAGE_PATH}${authorProfile[0][0].photo}`,
       motto: authorProfile[0][0].motto,
       finishedProgress: finishedProgress[0].length,
-      follower: follower[0].length,
-      following: following[0].length,
+      follower: follower[0],
+      following: following[0]
     }
     return(data);
 } catch (error) {

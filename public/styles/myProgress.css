@@ -69,6 +69,10 @@ main {
 /* 把原本row拿掉 新增一個div  */
 #userName {
  text-align: center;
+ letter-spacing: 1px;
+ font-size: 25px;
+ font-weight: bold;
+ color: rgb(19, 34, 53);
 }
 
 #fansidols {
@@ -296,4 +300,56 @@ img {
   align-items: center;
   justify-content: center;
   display: none;
+}
+
+#fans, #idols {
+  cursor: url("../../images/heart.png"), auto;	
+}
+
+body{
+  overflow-x:hidden;
+}
+
+.modal-header {
+  background-color: rgb(19, 34, 53);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-title {
+  color: #ddd;
+  letter-spacing: 2px;
+}
+
+.listImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.listImgDiv {
+  width: 80px;
+  height: 80px;
+  padding: 0;
+}
+
+.listName {
+  margin-bottom: 0px;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+
+.listNameDiv {
+  line-height: 80px;
+}
+
+.listRow {
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+
+.modal-content {
+  width: 400px;
 }
