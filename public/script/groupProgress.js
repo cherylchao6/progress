@@ -4,7 +4,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const groupProgressID = urlParams.get("id");
 console.log(groupProgressID);
 let invationCode;
-getGroupData ();
+
 
 //今天日期
 let today = new Date();
@@ -327,6 +327,8 @@ socket.on('userInfo', (userInfo)=>{
   let myprogress = document.querySelector("#myprogress");
   myprogress.href = `myProgress?userid=${myID}`;
 });
+
+getGroupData ();
 
 //看距離上次連線間有沒有未讀訊息(除了聊天室每頁都要有)
 socket.on ("checknewMsgNotification", hasUnread => {
