@@ -277,6 +277,14 @@ socket.on("getRoomMsg",data =>{
 });
 
 //sendMsg
+//enter可以送訊息
+let msgInput = document.querySelector("#msgInput");
+msgInput.addEventListener("keyup", (event) => {
+  if (event.keyCode === 13) {
+      event.preventDefault();
+      sendMsg ()
+  }
+});
 function sendMsg () {
   let currentTime = new Date().toLocaleString();
   let msg = document.querySelector("#msgInput");
@@ -377,7 +385,6 @@ function sendMsg () {
             method: "GET",
           }).then(response => {
             if (response.status === 200 ) {
-              console.log("hihihihihihi");
               return response.json();
             }
           }).then(data=>{
