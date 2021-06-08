@@ -205,6 +205,7 @@ function getGroupData () {
           memberRaw.appendChild(itemDiv);
           //加入ProressBar
           //自己的progreeBar
+          console.log(data.members[k].id == myID);
           if (data.members[k].id == myID) {
             let myProgressBar = document.querySelector("#myProgressBar");
             let myProgressBarDiv = document.createElement("div");
