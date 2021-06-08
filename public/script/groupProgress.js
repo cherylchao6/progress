@@ -205,8 +205,8 @@ function getGroupData () {
           memberRaw.appendChild(itemDiv);
           //加入ProressBar
           //自己的progreeBar
-          console.log(data.members[k].id == myID);
-          if (data.members[k].id == myID) {
+          console.log(parseInt(data.members[k].id) == parseInt(myID));
+          if (parseInt(data.members[k].id) == parseInt(myID)) {
             let myProgressBar = document.querySelector("#myProgressBar");
             let myProgressBarDiv = document.createElement("div");
             myProgressBarDiv.className = 'progress-bar progress-bar-striped';
