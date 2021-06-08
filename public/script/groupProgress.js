@@ -206,6 +206,8 @@ function getGroupData () {
           //加入ProressBar
           //自己的progreeBar
           console.log(parseInt(data.members[k].id) == parseInt(myID));
+          console.log(data.members[k].id);
+          console.log(myID);
           if (parseInt(data.members[k].id) == parseInt(myID)) {
             let myProgressBar = document.querySelector("#myProgressBar");
             let myProgressBarDiv = document.createElement("div");
