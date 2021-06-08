@@ -210,6 +210,8 @@ function getGroupData () {
             let myProgressBarDiv = document.createElement("div");
             myProgressBarDiv.className = 'progress-bar progress-bar-striped';
             myProgressBarDiv.setAttribute('role', 'progressbar');
+            console.log("here")
+            console.log(data.members[k].percent);
             myProgressBarDiv.style.width = `${data.members[k].percent}%`;
             myProgressBarDiv.setAttribute('aria-valuenow', `${data.members[k].percent}`);
             myProgressBarDiv.setAttribute('aria-valuemin', '0');
