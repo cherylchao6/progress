@@ -4,7 +4,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const groupProgressID = urlParams.get("id");
 console.log(groupProgressID);
 let invationCode;
-
+getGroupData ();
 
 //今天日期
 let today = new Date();
@@ -205,10 +205,8 @@ function getGroupData () {
           memberRaw.appendChild(itemDiv);
           //加入ProressBar
           //自己的progreeBar
-          console.log(parseInt(data.members[k].id) == parseInt(myID));
-          console.log(data.members[k].id);
-          console.log(myID);
-          if (parseInt(data.members[k].id) == parseInt(myID)) {
+          let myselfID = JSON.parse(localStorage.getItem('userInfo')).id;
+          if (data.members[k].id == myselfID) {
             let myProgressBar = document.querySelector("#myProgressBar");
             let myProgressBarDiv = document.createElement("div");
             myProgressBarDiv.className = 'progress-bar progress-bar-striped';
@@ -327,8 +325,6 @@ socket.on('userInfo', (userInfo)=>{
   let myprogress = document.querySelector("#myprogress");
   myprogress.href = `myProgress?userid=${myID}`;
 });
-
-getGroupData ();
 
 //看距離上次連線間有沒有未讀訊息(除了聊天室每頁都要有)
 socket.on ("checknewMsgNotification", hasUnread => {
