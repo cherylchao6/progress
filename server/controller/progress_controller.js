@@ -2,6 +2,7 @@ const Progress = require('../model/progress_model.js');
 const Diary = require('../model/diary_model.js');
 const ChatModel = require('../model/chat_model.js');
 require('dotenv').config();
+const validator = require('validator');
 
 
 const addProgress = async (req, res, next) => {
@@ -9,6 +10,25 @@ const addProgress = async (req, res, next) => {
     //insert progress table
     let progressData;
     let reqData = JSON.parse(JSON.stringify(req.body));
+    if(!reqData.progressName || !reqData.motivation || validator.isEmpty(reqData.motivation) || validator.isEmpty(reqData.progressName)){
+      res.status(400).send({error:'Progress名字和動機為必填欄位'});
+      return;
+    }
+    if (!validator.isIn(reqData.category, ['類別','運動','成長','體態外表','園藝','學習','居家','烹飪',"作品"])) {
+      res.status(400).send({error:'沒有這種類別'});
+      return;
+    }
+
+    if(reqData.checkPrivacy && reqData.checkPrivacy !== "1"){
+      res.status(400).send({error:'不正常'});
+      return;
+    }
+
+    if(reqData.progressName.length > 9 || reqData.motivation.length > 30){
+      res.status(400).send({error:'輸入過長字元'});
+      return;
+    }
+
     if (req.file) {
       if (reqData.checkPrivacy) {
         progressData = {
@@ -77,6 +97,26 @@ const editProgress = async (req, res, next) => {
   try {
     let editProgressData;
     let reqData = JSON.parse(JSON.stringify(req.body));
+
+    if(!reqData.progressName || !reqData.motivation || validator.isEmpty(reqData.motivation) || validator.isEmpty(reqData.progressName)){
+      res.status(400).send({error:'Progress名字和動機為必填欄位'});
+      return;
+    }
+    if (!validator.isIn(reqData.category, ['類別','運動','成長','體態外表','園藝','學習','居家','烹飪',"作品"])) {
+      res.status(400).send({error:'沒有這種類別'});
+      return;
+    }
+
+    if(reqData.checkPrivacy && reqData.checkPrivacy !== "1"){
+      res.status(400).send({error:'不正常'});
+      return;
+    }
+
+    if(reqData.progressName.length > 9 || reqData.motivation.length > 30){
+      res.status(400).send({error:'輸入過長字元'});
+      return;
+    }
+
     let {src} = reqData;
     let splitArray = src.split('/');
     let index = splitArray.length - 1;
@@ -153,7 +193,7 @@ const editProgress = async (req, res, next) => {
     let progressData = {
       progress_id: req.query.progressid,
       data: progressDataArray
-    }
+    };
     await Progress.editProgressData(progressData);
 
     //如果刪掉progress數據，日記相關數據也要刪掉
@@ -349,6 +389,28 @@ const addGroupProgress = async (req, res, next) => {
     console.log("addGroupProgress Controller");
     console.log(reqData);
     console.log(req.file);
+    if(!reqData.progressName || !reqData.motivation || !reqData.startDate || !reqData.goalVerb || !reqData.goalNumber || !reqData.goalUnit || validator.isEmpty(reqData.progressName) || validator.isEmpty(reqData.motivation) || validator.isEmpty(reqData.startDate) || validator.isEmpty(reqData.goalVerb) || validator.isEmpty(reqData.goalNumber) || validator.isEmpty(reqData.goalUnitr)){
+      res.status(400).send({error:'未完整填入訊息'});
+      return;
+    }
+    if (!validator.isIn(reqData.category, ['類別','運動','成長','體態外表','園藝','學習','居家','烹飪',"作品"])) {
+      res.status(400).send({error:'沒有這種類別'});
+      return;
+    }
+
+    if(reqData.progressName.length > 9 || reqData.motivation.length > 30 || reqData.goalVerb.length > 5 || reqData.goalUnit > 3 ){
+      res.status(400).send({error:'輸入過長字元'});
+      return;
+    }
+    if (reqData.endDate !== "") {
+      let newStartDate = new Date(reqData.startDate);
+      let newEndDate = new Date(reqData.endDate);
+      if (newStartDate > newEndDate) {
+        res.status(400).send({error:'結束日期不得早於開始日期'});
+        return
+      }
+    }
+    
     let creatorID = req.user.id
     if (req.file) {
       progressData = {
@@ -446,6 +508,29 @@ const editGroupProgress = async (req, res, next) => {
     let reqData = JSON.parse(JSON.stringify(req.body));
     console.log(reqData);
     console.log(req.file);
+
+    if(!reqData.progressName || !reqData.motivation || !reqData.startDate || !reqData.goalVerb || !reqData.goalNumber || !reqData.goalUnit){
+      res.status(400).send({error:'未完整填入訊息'});
+      return;
+    }
+    if(reqData.category !== "類別" && reqData.category !== "運動" && reqData.category !== "成長" && reqData.category !== "體態外表" && reqData.category !== "園藝" && reqData.category !== "學習" && reqData.category !== "居家" && reqData.category !== "烹飪" && reqData.category !== "作品"){
+      res.status(400).send({error:'沒有這個選項'});
+      return;
+    }
+
+    if(reqData.progressName.length > 9 || reqData.motivation.length > 30 || reqData.goalVerb.length > 5 || reqData.goalUnit > 3 ){
+      res.status(400).send({error:'輸入過長字元'});
+      return;
+    }
+    if (reqData.endDate !== "") {
+      let newStartDate = new Date(reqData.startDate);
+      let newEndDate = new Date(reqData.endDate);
+      if (newStartDate > newEndDate) {
+        res.status(400).send({error:'結束日期不得早於開始日期'});
+        return
+      }
+    }
+
     let {src} = reqData;
     let splitArray = src.split('/');
     let index = splitArray.length - 1;

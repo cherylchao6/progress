@@ -1,5 +1,6 @@
 const Diary = require('../model/diary_model.js');
 const Progress = require('../model/progress_model.js');
+const validate = require('validator');
 
 const addDiary = async (req, res, next) => {
   try {
@@ -8,9 +9,18 @@ const addDiary = async (req, res, next) => {
     let reqData = JSON.parse(JSON.stringify(req.body));
     let reqImages = JSON.parse(JSON.stringify(req.files));
     let dateArray = reqData.date.split("-");
+    if(!validate.isDate(reqData.date)){
+      res.status(400).send({error:'日期格式錯誤'});
+      return;
+    } 
+    if (!validate.isIn(reqData.mood, ['0','1','2','3','4','5','6','7'])) {
+      res.status(400).send({error:'沒有這種心情'});
+      return;
+    }
+
     if (reqImages["main_image"]) {
       diaryData = {
-        progress_id: req.query['progressId'],
+        progress_id: req.query['progressid'],
         date: reqData.date,
         mood: reqData.mood,
         content: reqData.content,
@@ -21,7 +31,7 @@ const addDiary = async (req, res, next) => {
       };
     } else {
       diaryData = {
-        progress_id: req.query['progressId'],
+        progress_id: req.query['progressid'],
         date: reqData.date,
         mood: reqData.mood,
         content: reqData.content,
@@ -33,7 +43,6 @@ const addDiary = async (req, res, next) => {
     };
     let insertDiaryId= await Diary.addDiary(diaryData); 
     //insert diaryImages table
-
     if (reqImages["images"]) {
       let sqlArray = []
       for (let i in reqImages["images"]) {
@@ -69,6 +78,7 @@ const addDiary = async (req, res, next) => {
 
 const selectDiary = async (req, res, next) => {
   try {
+    console.log("selectDiary controller...........");
     let {diaryid,progressid} = req.query;
     let progressData = await Progress.selectProgress(req.query);
     if (progressData.progress.public == "1") {
@@ -79,7 +89,8 @@ const selectDiary = async (req, res, next) => {
           data : diaryData,
           progressInfo
         });
-      } else {res.status(200).send({});}
+        return;
+      } else {res.status(200).send({});return;}
     } else if (progressData.progress.public == "0") {
         let diaryData = await Diary.selectDiary(diaryid);
         let progressInfo = await Progress.selectProgressBasicInfo(progressid);
@@ -87,6 +98,7 @@ const selectDiary = async (req, res, next) => {
           data : diaryData,
           progressInfo
         });
+        return;
       }
   } catch (err) {
     next(err);
@@ -100,6 +112,14 @@ const editDiary = async (req, res, next) => {
     let reqData = JSON.parse(JSON.stringify(req.body));
     let reqImages = JSON.parse(JSON.stringify(req.files));
     let dateArray = reqData.date.split("-");
+    if(!validate.isDate(reqData.date)){
+      res.status(400).send({error:'日期格式錯誤'});
+      return;
+    } 
+    if (!validate.isIn(reqData.mood, ['0','1','2','3','4','5','6','7'])) {
+      res.status(400).send({error:'沒有這種心情'});
+      return;
+    }
     //images轉碼
     let reqImageSrcArray = reqData.imagesSrc.split(',');
     let reqImagesArray = [];

@@ -3,14 +3,14 @@
 let token = localStorage.getItem("token");
 const urlParams = new URLSearchParams(window.location.search);
 const progressId = urlParams.get("progressid");
+getProgressTimeData();
+setTimeout(function(){sendDate()}, 1200);
 getProgressData ();
+getAuthorProfile();
 let authorID;
 let data;
 
-getProgressTimeData();
-setTimeout(function(){sendDate()}, 1200);
 
-getAuthorProfile();
 let page = 0;
 function addPage () {
   page += 1;
@@ -21,6 +21,7 @@ function minusPage () {
     page -= 1;
   }
 };
+
 let statusNum;
 
 //socket
@@ -96,6 +97,7 @@ function getProgressTimeData () {
     })
     .then (timedata => {
       if (timedata) {
+        data = timedata;
         console.log(timedata);
         if (Object.keys(timedata).length === 0) { 
           console.log("沒有日記");
@@ -109,7 +111,6 @@ function getProgressTimeData () {
           timescale.style.display = "none";
         };
         //appendColumns
-        data = timedata;
         let column1 = document.querySelector("#column1");
         let column2 = document.querySelector("#column2");
         let yearArray = Object.keys(timedata);
@@ -592,7 +593,7 @@ function editProfile() {
       `<input type="text" id="updatemotto" name="updatemotto" class="swal2-input" placeholder="請輸入座右銘">`+
       `<input type="file" id="uploaduserPic" name="picture" class="swal2-input" accept="image/*">`+
     `</form>`,
-  }).then (result =>{
+  }).then ((result) =>{
     if (result.value) {
       let form = document.forms.namedItem("uploadNewUserInfo");
       let data = new FormData(form);
@@ -601,10 +602,33 @@ function editProfile() {
         body: data,
         headers: { 'authorization': `Bearer ${token}` },
       })
-      .then(response =>{
+      .then(async(response) =>{
         if (response.status === 200) {
           return response.json();
-        } 
+        } else if (response.status === 500) {
+          let msg = await response.json();
+          if (msg.error.message == "File too large") {
+            Swal.fire(
+              {
+                title:"檔案請勿超過1MB",
+                text: "請重新上傳一張小一點點的喔",
+                icon:"error",
+                confirmButtonColor: '#132235',
+                confirmButtonText: 'OK',
+              }
+            );
+          } else {
+            Swal.fire(
+              {
+                title:"伺服器維修中",
+                text: "真的很抱歉喔～請稍後再使用",
+                icon:"error",
+                confirmButtonColor: '#132235',
+                confirmButtonText: 'OK',
+              }
+            );
+          }
+        }
       })
       .then(data =>{
         if(data) {

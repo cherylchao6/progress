@@ -2,7 +2,6 @@
 let token = localStorage.getItem("token");
 const urlParams = new URLSearchParams(window.location.search);
 const groupProgressID = urlParams.get("id");
-console.log(groupProgressID);
 let invationCode;
 getGroupData ();
 
@@ -12,7 +11,6 @@ let dd = String(today.getDate()).padStart(2, '0');
 let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 let yyyy = today.getFullYear();
 today = yyyy + '-' + mm + '-' + dd;
-console.log(today);
 
 let diaryVerb;
 let diaryUnit;

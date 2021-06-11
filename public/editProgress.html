@@ -84,11 +84,11 @@
       <div class="row"> 
         <div class="col-10">
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="progressName" name="progressName" placeholder="讓你堅持下去的原因！" required>
+            <input type="text" class="form-control" id="progressName" name="progressName" placeholder="讓你堅持下去的原因！" maxlength="9" required>
             <label for="progressName">Progress名字</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="motivation" name="motivation" placeholder="讓你堅持下去的原因！" required>
+            <input type="text" class="form-control" id="motivation" name="motivation" placeholder="讓你堅持下去的原因！" maxlength="30" required>
             <label for="motivation">動機</label>
           </div>
           <select class="form-select mb-3" aria-label="Default select example" name="category" id="category">
@@ -102,6 +102,10 @@
             <option value="烹飪" name="烹飪">烹飪</option>
             <option value="作品" name="作品">作品</option>
           </select>
+          <div class="form-check form-switch mb-3" onclick="hasInput()">
+            <input class="form-check-input" type="checkbox" id="addNum" name="addNum">
+            <label class="form-check-label" for="addNum">增加數據</label>
+          </div>
           <div class="row row2">
             <div class="col-4" id="inputForm1">
               <div class="inputForm">
@@ -113,8 +117,13 @@
                   <input type="text" class="form-control" id="input1Unit" placeholder="input1Unit" name="input1Unit">
                   <label for="input1Unit">數據單位</label>
                 </div>
-                <div class="text-end">
-                  <div class="addInputForm" id="addInputForm1">+</div>
+                <div class="row formRow">
+                  <div class="col-1 formBtnDiv">
+                    <div class="addInputForm"></div>
+                  </div>
+                  <div class="col-1">
+                    <div class="addInputForm" id="addInputForm1">+</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -128,8 +137,13 @@
                   <input type="text" class="form-control" id="input2Unit" placeholder="input2Unit" name="input2Unit">
                   <label for="input2Unit">數據單位</label>
                 </div>
-                <div class="text-end">
-                  <div class="addInputForm" id="addInputForm2">+</div>
+                <div class="row formRow">
+                  <div class="col-1 formBtnDiv">
+                    <div class="addInputForm" id="minusInputForm2">-</div>
+                  </div>
+                  <div class="col-1">
+                    <div class="addInputForm" id="addInputForm2">+</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -143,7 +157,11 @@
                   <input type="text" class="form-control" id="input3Unit" placeholder="input3Unit" name="input3Unit">
                   <label for="input3Unit">數據單位</label>
                 </div>
-                <div style="width: 251.98px; height: 24px;"></div>
+                <div class="row formRow">
+                  <div class="col-1 formBtnDiv">
+                    <div class="addInputForm" id="minusInputForm3">-</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

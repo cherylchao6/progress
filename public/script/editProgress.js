@@ -10,6 +10,17 @@ function addInputForm (id) {
 addInputForm(1);
 addInputForm(2);
 
+function minusInputForm (id) {
+  let minusButton = document.querySelector(`#minusInputForm${id}`);
+  let form = document.querySelector(`#inputForm${id}`);
+  minusButton.addEventListener('click', ()=>{
+    document.querySelector(`#input${id}Name`).value = "";
+    document.querySelector(`#input${id}Unit`).value = "";
+    form.style.display = "none";
+  });
+}
+minusInputForm(2);
+minusInputForm(3);
 // Get API query parameter
 let token = localStorage.getItem("token")
 const urlParams = new URLSearchParams(window.location.search);
@@ -83,11 +94,24 @@ function getProgressData () {
       } else if (response.status === 403) {
         alert('無權限操做此網頁');
         return window.location.assign('/signin');
+      } else if (response.status === 500) {
+        Swal.fire(
+          {
+            title:"檔案請勿超過1MB",
+            text: "請重新上傳一張小一點點的喔",
+            icon:"error",
+            confirmButtonColor: '#132235',
+            confirmButtonText: 'OK',
+          }
+        );
+      } else if (response.status === 400) {
+        return window.location.assign('/signin.html');
       }
     })
     .then (data => {
       if (data) {
         //sql資料填入input
+        console.log(data);
         let name = document.querySelector("#progressName");
         name.value = data.data.progress.name;
         let motivation = document.querySelector("#motivation");
@@ -97,17 +121,27 @@ function getProgressData () {
         let image = document.querySelector('#image');
         image.src = data.data.progress.picture;
         if (data.data.progress.public == '1') {
-          let public = document.querySelector('#checkPrivacy')
+          let public = document.querySelector('#checkPrivacy');
           public.setAttribute('checked', true);
         }
         //判斷幾組數據並顯示數單表單
+        let form1 = document.querySelector('#inputForm1');
         let form2 = document.querySelector('#inputForm2');
         let form3 = document.querySelector('#inputForm3');
+        let hasInput = document.querySelector("#addNum");
+        if ((data.data.progressData).length !== 0) {
+          hasInput.setAttribute('checked', true);
+        }
         switch ((data.data.progressData).length) {
+          case 1 :
+            form1.style.display = "inline";
+            break;
           case 2 :
+            form1.style.display = "inline";
             form2.style.display = "inline";
             break;
           case 3 :
+            form1.style.display = "inline";
             form2.style.display = "inline";
             form3.style.display = "inline";
             break;
@@ -158,7 +192,7 @@ form.addEventListener ("submit", function(ev){
     body: data,
     headers: { 'authorization': `Bearer ${token}`},
   })
-  .then(function (response) {
+  .then(async (response) => {
     if (response.status === 200) {
       Swal.fire(
         {
@@ -180,6 +214,40 @@ form.addEventListener ("submit", function(ev){
     } else if (response.status === 405) {
       alert("無權限");
       return window.location.assign('/signin.html');
+    } else if (response.status === 500) {
+      let msg = await response.json();
+      if (msg.error.message == "File too large") {
+        Swal.fire(
+          {
+            title:"檔案請勿超過1MB",
+            text: "請重新上傳一張小一點點的喔",
+            icon:"error",
+            confirmButtonColor: '#132235',
+            confirmButtonText: 'OK',
+          }
+        );
+      } else {
+        Swal.fire(
+          {
+            title:"伺服器維修中",
+            text: "真的很抱歉喔～請稍後再使用",
+            icon:"error",
+            confirmButtonColor: '#132235',
+            confirmButtonText: 'OK',
+          }
+        );
+      }
+    } else if (response.status === 400) {
+      let msg= await response.json();
+      Swal.fire(
+        {
+          title:msg.error,
+          icon:"warning",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      );
+      return;
     }
   });
   ev.preventDefault();
@@ -220,8 +288,34 @@ function search () {
 }
 
 function waitingAlert () {
-  Swal.fire({
-    title:"上傳中請稍候",
-    icon: 'warning',
-  })
+  let progressName = document.querySelector('#progressName');
+  let motivation = document.querySelector('#motivation');
+  if (progressName.value !== "" && motivation.value !== "") {
+    Swal.fire({
+      title:"上傳中請稍候",
+      icon: 'warning',
+      showCancelButton: false,
+      showConfirmButton: false
+    });
+  }
+}
+
+function hasInput() {
+  document.querySelector('#input1Name').value = "";
+  document.querySelector('#input1Unit').value = "";
+  document.querySelector('#input2Name').value = "";
+  document.querySelector('#input2Unit').value = "";
+  document.querySelector('#input3Name').value = "";
+  document.querySelector('#input3Unit').value = "";
+  let hasInput = document.querySelector("#addNum").checked;
+  let inputForm1 = document.querySelector("#inputForm1");
+  let inputForm2 = document.querySelector("#inputForm2");
+  let inputForm3 = document.querySelector("#inputForm3");
+  if (hasInput) {
+    inputForm1.style.display = "block";
+  } else {
+    inputForm1.style.display = "none";
+    inputForm2.style.display = "none";
+    inputForm3.style.display = "none";
+  }
 }

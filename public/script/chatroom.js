@@ -115,9 +115,13 @@ socket.on("roomList", roomList => {
     frinedLi.appendChild(link);
     let friendImg = document.createElement("img");
     if (roomList[k].image == "") {
+      console.log("single chat");
       for (let p in roomList[k].member) {
-        // console.log(roomList[k].member[p])
-        if (roomList[k].member[p].name !== myName) {
+        console.log(roomList[k].member[p]);
+        if (roomList[k].member[p].user !== myID) {
+          console.log(roomList[k].member[p].photo);
+          console.log(myName);
+          console.log("herrrrrrrrrrr");
           friendImg.src= roomList[k].member[p].photo;
         } 
       }
@@ -131,7 +135,7 @@ socket.on("roomList", roomList => {
     let Name = document.createElement("strong");
     if (roomList[k].name == "") {
       for (let j in roomList[k].member) {
-        if (roomList[k].member[j].name !== myName) {
+        if (roomList[k].member[j].user !== myID) {
           Name.innerHTML = roomList[k].member[j].name;
         } 
       }

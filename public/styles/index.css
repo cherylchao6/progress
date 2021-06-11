@@ -78,7 +78,7 @@ main {
 .owl-carousel {
   margin-top: 20px;
   padding-left: 60px;
-  padding-right: 30px;
+  padding-right: 60px;
 }
 
 .owl-stage-outer {
@@ -144,7 +144,7 @@ opacity: 0.2;
 }
 .owl-carousel .next-slide{
   background: url(../../images/next.svg) no-repeat scroll 0 0;
-  right: -20px;
+  right: 20px;
   width: 30px;
   height: 30px;
 }
@@ -156,7 +156,7 @@ opacity: 0.2;
 }	
 
 .owl-carousel {
-  width: 1400px !important
+  width: 100% !important
 }
 
 .owl-nav {

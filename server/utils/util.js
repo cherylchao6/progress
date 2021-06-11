@@ -27,10 +27,11 @@ function verifyAuthor (req, res, next) {
   } else {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, result) => {
       if (err) {
-        console.log(err)
-        return res.sendStatus(403)
+        console.log(err);
+        return res.sendStatus(403);
       };
       req.user = result;
+      console.log("..................")
       let progressId = req.query.progressid;
       let userId = result.id;
       let sql = `SELECT * FROM progress WHERE id = ${progressId} AND user_id = ${userId}`;
@@ -126,6 +127,21 @@ function vefifyGroupMember (req, res, next) {
   }
 }
 
+function verifyreqQuery (req, res, next) {
+  console.log("verifyreqQuery.................")
+  let reqObject = req.query;
+  console.log(reqObject);
+  let reqQueryArr = Object.values(reqObject);
+  console.log(reqQueryArr);
+  for (let i in reqQueryArr) {
+    if (typeof parseInt(reqQueryArr[i]) !== 'number') {
+      res.sendStatus(401);
+      break;
+      return
+    } 
+  }
+  next();
+}
 
 
 //Multer for uploading files
@@ -134,7 +150,21 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
       cb(null, file.originalname);},
 });
-const upload = multer({ storage: storage });
+const upload = multer({ 
+  storage: storage,
+  limits: {
+    // 限制上傳檔案的大小為 1MB
+    fileSize: 1000000
+  }
+  
+  // fileFilter(req, file, res) {
+  //   // 只接受三種圖片格式
+  //   if (!file.size > 100) {
+  //     console.log('here')
+  //     res.sendStatus(501);
+  //   }
+  // }
+});
 
 
 module.exports = {
@@ -143,5 +173,6 @@ module.exports = {
   verifyAuthor,
   verifyVistor,
   vefifyGroupMember,
+  verifyreqQuery,
   upload
 }

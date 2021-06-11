@@ -2,10 +2,6 @@ function signUp () {
   let name = document.getElementById('name').value;
   let email = document.getElementById('email').value;
   let password = document.getElementById('password').value;
-  if (name == "" || email == "" || password == "") {
-    alert('請輸入完整資訊')
-    return;
-  }
   let data = {
     name,
     email,
@@ -15,7 +11,7 @@ function signUp () {
     method: "POST",
     body: JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' }
-  }).then(response => {
+  }).then(async (response) => {
     console.log(response.status);
     if (response.status === 200 ) {
       return response.json();
@@ -28,6 +24,17 @@ function signUp () {
           confirmButtonText: 'OK',
         }
       );
+    } else if (response.status === 400) {
+      let msg= await response.json();
+      Swal.fire(
+        {
+          title:msg.error,
+          icon:"warning",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      );
+      return;
     }
     })
     .then(data => {

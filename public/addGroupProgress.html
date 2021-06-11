@@ -77,11 +77,11 @@
       <div class="row"> 
         <div class="col-10">
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="progressName" name="progressName" placeholder="讓你堅持下去的原因！" required>
+            <input type="text" class="form-control" id="progressName" name="progressName" placeholder="讓你堅持下去的原因！" maxlength="9" required>
             <label for="progressName">Progress名字</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="motivation" name="motivation" placeholder="讓你堅持下去的原因！" required>
+            <input type="text" class="form-control" id="motivation" name="motivation" placeholder="讓你堅持下去的原因！" maxlength="30" required>
             <label for="motivation">動機</label>
           </div>
           <select class="form-select mb-3" aria-label="Default select example" name="category">
@@ -117,13 +117,13 @@
                 </div>
                 <div class="row" id="goalDiv">
                   <div class="goal mb-3 g-3">
-                    <input type="text" class="form-control" id="input1Name" placeholder="讀書" name="goalVerb" required>
+                    <input type="text" class="form-control" id="input1Name" placeholder="讀書" maxlength="5" name="goalVerb" required>
                   </div>
                   <div class="goal mb-3 g-3">
-                    <input type="number" class="form-control" id="input1Unit" placeholder="200" name="goalNumber" required>
+                    <input type="number" class="form-control" id="input1Num" placeholder="200" name="goalNumber" required>
                   </div>
                   <div class="goal mb-3 g-3">
-                    <input type="text" class="form-control" id="input1Unit" placeholder="本" name="goalUnit" required>
+                    <input type="text" class="form-control" id="input1Unit" placeholder="本" maxlength="3" name="goalUnit" required>
                   </div>
                 </div>
               </div>

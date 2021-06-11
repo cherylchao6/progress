@@ -1,6 +1,7 @@
 const { response } = require('express');
 const { pool } = require ('./mysql');
 
+
 const addProgress = async (addProgress) => {
   try {
       let result  = await pool.query('INSERT INTO progress SET ?', addProgress);
@@ -121,7 +122,8 @@ const selectDiaryId = async (progressId) => {
 const editProgress = async (editProgressData) => {
   try {
     let {progressId, name, motivation, category, picture, public} = editProgressData;
-    let result = await pool.query(`UPDATE progress SET name ='${name}', motivation='${motivation}', category='${category}', picture='${picture}', public='${public}' WHERE id='${progressId}'`);
+    let sqlValue = [`${name}`, `${motivation}`, `${category}`, `${picture}`, `${public}`];
+    let result = await pool.query(`UPDATE progress SET name =?, motivation=?, category=?, picture=?, public=? WHERE id='${progressId}'`, sqlValue);
   } catch (error) {
       console.log(error);
       return {error};
@@ -277,7 +279,8 @@ const addGroupPersonalProgress = async (personalData) => {
     if (result[0].length == 0) {
       let result2 = await pool.query("INSERT INTO group_progress_diary SET?", personalData);
     } else if (result[0].length !== 0) {
-      let result3 = await pool.query(`UPDATE group_progress_diary SET data_num=${personalData.data_num} WHERE user_id=${personalData.user_id} AND date='${personalData.date}'`);
+      let sqlValue = [`${personalData.data_num}`];
+      let result3 = await pool.query(`UPDATE group_progress_diary SET data_num=? WHERE user_id=${personalData.user_id} AND date='${personalData.date}'`, sqlValue);
     }
     //更新group_progress_user table
     //先選出progress goal
@@ -301,7 +304,8 @@ const editGroupProgress = async (progressData) => {
   try {
     console.log("editGroupProgress model........");
     let {ID, name, motivation, category, startDate, endDate, goalVerb, goalNum, goalUnit, picture} = progressData;
-    await pool.query(`UPDATE group_progress SET name ='${name}', motivation='${motivation}', category='${category}', start_date='${startDate}', end_date='${endDate}', goal_verb='${goalVerb}', goal_num='${goalNum}', goal_unit='${goalUnit}', picture='${picture}' WHERE id='${ID}'`);
+    let sqlValue = [`${name}`, `${motivation}`, `${category}`, `${startDate}`, `${endDate}`, `${goalVerb}`, `${goalNum}`, `${goalUnit}`, `${picture}`];
+    await pool.query(`UPDATE group_progress SET name =?, motivation=?, category=?, start_date=?, end_date=?, goal_verb=?, goal_num=?, goal_unit=?, picture=? WHERE id='${ID}'`,sqlValue);
   } catch (error) {
       console.log(error);
       return {error};

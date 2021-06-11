@@ -3,10 +3,6 @@
 function signIn () {
   let email = document.getElementById('email').value;
   let password = document.getElementById('password').value;
-  if (email == "" || password == "") {
-    alert('請輸入完整資訊')
-    return;
-  }
   let data = {
     email,
     password
@@ -15,7 +11,7 @@ function signIn () {
     method: "POST",
     body: JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' }
-  }).then(response => {
+  }).then(async(response) => {
     if (response.status === 200 ) {
       return response.json();
     } else if (response.status === 401) {
@@ -36,6 +32,17 @@ function signIn () {
             confirmButtonText: 'OK',
           }
         );
+      } else if (response.status === 400) {
+        let msg= await response.json();
+        Swal.fire(
+          {
+            title:msg.error,
+            icon:"warning",
+            confirmButtonColor: '#132235',
+            confirmButtonText: 'OK',
+          }
+        );
+        return;
       }
     })
     .then (data => {

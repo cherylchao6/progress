@@ -4,7 +4,7 @@ const path = require('path');
 router.use(express.json());
 router.use(express.urlencoded({ extended: false }));
 const {signUp, signIn, selectUserInfo, updateUserProfile, follow} = require("../controller/user_controller");
-const { verifyToken, upload} = require('../utils/util');
+const { verifyToken, upload, verifyreqQuery} = require('../utils/util');
 
 
 //signup
@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
 });
 router.post('/signin',signIn);
 router.post('/updateUserProfile',verifyToken, upload.single("picture"), updateUserProfile);
-router.get("/api/1.0/user", verifyToken, selectUserInfo);
+router.get("/api/1.0/user", verifyreqQuery, verifyToken, selectUserInfo);
 router.post("/follow", verifyToken, follow);
 
 

@@ -65,6 +65,7 @@ h1 {
   padding: 20px;
 }
 
+#inputForm1,
 #inputForm2,
 #inputForm3 {
   display: none;
@@ -80,4 +81,14 @@ h1 {
   margin-bottom: 30px;
 }
 
+.formRow {
+  justify-content: space-between;
+  padding: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.formBtnDiv {
+  padding: 0;
+}
 

@@ -209,10 +209,33 @@ function editProfile() {
         body: data,
         headers: { 'authorization': `Bearer ${token}` },
       })
-      .then(response =>{
+      .then(async(response) =>{
         if (response.status === 200) {
           return response.json();
-        } 
+        } else if (response.status === 500) {
+          let msg = await response.json();
+          if (msg.error.message == "File too large") {
+            Swal.fire(
+              {
+                title:"檔案請勿超過1MB",
+                text: "請重新上傳一張小一點點的喔",
+                icon:"error",
+                confirmButtonColor: '#132235',
+                confirmButtonText: 'OK',
+              }
+            );
+          } else {
+            Swal.fire(
+              {
+                title:"伺服器維修中",
+                text: "真的很抱歉喔～請稍後再使用",
+                icon:"error",
+                confirmButtonColor: '#132235',
+                confirmButtonText: 'OK',
+              }
+            );
+          }
+        }
       })
       .then(data =>{
         if(data) {

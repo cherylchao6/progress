@@ -112,7 +112,11 @@ const selectRoomMembersOnlineStatus = async (userID, roomID) => {
 
 const insertMsg = async (msgInfo) => {
   try {
-    let result = await pool.query(`INSERT INTO message (room_id, source_id, source_name, source_pic, msg, time) VALUES (${msgInfo.room_id}, ${msgInfo.source_id}, '${msgInfo.source_name}', '${msgInfo.source_pic}', '${msgInfo.msg}', '${msgInfo.time}')`);
+    let sqlValue = [`${msgInfo.room_id}`, `${msgInfo.source_id}`, `${msgInfo.source_name}`, `${msgInfo.source_pic}`, `${msgInfo.msg}`, `${msgInfo.time}`];
+    // console.log(sqlValue);
+    let result = await pool.query(`INSERT INTO message (room_id, source_id, source_name, source_pic, msg, time) VALUES ?`,[[sqlValue]]);
+    // console.log(pool.format(`INSERT INTO message (room_id, source_id, source_name, source_pic, msg, time) VALUES ?`,[[sqlValue]]))
+    // INSERT INTO message (room_id, source_id, source_name, source_pic, msg, time) VALUES (${msgInfo.room_id}, ${msgInfo.source_id}, '${msgInfo.source_name}', '${msgInfo.source_pic}', '${msgInfo.msg}', '${msgInfo.time}')
     let insertMsgID = result[0].insertId
     return insertMsgID;
   } catch (err) {
