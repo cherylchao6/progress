@@ -3,9 +3,10 @@
 let token = localStorage.getItem("token");
 const urlParams = new URLSearchParams(window.location.search);
 const progressId = urlParams.get("progressid");
+getProgressData ();
 getProgressTimeData();
 setTimeout(function(){sendDate()}, 1200);
-getProgressData ();
+
 getAuthorProfile();
 let authorID;
 let data;
