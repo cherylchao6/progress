@@ -363,8 +363,6 @@ const selectProgressAuthor = async (req, res, next) => {
       for (let i in vistorRooms) {
         vistorRoomsArr.push(vistorRooms[i].room_id);
       };
-      console.log(authorRoomsArr);
-      console.log(vistorRoomsArr);
       let shareRoomID = "no"
       for (let j in authorRoomsArr) {
         if (vistorRoomsArr.indexOf(authorRoomsArr[j])!== -1) {
@@ -374,6 +372,9 @@ const selectProgressAuthor = async (req, res, next) => {
       data.shareRoomID = shareRoomID;
     }
     data.vistor = req.user.id
+    //看此progress完成了沒
+    let result = await Progress.selectProgress(req.query);
+    data.status = result.progress.status;
     res.status(200).send(data);
   } catch (err) {
     next(err);

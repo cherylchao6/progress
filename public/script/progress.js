@@ -3,11 +3,9 @@
 let token = localStorage.getItem("token");
 const urlParams = new URLSearchParams(window.location.search);
 const progressId = urlParams.get("progressid");
-let statusNum;
-getProgressData ();
 getProgressTimeData();
 setTimeout(function(){sendDate()}, 1200);
-
+getProgressData ();
 getAuthorProfile();
 let authorID;
 let data;
@@ -193,7 +191,13 @@ function getAuthorProfile () {
         let unfinishProgressCol = document.querySelector('#unfinishProgressCol');
         let followBtn = document.querySelector("#followBtn");
         let msgBtn = document.querySelector('#MessageBtn');
-        console.log(statusNum);
+        if (data.author == data.vistor && data.status == 1) {
+          console.log(unfinishProgressCol);
+          unfinishProgressCol.style.display = "flex";
+        } else if (data.author == data.vistor && data.status == 0) {
+          finishProgress.style.display = "flex";
+          addDiary.style.display = "flex";
+        }
         if (data.author == data.vistor) {
           editProfile.style.display = "flex";
           editProgress.style.display = "flex";
@@ -250,13 +254,6 @@ function getAuthorProfile () {
         listName.className = "listName";
         listName.innerHTML = data.following[i].name;
         listNameDiv.appendChild(listName);
-      }
-      if (data.author == data.vistor && statusNum == 1) {
-        console.log(unfinishProgressCol);
-        unfinishProgressCol.style.display = "flex";
-      } else if (data.author == data.vistor && statusNum == 0) {
-        finishProgress.style.display = "flex";
-        addDiary.style.display = "flex";
       }
     });
 }

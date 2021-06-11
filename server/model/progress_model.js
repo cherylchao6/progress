@@ -33,7 +33,7 @@ const addProgressData = async (progressDataArray) => {
 const selectProgress = async (progressId) => {
   try {
     let id = progressId.progressid;
-    let progress = await pool.query(`SELECT name, category, motivation, public, picture FROM progress WHERE id=${id}`);
+    let progress = await pool.query(`SELECT * FROM progress WHERE id=${id}`);
     let progressData = await pool.query(`SELECT name, unit FROM progress_data WHERE progress_id=${id}`);
     let progressInfo = {
       progress: progress[0][0],
