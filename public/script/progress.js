@@ -102,13 +102,17 @@ function getProgressTimeData () {
         if (Object.keys(timedata).length === 0) { 
           console.log("沒有日記");
           // let diaryMain = document.querySelector("#diaryMain");
-          // diaryMain.display = "none";
+          // diaryMain.display = "none";       
           let noDiary = document.querySelector("#noDiary");
           noDiary.style.display = "flex";
           let chart = document.querySelector("#chart");
           chart.style.display = "none";
           let timescale = document.querySelector(".timescale");
           timescale.style.display = "none";
+          let diaryPicture = document.querySelector("#diaryPicture");
+          diaryPicture.src = 'https://i.imgur.com/3VYrII5.jpg';
+          let diaryDay = document.querySelector("#diaryDay");
+          diaryDay.innerHTML = "尚未開始";
         };
         //appendColumns
         let column1 = document.querySelector("#column1");
