@@ -3,6 +3,7 @@
 let token = localStorage.getItem("token");
 const urlParams = new URLSearchParams(window.location.search);
 const progressId = urlParams.get("progressid");
+let statusNum;
 getProgressData ();
 getProgressTimeData();
 setTimeout(function(){sendDate()}, 1200);
@@ -23,7 +24,7 @@ function minusPage () {
   }
 };
 
-let statusNum;
+
 
 //socket
 let myID;
