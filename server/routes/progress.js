@@ -3,7 +3,7 @@ const router = express.Router();
 const path = require('path');
 router.use(express.json());
 router.use(express.urlencoded({ extended: false }));
-const { verifyToken, verifyAuthor, verifyAdminToken, verifyVistor, vefifyGroupMember, verifyreqQuery, upload} = require('../utils/util');
+const { verifyToken, verifyAuthor, verifyAdminToken, verifyVistor, vefifyGroupMember, verifyreqQuery, verifyRoomMember, upload} = require('../utils/util');
 const {addProgress, editProgress, selectProgress,selectProgressTime,selectProgressChart,selectProgressWithDiarys,selectProgressAuthor, addGroupProgress, selectGroupProgress, addGroupPersonalProgress,selectGroupRoomInfo, editGroupProgress, joinGroupProgress,selectMyProgress,selectNewProgress,finishProgress} = require("../controller/progress_controller");
 
 //addProgress
@@ -54,6 +54,8 @@ router.post("/checkInvitation", verifyToken, joinGroupProgress);
 router.get("/api/1.0/myprogress", verifyreqQuery, verifyToken, selectMyProgress);
 router.get("/api/1.0/topProgresses", verifyToken, selectNewProgress);
 router.post("/finishProgress", verifyreqQuery, verifyAuthor, finishProgress);
+router.post("/api/1.0/roomMember", verifyreqQuery, verifyToken, verifyRoomMember);
+router.get("/api/1.0/progressSearch", verifyToken, selectProgress);
 module.exports = router;
 
 

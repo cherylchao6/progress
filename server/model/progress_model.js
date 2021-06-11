@@ -409,7 +409,8 @@ const selectProgressCategory = async (requestInfo) => {
     console.log(requestInfo);
     console.log("selectProgressCategory model........");
     let category = requestInfo.category;
-    let result = await pool.query(`SELECT * FROM progress WHERE category='${category}' AND public NOT IN ('1') ORDER BY id DESC`);
+    let sqlValue = [category];
+    let result = await pool.query(`SELECT * FROM progress WHERE category=? AND public NOT IN ('1') ORDER BY id DESC`, sqlValue);
     console.log(result[0]);
     for (let i in result[0]) {
       result[0][i].picture = `${process.env.IMAGE_PATH}${result[0][i].picture}`
@@ -429,7 +430,8 @@ const selectProgressSearch = async (requestInfo) => {
     console.log(requestInfo);
     console.log("selectProgressSearch model........");
     let keyword = requestInfo.keyword;
-    let result = await pool.query(`SELECT * FROM progress WHERE name LIKE '%${keyword}%' AND public NOT IN ('1') ORDER BY id DESC`);
+    let sqlValue = [`%${keyword}%`];
+    let result = await pool.query(`SELECT * FROM progress WHERE name LIKE ? AND public NOT IN ('1') ORDER BY id DESC`, sqlValue);
     console.log(result[0]);
     for (let i in result[0]) {
       result[0][i].picture = `${process.env.IMAGE_PATH}${result[0][i].picture}`

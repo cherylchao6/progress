@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const { pool } = require('../model/mysql');
+const validator = require('validator');
 // authorization: Bearer <access_token>
 function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization; 
@@ -117,7 +118,6 @@ function vefifyGroupMember (req, res, next) {
       let userID = result.id;
       let sql = `SELECT * FROM group_progress_user WHERE group_progress_id = ${groupProgressID} AND user_id = ${userID}`;
       let checkUser = await pool.query(sql);
-      console.log(checkUser);
       if (checkUser[0].length == 0) {
         res.sendStatus(405);
       } else if (checkUser[0].length !== 0) {
@@ -133,16 +133,28 @@ function verifyreqQuery (req, res, next) {
   console.log(reqObject);
   let reqQueryArr = Object.values(reqObject);
   console.log(reqQueryArr);
+
   for (let i in reqQueryArr) {
-    if (typeof parseInt(reqQueryArr[i]) !== 'number') {
-      res.sendStatus(401);
-      break;
-      return
+    if (!validator.isInt(reqQueryArr[i])) {
+      console.log("not a number");
+      return res.sendStatus(401);
     } 
-  }
+  } 
   next();
 }
 
+
+async function verifyRoomMember (req, res, next) {
+  console.log("verifyRoomMember......")
+  let sql = `SELECT user FROM room_user WHERE room_id = ${req.query.roomid}`;
+  let checkMember = await pool.query(sql);
+  for (let i in checkMember[0]) {
+    if (parseInt(checkMember[0][i].user) == req.user.id) {
+      return res.sendStatus(200);
+    }
+  }
+  return res.sendStatus(403);
+}
 
 //Multer for uploading files
 const storage = multer.diskStorage({
@@ -150,21 +162,15 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
       cb(null, file.originalname);},
 });
+
 const upload = multer({ 
   storage: storage,
   limits: {
     // 限制上傳檔案的大小為 1MB
     fileSize: 1000000
   }
-  
-  // fileFilter(req, file, res) {
-  //   // 只接受三種圖片格式
-  //   if (!file.size > 100) {
-  //     console.log('here')
-  //     res.sendStatus(501);
-  //   }
-  // }
 });
+
 
 
 module.exports = {
@@ -174,5 +180,6 @@ module.exports = {
   verifyVistor,
   vefifyGroupMember,
   verifyreqQuery,
+  verifyRoomMember,
   upload
 }

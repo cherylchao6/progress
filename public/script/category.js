@@ -66,7 +66,7 @@ socket.on(`newMsgNotification`, toWhom => {
 });
 
 function getProgressData () {
-  fetch(`/api/1.0/progress?category=${category}`,{
+  fetch(`/api/1.0/progressSearch?category=${category}`,{
     method: "GET",
     headers: { 'authorization': `Bearer ${token}` },
   }).then(response => {
@@ -115,7 +115,7 @@ function getProgressData () {
 
 function getSearchData () {
   console.log("search")
-  fetch(`/api/1.0/progress?keyword=${keyword}`,{
+  fetch(`/api/1.0/progressSearch?keyword=${keyword}`,{
     method: "GET",
     headers: { 'authorization': `Bearer ${token}` },
   }).then(response => {

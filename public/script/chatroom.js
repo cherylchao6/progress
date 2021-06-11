@@ -34,8 +34,36 @@ if (!roomID) {
   socket.emit("checkShareRoom", users);
 } else if (roomID !== "no") {
   NowAtRoomID = roomID;
-  //拿聊天室訊息同時也要跟server更新最新的一則未讀;
-  socket.emit("getRoomMsg", roomID);
+  //fetch聊天室middleware
+  fetch(`/api/1.0/roomMember?roomid=${roomID}`,{
+    method: "POST",
+    headers: { 'authorization': `Bearer ${token}`,
+                'content-type': 'application/json'},
+  }).then(response => {
+    if (response.status === 200 ) {
+      console.log("check done");
+      //拿聊天室訊息同時也要跟server更新最新的一則未讀;
+      socket.emit("getRoomMsg", roomID);
+    } else if (response.status === 401) {
+      Swal.fire(
+        {
+          title:"請先登入",
+          icon:"warning",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      );
+      } else if (response.status === 403) {
+        Swal.fire(
+          {
+            title:"登入逾期或無權限",
+            icon:"error",
+            confirmButtonColor: '#132235',
+            confirmButtonText: 'OK',
+          }
+        );
+      } 
+    });
 } 
 
 socket.on("checkShareRoomResult", shareRoom => {
@@ -115,13 +143,8 @@ socket.on("roomList", roomList => {
     frinedLi.appendChild(link);
     let friendImg = document.createElement("img");
     if (roomList[k].image == "") {
-      console.log("single chat");
       for (let p in roomList[k].member) {
-        console.log(roomList[k].member[p]);
-        if (roomList[k].member[p].user !== myID) {
-          console.log(roomList[k].member[p].photo);
-          console.log(myName);
-          console.log("herrrrrrrrrrr");
+        if (parseInt(roomList[k].member[p].user) !== myID) {
           friendImg.src= roomList[k].member[p].photo;
         } 
       }
@@ -135,7 +158,7 @@ socket.on("roomList", roomList => {
     let Name = document.createElement("strong");
     if (roomList[k].name == "") {
       for (let j in roomList[k].member) {
-        if (roomList[k].member[j].user !== myID) {
+        if (parseInt(roomList[k].member[j].user) !== myID) {
           Name.innerHTML = roomList[k].member[j].name;
         } 
       }
