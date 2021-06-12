@@ -29,7 +29,7 @@ const selectRooms = async (socket) => {
       }
       let latestMsg = MsgArray[0][0];
       chatRoomsList[0][k].sourceID = latestMsg.source_id;
-      chatRoomsList[0][k].sourceName = latestMsg.source_name;
+      chatRoomsList[0][k].sourceName = latestMsg.name;
       chatRoomsList[0][k].latestMsg = latestMsg.msg;
       chatRoomsList[0][k].latestTime = latestMsg.time;
       if (chatRoomsList[0][k].image !== "") {
