@@ -382,3 +382,54 @@ body{
 .userTitle {
   margin-top: 20px;
 }
+
+/* 給story */
+.videoRow {
+  align-items: center;
+  justify-content: center;
+  height: 433px;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+}
+
+.headerDiv {
+  height: 600px;
+}
+#headerImg {
+  padding: 0;
+  height: 100%;
+  border-radius: 0;
+}
+
+#reason1 {
+  background-color: rgb(19, 34, 53);
+  padding: 0;
+  height: 433px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#video1Col6 {
+  padding: 0;
+  height: 433px;
+}
+
+.reasonTitle {
+  color: #f1f1f1;
+  font-weight: bolder;
+  font-size: 30px;
+  letter-spacing: 3px;
+}
+
+.reasonBottomLine {
+  color: #f1f1f1;
+  letter-spacing: 2px;
+}
+/* #storyMain {
+  margin-top: 0px;
+} */

@@ -10,7 +10,7 @@ const selectRooms = async (socket) => {
     console.log("selectRooms.....................................");
     for (let k in chatRoomsList[0]) {
       let roomID = chatRoomsList[0][k].room_id;
-      let MsgArray = await pool.query(`SELECT room_id, source_id, source_name, msg, time, sqltime FROM message WHERE room_id = ${roomID} ORDER BY sqltime DESC`);
+      let MsgArray = await pool.query(`SELECT message.room_id, message.source_id, users.name, message.msg, message.time, message.sqltime FROM message JOIN users ON message.source_id = users.id WHERE room_id = ${roomID} ORDER BY sqltime DESC`);
       socket.join(roomID.toString());
       let member = await pool.query(`SELECT room_user.room_id, room_user.user, users.name, users.photo FROM room_user JOIN users ON room_user.user = users.id WHERE room_user.room_id = ${roomID}`);
       for (let l in member[0]) {
@@ -62,9 +62,11 @@ const selectRoomCount = async (userID) => {
 
 const getRoomMsg = async (socket,roomID) => {
   try{
-    let roomMsg = await pool.query(`SELECT id, source_id, source_name, source_pic, msg, time FROM message WHERE room_id = ${roomID} ORDER BY sqltime`);
+    console.log('getRoomMsg...........')
+    let roomMsg = await pool.query(`SELECT message.id, message.source_id, message.msg, message.time, users.name, users.photo FROM message JOIN users ON message.source_id = users.id WHERE room_id = ${roomID} ORDER BY sqltime`);
+    console.log(roomMsg[0]);
     for (let i in roomMsg[0]) {
-      roomMsg[0][i].source_pic = `${process.env.IMAGE_PATH}${roomMsg[0][i].source_pic}`;
+      roomMsg[0][i].photo = `${process.env.IMAGE_PATH}${roomMsg[0][i].photo}`;
     }
     let data = {
       roomID: roomID,
@@ -112,11 +114,8 @@ const selectRoomMembersOnlineStatus = async (userID, roomID) => {
 
 const insertMsg = async (msgInfo) => {
   try {
-    let sqlValue = [`${msgInfo.room_id}`, `${msgInfo.source_id}`, `${msgInfo.source_name}`, `${msgInfo.source_pic}`, `${msgInfo.msg}`, `${msgInfo.time}`];
-    // console.log(sqlValue);
-    let result = await pool.query(`INSERT INTO message (room_id, source_id, source_name, source_pic, msg, time) VALUES ?`,[[sqlValue]]);
-    // console.log(pool.format(`INSERT INTO message (room_id, source_id, source_name, source_pic, msg, time) VALUES ?`,[[sqlValue]]))
-    // INSERT INTO message (room_id, source_id, source_name, source_pic, msg, time) VALUES (${msgInfo.room_id}, ${msgInfo.source_id}, '${msgInfo.source_name}', '${msgInfo.source_pic}', '${msgInfo.msg}', '${msgInfo.time}')
+    let sqlValue = [`${msgInfo.room_id}`, `${msgInfo.source_id}`, `${msgInfo.msg}`, `${msgInfo.time}`];
+    let result = await pool.query(`INSERT INTO message (room_id, source_id, msg, time) VALUES ?`,[[sqlValue]]);
     let insertMsgID = result[0].insertId
     return insertMsgID;
   } catch (err) {

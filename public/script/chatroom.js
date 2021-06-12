@@ -258,7 +258,7 @@ socket.on("getRoomMsg",data =>{
       msgLi.appendChild(sourceImgSpan);
       let sourceImg = document.createElement("img");
       sourceImg.className = "sourceImg";
-      sourceImg.src = msgArr[i].source_pic;
+      sourceImg.src = msgArr[i].photo;
       sourceImg.alt = alt="User Avatar";
       sourceImgSpan.appendChild(sourceImg);
       let chatBodyDiv = document.createElement("div");
@@ -269,7 +269,7 @@ socket.on("getRoomMsg",data =>{
       chatBodyDiv.appendChild(headerDiv);
       let sourceName = document.createElement("strong");
       sourceName.className = "primary-font";
-      sourceName.innerHTML = msgArr[i].source_name;
+      sourceName.innerHTML = msgArr[i].name;
       headerDiv.appendChild(sourceName);
       let time = document.createElement("small");
       time.className = "pull-right text-muted";
@@ -287,7 +287,7 @@ socket.on("getRoomMsg",data =>{
       msgLi.appendChild(sourceImgSpan);
       let sourceImg = document.createElement("img");
       sourceImg.className = "sourceImg";
-      sourceImg.src = msgArr[i].source_pic;
+      sourceImg.src = msgArr[i].photo;
       sourceImg.alt = alt="User Avatar";
       sourceImgSpan.appendChild(sourceImg);
       let chatBodyDiv = document.createElement("div");
@@ -298,7 +298,7 @@ socket.on("getRoomMsg",data =>{
       chatBodyDiv.appendChild(headerDiv);
       let sourceName = document.createElement("strong");
       sourceName.className = "primary-font";
-      sourceName.innerHTML = msgArr[i].source_name;
+      sourceName.innerHTML = msgArr[i].name;
       headerDiv.appendChild(sourceName);
       let time = document.createElement("small");
       time.className = "pull-right text-muted";
@@ -333,8 +333,6 @@ function sendMsg () {
       socket_id: socketID,
       room_id: NowAtRoomID,
       source_id: myID,
-      source_name: myName,
-      source_pic: myPic,
       msg: msg.value,
       time: currentTime
     }
