@@ -333,6 +333,8 @@ function sendMsg () {
       socket_id: socketID,
       room_id: NowAtRoomID,
       source_id: myID,
+      source_name:myName,
+      source_pic:myPic,
       msg: msg.value,
       time: currentTime
     }
