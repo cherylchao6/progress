@@ -120,17 +120,44 @@ const updateUserProfile = async (userData) => {
   }
 };
 
+const selectUser = async (requestInfo) => {
+  try {  
+    console.log("selectUser model.....")
+    let namekeyword = requestInfo.keyword;
+    let sqlValue = [`%${namekeyword}%`];
+    let result = await pool.query(`SELECT * FROM users WHERE name LIKE ?`, sqlValue);
+    for (let i in result[0]) {
+      result[0][i].photo = `${process.env.IMAGE_PATH}${result[0][i].photo}`
+    }
+    return result[0];
+  } catch (error) {
+    console.log(error)
+    return {error}
+  }
+};
+
 const follow = async (request) => {
   try {  
     console.log("follow model");
     console.log(request)
     //先選避免重複追蹤
     let {fans, idol} = request;
-    let result = await pool.query (`SELECT * FROM follow WHERE follower_id = ${fans} AND following_id = ${idol}`);
-    console.log(result[0])
+    let sqlValue1 = [fans, idol];
+    let result = await pool.query (`SELECT * FROM follow WHERE follower_id = ? AND following_id = ?`,sqlValue1);
     if (result[0].length == 0) {
-      console.log("new fans!")
-      await pool.query(`INSERT INTO follow (follower_id, following_id) VALUES (${fans}, ${idol})`);
+      console.log("new fans!");
+      await pool.query(`INSERT INTO follow (follower_id, following_id) VALUES ?`, [[sqlValue1]]);
+      let data = {
+        followStatus: "追蹤成功"
+      }
+      return data;
+    } else if (result[0].length !== 0) {
+      console.log("取消追蹤")
+      await pool.query(`DELETE FROM follow WHERE follower_id = ? AND following_id = ?`, sqlValue1);
+      let data = {
+        followStatus: "取消追蹤成功"
+      }
+      return data;
     }
   } catch (error) {
     console.log(error)
@@ -153,5 +180,6 @@ module.exports = {
   selectUserInfo,
   logOut,
   updateUserProfile,
-  follow
+  follow,
+  selectUser
 };

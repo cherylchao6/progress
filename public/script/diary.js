@@ -117,6 +117,10 @@ function getAuthorProfile () {
       let fansList = document.querySelector("#fansList");
       let idolList = document.querySelector('#idolList');
       for (let i in data.follower) {
+        if (data.follower[i].follower_id == myID) {
+          let followBtn = document.querySelector('#followBtn');
+          followBtn.innerHTML = '退追';
+        }
         let listRow = document.createElement('div');
         listRow.className = "row listRow";
         fansList.appendChild(listRow);
@@ -349,6 +353,13 @@ function editProfile() {
   });
 }
 
+let searchInput = document.querySelector("#search");
+searchInput.addEventListener("keyup", (event) => {
+  if (event.keyCode === 13) {
+      event.preventDefault();
+      search ();
+  }
+});
 function search () {
   let keyword = document.querySelector('#search').value;
   if (keyword !== '') {
@@ -366,17 +377,18 @@ function follow() {
     body: JSON.stringify(data),
     headers: { 'authorization': `Bearer ${token}`,
                 'content-type': 'application/json'},
-  }).then(response => {
+  }).then(async(response) => {
     if (response.status === 200 ) {
+      let msg = await response.json();
       Swal.fire(
         {
-          title:"追蹤成功",
+          title:msg.followStatus,
           icon:"success",
           confirmButtonColor: '#132235',
           confirmButtonText: 'OK',
         }
       ).then(()=>{
-        window.location.assign(`/progress?progressid=${progressId}`);
+        window.location.assign(`/diary?progressid=${progressId}&diaryid=${diaryId}`);
       })
       return response.json();
     } else if (response.status === 401) {

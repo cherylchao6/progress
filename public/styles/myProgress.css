@@ -33,6 +33,7 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 200px;
 }
 
 /* #followBtn,
@@ -75,9 +76,6 @@ main {
  color: rgb(19, 34, 53);
 }
 
-#fansidols {
-  padding-left: 60px;
-}
 
 img {
   width: 100%;
@@ -357,4 +355,30 @@ body{
 
 #motto {
   letter-spacing: 2px;
+}
+
+/* 給category.html用 */
+.title {
+  background-color: rgb(19, 34, 53);
+  color: white;
+  letter-spacing: 2px;
+  font-size: 25px;
+}
+
+.main {
+  padding: 0px;
+}
+
+.searchResult {
+  background-color: white;
+  color: rgb(19, 34, 53);
+}
+
+.noProgressHint, .noUserHint{
+  color: rgb(158, 155, 155);
+  display: none;
+}
+
+.userTitle {
+  margin-top: 20px;
 }

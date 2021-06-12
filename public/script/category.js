@@ -65,6 +65,8 @@ socket.on(`newMsgNotification`, toWhom => {
   }
 });
 
+
+
 function getProgressData () {
   fetch(`/api/1.0/progressSearch?category=${category}`,{
     method: "GET",
@@ -83,6 +85,13 @@ function getProgressData () {
     .then (data => {
       if (data) {
         console.log(data);
+        console.log("here");
+        let title = document.getElementsByClassName('title');
+        for (let i=0; i < title.length; i++) {
+            title[i].style.display = "none";
+        }
+         
+        let progresses = document.querySelector('#progresses');
         for (let k in data.data) {
           let progressDiv = document.createElement('div');
           progressDiv.className = "col-3 groupProgress";
@@ -114,7 +123,7 @@ function getProgressData () {
 }
 
 function getSearchData () {
-  console.log("search")
+  console.log("search");
   fetch(`/api/1.0/progressSearch?keyword=${keyword}`,{
     method: "GET",
     headers: { 'authorization': `Bearer ${token}` },
@@ -132,11 +141,23 @@ function getSearchData () {
     .then (data => {
       if (data) {
         console.log(data);
-        if (data.data.length == 0) {
-          console.log("here");
+        if (data.data.length == 0 && data.users.length == 0) {
           let noresult = document.querySelector('.noresult');
           noresult.style.display = "flex";
+          let title = document.getElementsByClassName('title');
+          for (let i=0; i < title.length; i++) {
+            title[i].style.display = "none";
+          }
+          let myProgrssMain = document.getElementsByClassName('myProgrssMain');
+          for (let i=0; i < myProgrssMain.length; i++) {
+            myProgrssMain[i].style.display = "none";
+          }
         }
+        if (data.data.length == 0) {
+          let noProgressHint = document.querySelector('.noProgressHint');
+          noProgressHint.style.display = "block";
+        }
+        let progresses = document.querySelector('#progresses');
         for (let k in data.data) {
           let progressDiv = document.createElement('div');
           progressDiv.className = "col-3 groupProgress";
@@ -163,13 +184,78 @@ function getSearchData () {
           img.className = 'progressImage';
           imgDiv.appendChild(img);
         }
+        if (data.users.length == 0) {
+          let noUserHint = document.querySelector('.noUserHint');
+          noUserHint.style.display = "block";
+        }
+        let users = document.querySelector('#users');
+        for (let k in data.users) {
+          let progressDiv = document.createElement('div');
+          progressDiv.className = "col-3 groupProgress";
+          users.appendChild(progressDiv);
+          let progressLink = document.createElement("a");
+          progressLink.className = "progressLink";
+          progressLink.href=`/myProgress?userid=${data.users[k].id}`;
+          progressDiv.appendChild(progressLink);
+          progressInfoBorder = document.createElement('div');
+          progressInfoBorder.className = "progressInfoBorder";
+          progressLink.appendChild(progressInfoBorder);
+          let progressNameDiv = document.createElement("div");
+          progressNameDiv.className = "text-center progressName";
+          progressInfoBorder.appendChild(progressNameDiv);
+          let name = document.createElement('p');
+          name.className = "progressNameFont";
+          name.innerHTML = data.users[k].name;
+          progressNameDiv.appendChild(name);
+          let imgDiv = document.createElement("div");
+          imgDiv.className = "imageDiv";
+          progressInfoBorder.appendChild(imgDiv);
+          let img = document.createElement('img');
+          img.src = data.users[k].photo;
+          img.className = 'progressImage';
+          imgDiv.appendChild(img);
+        }
       }
     });
 }
 
+let searchInput = document.querySelector("#search");
+searchInput.addEventListener("keyup", (event) => {
+  if (event.keyCode === 13) {
+      event.preventDefault();
+      search ();
+  }
+});
 function search () {
   let keyword = document.querySelector('#search').value;
   if (keyword !== '') {
     window.location.assign(`/category.html?keyword=${keyword}`);
   } 
+}
+
+function signOut () {
+  Swal.fire({
+    title:"確定要登出嗎？",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#132235',
+    cancelButtonColor: '#6ddad3',
+    confirmButtonText: '確定',
+    cancelButtonText:'取消'
+  }).then(result=>{
+    if (result.value) {
+      Swal.fire(
+        {
+          title:"登出成功",
+          icon:"success",
+          confirmButtonColor: '#132235',
+          confirmButtonText: 'OK',
+        }
+      );
+      setTimeout(function(){ window.location.assign('/signin'); }, 4000);
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("userInfo");
+      socket.emit("logOut", "true");
+    }
+  });
 }

@@ -212,6 +212,11 @@ function getAuthorProfile () {
       let fansList = document.querySelector("#fansList");
       let idolList = document.querySelector('#idolList');
       for (let i in data.follower) {
+        if (data.follower[i].follower_id == myID) {
+          console.log("faaaaaannnnnssss")
+          let followBtn = document.querySelector('#followBtn');
+          followBtn.innerHTML = '退追';
+        }
         let listRow = document.createElement('div');
         listRow.className = "row listRow";
         fansList.appendChild(listRow);
@@ -278,7 +283,6 @@ function getProgressData () {
       if (data) {
         console.log(data);
         //做gif
-        statusNum = data.status;
         let status = document.querySelector('#status');
         if (data.status == 1) {
           status.innerHTML = '狀態：已完成'
@@ -336,6 +340,11 @@ function getProgressData () {
         category.innerHTML = `類別：${data.category}`;
         let motivation = document.querySelector("#motivation");
         motivation.innerHTML = data.motivation;
+        if (data.diarys.length == 1) {
+          let oneDiary = document.querySelector("#oneDiary");
+          oneDiary.style.display = "block";
+          console.log("one diary");
+        }
       }
     });
 }
@@ -551,9 +560,6 @@ function sendDate () {
   })
 } 
 
-// if (statusNum == 1) {
-  
-// }
 
 function signOut () {
   Swal.fire({
@@ -645,6 +651,13 @@ function editProfile() {
   });
 }
 
+let searchInput = document.querySelector("#search");
+searchInput.addEventListener("keyup", (event) => {
+  if (event.keyCode === 13) {
+      event.preventDefault();
+      search ();
+  }
+});
 function search () {
   let keyword = document.querySelector('#search').value;
   if (keyword !== '') {
@@ -760,11 +773,12 @@ function follow() {
     body: JSON.stringify(data),
     headers: { 'authorization': `Bearer ${token}`,
                 'content-type': 'application/json'},
-  }).then(response => {
+  }).then(async(response) => {
     if (response.status === 200 ) {
+      let msg = await response.json();
       Swal.fire(
         {
-          title:"追蹤成功",
+          title:msg.followStatus,
           icon:"success",
           confirmButtonColor: '#132235',
           confirmButtonText: 'OK',

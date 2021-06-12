@@ -135,8 +135,8 @@ const follow = async (req, res, next) => {
   try {
     console.log("follow conttroller");
     console.log(req.body);
-    await User.follow(req.body);
-    res.sendStatus(200);
+    let data = await User.follow(req.body);
+    res.status(200).send(data);
   } catch (err) {
     next(err);
   }

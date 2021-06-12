@@ -59,10 +59,10 @@
             <i class="far fa-envelope icon" id="msgIcon"></i>
             <div class="iconBagde badge" id="msgBadge"> </div>
           </a>
-          <form class="d-flex">
-            <input id="search" class="form-control me-2" type="search" placeholder="有人完成過......" aria-label="Search">
+          <div class="d-flex">
+            <input id="search" class="form-control me-2" type="search" placeholder="找朋友或Progress......" aria-label="Search">
             <div class="btn btn-outline-success" onclick="search()">Search</div>
-          </form>
+          </div>
         </div>
       </div>
     </nav>
@@ -94,9 +94,12 @@
             <option value="烹飪" name="烹飪">烹飪</option>
             <option value="作品" name="作品">作品</option>
           </select>
-          <div class="form-check form-switch mb-3" onclick="hasInput()">
-            <input class="form-check-input" type="checkbox" id="addNum" name="addNum">
-            <label class="form-check-label" for="addNum">增加數據</label>
+          <div class="row">
+            <div class="form-check form-switch mb-3 openInput" onclick="hasInput()">
+              <input class="form-check-input" type="checkbox" id="addNum" name="addNum">
+              <label class="form-check-label" for="addNum">增加數據</label>
+            </div>
+            <div class="openInput openInputHint">*任何您想紀錄變化的數據，如體重(數據名稱)和公斤(數據單位)</div>
           </div>
           <div class="row row2">
             <div class="col-4" id="inputForm1">

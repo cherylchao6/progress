@@ -92,3 +92,14 @@ h1 {
   padding: 0;
 }
 
+.openInput {
+  padding-left: 52px;
+  width: 128px;
+  padding-right: 0px;
+}
+
+.openInputHint {
+  padding-left: 0px;
+  width: 500px;
+  color: rgb(161, 59, 59);
+}

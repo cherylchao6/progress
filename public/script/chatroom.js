@@ -131,6 +131,16 @@ socket.on('userInfo', (userInfo)=>{
 
 socket.on("roomList", roomList => {
   console.log(roomList);
+  if (roomList.length == 0) {
+    Swal.fire({
+      title:'您尚未任何人聊天',
+      text:'試試看私訊其他人吧',
+      imageUrl: 'https://i.imgur.com/FBCjmH4.jpg',
+      imageWidth: 400,
+      imageHeight: 233,
+      animation: false
+    });
+  }
   let friendul = document.querySelector("#friendul");
   for (let k in roomList) {
     let frinedLi = document.createElement("li");

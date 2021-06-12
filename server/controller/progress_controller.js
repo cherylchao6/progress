@@ -1,5 +1,6 @@
 const Progress = require('../model/progress_model.js');
 const Diary = require('../model/diary_model.js');
+const User = require('../model/user_model.js');
 const ChatModel = require('../model/chat_model.js');
 require('dotenv').config();
 const validator = require('validator');
@@ -245,6 +246,8 @@ const selectProgress = async (req, res, next) => {
     }
     if (req.query.keyword) {
       data = await Progress.selectProgressSearch(req.query);
+      let user = await User.selectUser(req.query);
+      data.users = user;
     }  
     res.status(200).send(data);
   } catch (err) {

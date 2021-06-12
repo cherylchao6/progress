@@ -202,6 +202,13 @@ function checkDate() {
   }
 }
 
+let searchInput = document.querySelector("#search");
+searchInput.addEventListener("keyup", (event) => {
+  if (event.keyCode === 13) {
+      event.preventDefault();
+      search ();
+  }
+});
 function search () {
   let keyword = document.querySelector('#search').value;
   if (keyword !== '') {

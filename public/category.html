@@ -62,25 +62,42 @@
             <i class="far fa-envelope icon" id="msgIcon"></i>
             <div class="iconBagde badge" id="msgBadge"> </div>
           </a>
-          <form class="d-flex">
-            <input id="search" class="form-control me-2" type="search" placeholder="有人完成過......" aria-label="Search">
+          <div class="d-flex">
+            <input id="search" class="form-control me-2" type="search" placeholder="找朋友或Progress" aria-label="Search">
             <div class="btn btn-outline-success" onclick="search()">Search</div>
-          </form>
+          </div>
         </div>
       </div>
     </nav>
   </header>
   <main>
-    <div class="container">
+    <div class="container-fluid main">
       <div class="row noresult">
         <div class="col-8">
           <img src="./images/Search-rafiki (2).jpg">
         </div>
       </div>
+      <div class="title text-center searchResult">
+        搜尋結果
+      </div>
+      <div class="title text-center">
+        Progress
+      </div>
       <div class="row">
         <div class="col-11 myProgrssMain container">
           <div class="row" id="progresses">
-
+            <div class="text-center noProgressHint">無任何相關Progress結果</div>
+          </div>
+        </div>
+        
+      </div>
+      <div class="title text-center userTitle">
+        User
+      </div>
+      <div class="row">
+        <div class="col-11 myProgrssMain container">
+          <div class="row" id="users">
+            <div class="text-center noUserHint">無任何相關User結果</div>
           </div>
         </div>
         

@@ -242,7 +242,7 @@ body {
 
 #friend-list {
   height: calc(100vh - 160px);
-  overflow-y:scroll;
+  overflow-y:auto;
 }
 #chat-message {
   height: calc(100vh - 69px);
@@ -284,4 +284,8 @@ body {
 
 #lodoDiv {
   cursor: pointer;
+}
+
+.swal2-image {
+  width: 400px;
 }
