@@ -6,10 +6,14 @@ function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization; 
   const token = authHeader && authHeader.split(' ')[1];
   if (token === "null") {
-    res.sendStatus(401);
+    console.log("no token");
+    return res.sendStatus(401);
   } else {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, result) => {
-      if (err) return res.sendStatus(403);
+      if (err) {
+        console.log(err);
+        return res.sendStatus(403);
+      }
       console.log(result);
       req.user = result;
       next();
