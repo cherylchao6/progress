@@ -211,9 +211,9 @@ function getAuthorProfile () {
       //粉絲偶像modal
       let fansList = document.querySelector("#fansList");
       let idolList = document.querySelector('#idolList');
+      myID = JSON.parse(localStorage.getItem("userInfo")).id;
       for (let i in data.follower) {
         if (data.follower[i].follower_id == myID) {
-          console.log("faaaaaannnnnssss")
           let followBtn = document.querySelector('#followBtn');
           followBtn.innerHTML = '退追';
         }
