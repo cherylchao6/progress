@@ -393,15 +393,16 @@ const addGroupProgress = async (req, res, next) => {
     console.log("addGroupProgress Controller");
     console.log(reqData);
     console.log(req.file);
-    if(!reqData.progressName || !reqData.motivation || !reqData.startDate || !reqData.goalVerb || !reqData.goalNumber || !reqData.goalUnit || validator.isEmpty(reqData.progressName) || validator.isEmpty(reqData.motivation) || validator.isEmpty(reqData.startDate) || validator.isEmpty(reqData.goalVerb) || validator.isEmpty(reqData.goalNumber) || validator.isEmpty(reqData.goalUnitr)){
+    if(!reqData.progressName || !reqData.motivation || !reqData.startDate || !reqData.goalVerb || !reqData.goalNumber || !reqData.goalUnit || validator.isEmpty(reqData.progressName) || validator.isEmpty(reqData.motivation) || validator.isEmpty(reqData.startDate) || validator.isEmpty(reqData.goalVerb) || validator.isEmpty(reqData.goalNumber) || validator.isEmpty(reqData.goalUnit)){
       res.status(400).send({error:'未完整填入訊息'});
       return;
     }
+    console.log("400...........")
     if (!validator.isIn(reqData.category, ['類別','運動','成長','體態外表','園藝','學習','居家','烹飪',"作品"])) {
       res.status(400).send({error:'沒有這種類別'});
       return;
     }
-
+    console.log("405.........")
     if(reqData.progressName.length > 9 || reqData.motivation.length > 30 || reqData.goalVerb.length > 5 || reqData.goalUnit > 3 ){
       res.status(400).send({error:'輸入過長字元'});
       return;
@@ -416,6 +417,7 @@ const addGroupProgress = async (req, res, next) => {
     }
     
     let creatorID = req.user.id
+    console.log("419.........")
     if (req.file) {
       progressData = {
         name: reqData.progressName,
@@ -443,6 +445,8 @@ const addGroupProgress = async (req, res, next) => {
         invitation_code: invivationCode
       }
     }
+    console.log("447.........")
+    console.log(progressData);
     let insertGroupProgressId = await Progress.addGroupProgress(progressData);
     console.log(insertGroupProgressId);
     //插入groupProrgess_user table

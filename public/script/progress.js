@@ -297,6 +297,7 @@ function getProgressData () {
             }
             images.push(image);
           }
+          console.log(images);
           gifshot.createGIF({
             'images': images,
             'interval': 1,

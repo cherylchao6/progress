@@ -12,6 +12,8 @@ const ChatModel = require('./server/model/chat_model.js');
 const User = require('./server/model/user_model.js');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const cors = require('cors'); 
+app.use(cors());
 //socket 
 //middleware
 io.use((socket, next) => {
