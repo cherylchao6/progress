@@ -38,7 +38,7 @@ const addProgress = async (req, res, next) => {
           motivation: reqData.motivation,
           category: reqData.category,
           public: reqData.checkPrivacy,
-          picture: req.file.filename
+          picture: req.file.originalname
         };
       } else {
         progressData = {
@@ -47,7 +47,7 @@ const addProgress = async (req, res, next) => {
           motivation: reqData.motivation,
           category: reqData.category,
           public: "0",
-          picture: req.file.filename
+          picture: req.file.originalname
         };
       }
     } else {
@@ -163,7 +163,7 @@ const editProgress = async (req, res, next) => {
           motivation: reqData.motivation,
           category: reqData.category,
           public: reqData.checkPrivacy,
-          picture: req.file.filename
+          picture: req.file.originalname
         };
       } else {
         editProgressData = {
@@ -172,7 +172,7 @@ const editProgress = async (req, res, next) => {
           motivation: reqData.motivation,
           category: reqData.category,
           public: "0",
-          picture: req.file.filename
+          picture: req.file.originalname
         };
       }
     }
@@ -426,7 +426,7 @@ const addGroupProgress = async (req, res, next) => {
         goal_verb: reqData.goalVerb,
         goal_num: reqData.goalNumber,
         goal_unit: reqData.goalUnit,
-        picture: req.file.filename,
+        picture: req.file.originalname,
         invitation_code: invivationCode
       }
     } else {
@@ -452,7 +452,7 @@ const addGroupProgress = async (req, res, next) => {
     if (req.file) {
       groupRoomData = {
         name: reqData.progressName,
-        image: req.file.filename,
+        image: req.file.originalname,
         category: "group"
       }
     } else {
@@ -590,7 +590,7 @@ const editGroupProgress = async (req, res, next) => {
         goalVerb: reqData.goalVerb,
         goalNum: reqData.goalNumber,
         goalUnit: reqData.goalUnit,
-        picture: req.file.filename
+        picture: req.file.originalname
       }
     }
     await Progress.editGroupProgress(progressData);

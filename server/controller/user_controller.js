@@ -114,7 +114,7 @@ const updateUserProfile = async (req, res, next) => {
       userData = {
         id: req.user.id,
         motto: reqData.updatemotto,
-        photo: req.file.filename
+        photo: req.file.originalname
       };
     } else {
       userData = {
@@ -123,6 +123,8 @@ const updateUserProfile = async (req, res, next) => {
         photo: 'default-person.png'
       };
     }
+    console.log('herrerererere...........');
+    console.log(userData);
     await User.updateUserProfile(userData);
     userData.photo = `${process.env.IMAGE_PATH}${userData.photo}`;
     res.status(200).send(userData);

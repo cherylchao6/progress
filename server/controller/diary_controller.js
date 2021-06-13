@@ -27,7 +27,7 @@ const addDiary = async (req, res, next) => {
         year: dateArray[0],
         month: dateArray[1],
         day: dateArray[2],
-        main_image: reqImages["main_image"][0]["filename"]
+        main_image: reqImages["main_image"][0]["originalname"]
       };
     } else {
       diaryData = {
@@ -48,7 +48,7 @@ const addDiary = async (req, res, next) => {
       for (let i in reqImages["images"]) {
         let imageArray = [];
         imageArray.push(insertDiaryId);
-        imageArray.push(reqImages["images"][i]['filename']);
+        imageArray.push(reqImages["images"][i]['originalname']);
         sqlArray.push(imageArray);
       };
       await Diary.addDiaryImages(sqlArray);
@@ -184,7 +184,7 @@ const editDiary = async (req, res, next) => {
         year: dateArray[0],
         month: dateArray[1],
         day: dateArray[2],
-        main_image: reqImages["main_image"][0]["filename"]
+        main_image: reqImages["main_image"][0]["originalname"]
       };
     }
     await Diary.editDiary(editDiaryData);
@@ -192,7 +192,7 @@ const editDiary = async (req, res, next) => {
     //全部刪除重插
     if (reqImages["images"]) {
       for (let i in reqImages["images"]) {
-        reqImagesArray.push(reqImages["images"][i]['filename']);
+        reqImagesArray.push(reqImages["images"][i]['originalname']);
       }
       let sqlArray = [];
       for (let l in reqImagesArray) {

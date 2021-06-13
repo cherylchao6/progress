@@ -1,11 +1,9 @@
 const jwt = require('jsonwebtoken');
-const multer = require('multer');
 const { pool } = require('../model/mysql');
 const validator = require('validator');
-// authorization: Bearer <access_token>
+
 function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization; 
-  //if (authHeader) then do authHeader.split(' ')[1] -> token = undefined or is token
   const token = authHeader && authHeader.split(' ')[1];
   if (token === "null") {
     res.sendStatus(401);
@@ -156,20 +154,43 @@ async function verifyRoomMember (req, res, next) {
   return res.sendStatus(403);
 }
 
-//Multer for uploading files
-const storage = multer.diskStorage({
-  destination: 'public/uploaded/',
-  filename: function (req, file, cb) {
-      cb(null, file.originalname);},
-});
 
-const upload = multer({ 
-  storage: storage,
+const multerS3 = require('multer-s3');
+const aws = require('aws-sdk');
+const multer = require('multer');
+const s3 = new aws.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_KEY
+});
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: 'myprogress-club',
+    acl: 'public-read',
+    key: function (req, file, cb) {
+      cb(null, file.originalname);
+    }
+  }),
   limits: {
     // 限制上傳檔案的大小為 1MB
     fileSize: 1000000
   }
-});
+})
+
+// //Multer for uploading files
+// const storage = multer.diskStorage({
+//   destination: 'public/uploaded/',
+//   filename: function (req, file, cb) {
+//       cb(null, file.originalname);},
+// });
+
+// const upload = multer({ 
+//   storage: storage,
+//   limits: {
+//     // 限制上傳檔案的大小為 1MB
+//     fileSize: 1000000
+//   }
+// });
 
 
 
