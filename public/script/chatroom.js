@@ -140,6 +140,11 @@ socket.on("roomList", roomList => {
       imageHeight: 233,
       animation: false
     });
+  } else {
+    let demo = document.getElementsByClassName("demo");
+    for (let i =0; i < demo.length; i++) {
+      demo[i].style.display = "none";
+    }
   }
   let friendul = document.querySelector("#friendul");
   for (let k in roomList) {
