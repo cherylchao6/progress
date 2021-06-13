@@ -48,6 +48,8 @@ const signIn = async (req, res, next) => {
     }
     let result = await User.signIn(email, password);
     //帳號或密碼錯誤
+    console.log("user controller");
+    console.log("result");
     if (result.error == 'user is not registered') {
       res.sendStatus(401);
       return;

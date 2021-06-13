@@ -49,6 +49,8 @@ const signIn = async (email, password) => {
           }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '86400s' });
           //改變為上線狀態
           await pool.query(`UPDATE users SET online='1' WHERE id=${checkUser[0][0].id}`);
+          console.log("signIn model");
+          console.log(user);
           return user;
       }
   } catch (error) {
