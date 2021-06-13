@@ -5,7 +5,7 @@ const validator = require('validator');
 function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization; 
   const token = authHeader && authHeader.split(' ')[1];
-  console.log("token");
+  console.log(token);
   if (token === "null") {
     console.log("no token");
     return res.sendStatus(401);
