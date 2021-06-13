@@ -414,7 +414,7 @@ video {
   justify-content: center;
 }
 
-#video1Col6 {
+.video {
   padding: 0;
   height: 433px;
 }
