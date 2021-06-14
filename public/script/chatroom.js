@@ -134,7 +134,7 @@ socket.on("roomList", roomList => {
   if (roomList.length == 0) {
     Swal.fire({
       title:'您尚未任何人聊天',
-      text:'試試看私訊其他人吧',
+      text:'試試看搜尋朋友並私訊他吧！',
       imageUrl: 'https://i.imgur.com/FBCjmH4.jpg',
       imageWidth: 400,
       imageHeight: 233,
