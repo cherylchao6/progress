@@ -5,7 +5,6 @@ const selectRooms = async (socket) => {
   try {
     const userID = socket.userInfo.id;
     const chatRoomsList = await pool.query(`SELECT room_user.room_id, room.name, room.image, MAX(message.sqltime) AS latest_time FROM room_user JOIN room ON room_user.room_id = room.id JOIN message ON room_user.room_id = message.room_id WHERE user=${userID} GROUP BY message.room_id ORDER BY MAX(message.sqltime) DESC`);
-    console.log("selectRooms.....................................");
     for (const k in chatRoomsList[0]) {
       const roomID = chatRoomsList[0][k].room_id;
       const MsgArray = await pool.query(`SELECT message.room_id, message.source_id, users.name, message.msg, message.time, message.sqltime FROM message JOIN users ON message.source_id = users.id WHERE room_id = ${roomID} ORDER BY sqltime DESC`);
@@ -47,8 +46,6 @@ const selectRooms = async (socket) => {
 const selectRoomCount = async (userID) => {
   try {
     const chatRoomsList = await pool.query(`SELECT room_user.room_id FROM room_user JOIN room ON room_user.room_id = room.id WHERE room_user.user=${userID} AND NOT room.category = "group"`);
-    // console.log("------------------------");
-    // console.log(chatRoomsList[0]);
     return (chatRoomsList[0]);
   } catch (err) {
     console.log(err);
@@ -58,9 +55,7 @@ const selectRoomCount = async (userID) => {
 
 const getRoomMsg = async (socket, roomID) => {
   try {
-    console.log("getRoomMsg...........");
     const roomMsg = await pool.query(`SELECT message.id, message.source_id, message.msg, message.time, users.name, users.photo FROM message JOIN users ON message.source_id = users.id WHERE room_id = ${roomID} ORDER BY sqltime`);
-    console.log(roomMsg[0]);
     for (const i in roomMsg[0]) {
       roomMsg[0][i].photo = `${process.env.IMAGE_PATH}${roomMsg[0][i].photo}`;
     }
@@ -80,15 +75,11 @@ const updateLastRead = async (socket, roomID) => {
     const userID = socket.userInfo.id;
     // 先選出該聊天室新的一則msg
     const lattestMsgIDArr = await pool.query(`SELECT MAX(id) FROM message WHERE room_id=${roomID}`);
-    console.log("last_read");
-    console.log(lattestMsgIDArr[0][0]["MAX(id)"]);
     const lattestMsgID = lattestMsgIDArr[0][0]["MAX(id)"];
     // update該user的最後一則已讀訊息
     const result = await pool.query(`UPDATE last_read_msg SET msg_id = ${lattestMsgID} WHERE room_id=${roomID} AND user_id=${userID}`);
-    console.log(result[0]);
     if (result[0].affectedRows == 0) {
-      console.log("insert New Room Last Read");
-      const result2 = await pool.query(`INSERT into last_read_msg (room_id, user_id, msg_id) VALUES (${roomID}, ${userID}, ${lattestMsgID})`);
+      await pool.query(`INSERT into last_read_msg (room_id, user_id, msg_id) VALUES (${roomID}, ${userID}, ${lattestMsgID})`);
     }
   } catch (err) {
     console.log(err);
@@ -132,7 +123,6 @@ const selectLastReadMsg = async (roomID, userID) => {
 const selectRoomName = async (roomID) => {
   try {
     const result = await pool.query(`SELECT name, image FROM room WHERE id=${roomID}`);
-    // { name: '', image: '' }
     return result[0][0];
   } catch (err) {
     console.log(err);
@@ -145,7 +135,7 @@ const createRoom = async (users) => {
     const result = await pool.query("INSERT INTO room (category) VALUES (\"one-one\")");
     const newRoomID = result[0].insertId;
     for (const i in users) {
-      const addUserInRoom = await pool.query(`INSERT INTO room_user (room_id, user) VALUES (${newRoomID}, ${users[i]})`);
+      await pool.query(`INSERT INTO room_user (room_id, user) VALUES (${newRoomID}, ${users[i]})`);
     }
     return newRoomID;
   } catch (err) {
@@ -172,9 +162,7 @@ const selectRoomMembersInfo = async (users) => {
 // 一連線就要告訴他有無新訊息
 const checkNewMsgUnread = async (userID) => {
   try {
-    console.log("checkNewMsgUnread");
     const result = await pool.query(`SELECT new_msg FROM new_msg_status WHERE user_id = ${userID}`);
-    console.log(result[0]);
     return result[0][0].new_msg;
   } catch (err) {
     console.log(err);
@@ -185,8 +173,7 @@ const checkNewMsgUnread = async (userID) => {
 // 離線的人就要告訴他有未讀
 const upDateNewMsgUnread = async (userID) => {
   try {
-    console.log("upDateNewMsgUnread");
-    const result = await pool.query(`UPDATE new_msg_status SET new_msg = '1' WHERE user_id =${userID}`);
+    await pool.query(`UPDATE new_msg_status SET new_msg = '1' WHERE user_id =${userID}`);
   } catch (err) {
     console.log(err);
     return (err);
@@ -196,9 +183,7 @@ const upDateNewMsgUnread = async (userID) => {
 // 使用者進入聊天室要改成沒有新訊息通知
 const allMsgRead = async (userID) => {
   try {
-    console.log("Model allMsgRead");
-    const result = await pool.query(`UPDATE new_msg_status SET new_msg = '0' WHERE user_id =${userID}`);
-    console.log(result[0]);
+    await pool.query(`UPDATE new_msg_status SET new_msg = '0' WHERE user_id =${userID}`);
   } catch (err) {
     console.log(err);
     return (err);
@@ -207,10 +192,7 @@ const allMsgRead = async (userID) => {
 
 const createGroupRoom = async (groupRoomData) => {
   try {
-    console.log("createGroupRoom");
-    console.log(groupRoomData);
     const result = await pool.query("INSERT INTO room SET?", groupRoomData);
-    console.log(result[0]);
     return result[0].insertId;
   } catch (err) {
     console.log(err);
@@ -222,7 +204,6 @@ const addGroupChatMember = async (userID, groupRoomID) => {
   try {
     // 先檢查該聊天室有沒有超過八個人或重複加入
     const member = await pool.query(`SELECT user FROM room_user WHERE room_id = ${groupRoomID}`);
-    console.log(member[0]);
     if (member[0].length == 8) {
       return "群組人數達上限";
     } else {
@@ -236,7 +217,7 @@ const addGroupChatMember = async (userID, groupRoomID) => {
           room_id: groupRoomID,
           user: userID
         };
-        const result = await pool.query("INSERT INTO room_user SET ?", data);
+        await pool.query("INSERT INTO room_user SET ?", data);
       }
     }
   } catch (err) {
@@ -247,10 +228,7 @@ const addGroupChatMember = async (userID, groupRoomID) => {
 
 const selectGroupRoomInfo = async (groupRoomID) => {
   try {
-    console.log("selectGroupRoomInfo controller");
-    console.log(groupRoomID);
     const result = await pool.query(`SELECT name, image FROM room WHERE id=${groupRoomID}`);
-    console.log(result[0]);
     result[0][0].image = `${process.env.IMAGE_PATH}${result[0][0].image}`;
     return result[0][0];
   } catch (err) {

@@ -3,7 +3,6 @@ const User = require("../model/user_model.js");
 const jwt = require("jsonwebtoken");
 
 function socket (io) {
-  console.log("io pass in as parameter");
   io.use((socket, next) => {
     const token = socket.handshake.auth.token;
     if (token === null) {
@@ -15,7 +14,6 @@ function socket (io) {
           const err = new Error("登入逾期");
           next(err);
         }
-        console.log(result);
         const userPicture = await User.selectUserPic(result.id);
         result.photo = userPicture;
         result.photoURL = `${process.env.IMAGE_PATH}${userPicture}`;
@@ -27,8 +25,6 @@ function socket (io) {
 
   io.on("connection", async (socket) => {
     socket.on("checkShareRoom", async (users) => {
-      console.log("server checkShareRoom");
-      console.log(users);
       const user1RoomList = await ChatModel.selectRoomCount(users[0]);
       const user2RoomList = await ChatModel.selectRoomCount(users[1]);
       const user1RoomArr = [];
@@ -45,33 +41,26 @@ function socket (io) {
           shareRoom = user1RoomArr[l];
         }
       }
-      console.log(shareRoom);
       socket.emit("checkShareRoomResult", shareRoom);
     });
     socket.on("letMeJoinRoom", newRoomID => {
-      console.log(socket.id);
-      console.log("server let Me Join Room");
       socket.join(newRoomID.toString());
     });
     socket.on("getRoomMsg", roomID => {
-      console.log("getRoomMsg");
       ChatModel.updateLastRead(socket, roomID);
       ChatModel.getRoomMsg(socket, roomID);
     });
     // 使用者進入聊天室要改成沒有新訊息通知
     socket.on("inTheChatRoom", async (status) => {
-      console.log("server allMsgRead");
       await ChatModel.allMsgRead(socket.userInfo.id);
     });
     socket.on("logOut", async (status) => {
-      console.log("user has log out");
       await User.logOut(socket.userInfo.id);
     });
     // 給前端連線者資料
     socket.emit("userInfo", socket.userInfo);
 
     socket.on("createRoom", async (users) => {
-      console.log("create New room in server");
       const newRoomID = await ChatModel.createRoom(users);
       const memberInfo = await ChatModel.selectRoomMembersInfo(users);
       const data = {
@@ -92,8 +81,6 @@ function socket (io) {
     }
 
     socket.on("sendMsg", async (msgInfo) => {
-      console.log("new Sent Msg");
-      console.log(msgInfo);
       // 自己發的訊息一定已讀自己
       ChatModel.updateLastRead(socket, msgInfo.room_id);
       // 如果是群組聊天的話要回傳群組名字跟頭貼
@@ -130,7 +117,6 @@ function socket (io) {
         await ChatModel.upDateNewMsgUnread(offlineRoomMemberArr[j]);
       }
     });
-
     console.log("a user connected");
     socket.on("disconnect", () => {
       console.log("user disconnected");

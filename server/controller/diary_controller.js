@@ -17,7 +17,6 @@ const addDiary = async (req, res, next) => {
       res.status(400).send({ error: "沒有這種心情" });
       return;
     }
-
     if (reqImages.main_image) {
       diaryData = {
         progress_id: req.query.progressid,
@@ -78,7 +77,6 @@ const addDiary = async (req, res, next) => {
 
 const selectDiary = async (req, res, next) => {
   try {
-    console.log("selectDiary controller...........");
     const { diaryid, progressid } = req.query;
     const progressData = await Progress.selectProgress(req.query);
     if (progressData.progress.public == "1") {
@@ -205,8 +203,8 @@ const editDiary = async (req, res, next) => {
       await Diary.addDiaryImages(sqlArray);
     } else if (!reqImages.images) {
       const sqlArray = [];
-      // 若reqImagesArray.length == 0 表示使用者一開始日記就沒有上傳照片而且也沒有新增照片
       if (reqImagesArray.length !== 0) {
+        // 使用者一開始日記有上傳照片然後沒有在新增新的
         for (const l in reqImagesArray) {
           const imageArray = [];
           imageArray.push(req.query.diaryid);
@@ -215,6 +213,9 @@ const editDiary = async (req, res, next) => {
         };
         await Diary.deleteDiaryImages(req.query.diaryid);
         await Diary.addDiaryImages(sqlArray);
+      } else if (reqImagesArray.length == 0) {
+        // 使用者一開始有上傳照片但全部移掉
+        await Diary.deleteDiaryImages(req.query.diaryid);
       }
     }
     // Update diaryData table
