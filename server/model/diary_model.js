@@ -51,7 +51,7 @@ const selectDiary = async (diaryid)=> {
     let diaryImages = await pool.query(`SELECT path FROM diary_images WHERE diary_id=${diaryid}`);
     for (let i in diaryImages[0]){
       diaryImages[0][i].fileName = diaryImages[0][i].path;
-      diaryImages[0][i].path = `${process.env.IMAGE_PATH}${diaryImages[0][i].path}`
+      diaryImages[0][i].path = `${process.env.IMAGE_PATH}${diaryImages[0][i].path}`;
     }
     let diaryData = {
       basicInfo: diaryBasicInfo[0][0],
@@ -68,10 +68,11 @@ const selectDiary = async (diaryid)=> {
 const editDiary = async (editDiaryData) => {
   try {
     let {date, mood, content, year, month, day, main_image, diary_id} = editDiaryData;
-    let result = await pool.query(`UPDATE diary SET date='${date}', mood='${mood}', content='${content}', year='${year}', month='${month}', day='${day}', main_image='${main_image}' WHERE id='${diary_id}'`);
+    let sqlValue = [`${date}`, `${mood}`, `${content}`, `${year}`, `${month}`, `${day}`, `${main_image}`];
+    let result = await pool.query(`UPDATE diary SET date=?, mood=?, content=?, year=?, month=?, day=?, main_image=? WHERE id='${diary_id}'`, sqlValue);
 } catch (error) {
     console.log(error);
-    return {error};
+    return {error};;
 }
 };
 
@@ -107,9 +108,9 @@ const editDiaryData = async (diaryDataArray) => {
   try {
     for (let i in diaryDataArray) {
       let {diary_id, name, value, unit} = diaryDataArray[i]
-      await pool.query (`UPDATE diary_data SET name='${name}', value='${value}', unit='${unit}' WHERE diary_id='${diary_id}' AND name='${name}'`);
-    }
-    
+      let sqlValue = [name, value, unit];
+      await pool.query (`UPDATE diary_data SET name=?, value=?, unit=? WHERE diary_id='${diary_id}' AND name='${name}'`, sqlValue);
+    }   
 } catch (error) {
     console.log(error);
     return {error};

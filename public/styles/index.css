@@ -1,0 +1,173 @@
+#banner {
+  padding: 0;
+}
+
+main {
+  margin-top: 100px;
+}
+
+.bannerImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* object-position: top; */
+}
+
+.img3, .img2 {
+  object-position: top;
+}
+.imgDiv {
+  height: 600px;
+}
+
+#main {
+  margin-top: 500px;
+}
+
+.category {
+  color:white;
+  font-size: 20px;
+  letter-spacing: 4px;
+  background-color: rgb(19, 34, 53);
+}
+/* .img1 {
+  background-image: url("../../images/plant_banner.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.img2 {
+  background-image: url("../../images/running_banner.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.img3 {
+  background-image: url("../../images/meal_banner.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.img4 {
+  background-image: url("../../images/training.jpg");
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: cover;
+  
+}
+
+.img5 {
+  background-image: url("../../images/painter_banner.jpg");
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: cover;
+  
+} */
+
+.owl-theme .item {
+  width: 270px;
+  height: 237.25px;
+
+}
+
+
+
+.owl-carousel {
+  margin-top: 20px;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+.owl-stage-outer {
+  height: 270px;
+}
+
+
+
+.progressLink {
+  text-decoration: none;
+}
+
+.progressInfoBorder {
+  border: 2px rgb(19, 34, 53) solid;
+  height: 270px;
+  border-radius: 10px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.progressName {
+  padding-top: 5px;
+  padding-bottom: 6px;
+  background-color: rgb(19, 34, 53);
+  color: whitesmoke;
+  border-radius: 7px 7px 0 0;
+  letter-spacing: 2px;
+  font-size: 22px;
+}
+
+.progressNameFont {
+  margin-bottom: 0cm;
+}
+
+.progressImage {
+  height: 222px;
+  margin-bottom: 20px;
+  border-radius: 0 0 7px 7px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.owl-carousel .nav-btn{
+  height: 47px;
+  position: absolute;
+  width: 26px;
+  cursor: pointer;
+  top: 100px !important;
+}
+
+.owl-carousel .owl-prev.disabled,
+.owl-carousel .owl-next.disabled{
+pointer-events: none;
+opacity: 0.2;
+}
+
+.owl-carousel .prev-slide{
+  background: url(../../images/next.svg) no-repeat scroll 0 0;
+  transform: scaleX(-1);
+  left: 20px;
+  width: 30px;
+  height: 30px;
+}
+.owl-carousel .next-slide{
+  background: url(../../images/next.svg) no-repeat scroll 0 0;
+  right: 20px;
+  width: 30px;
+  height: 30px;
+}
+.owl-carousel .prev-slide:hover{
+  fill: gray;
+}
+.owl-carousel .next-slide:hover{
+  fill: gray;
+}	
+
+.owl-carousel {
+  width: 100% !important
+}
+
+.owl-nav {
+  margin-top: 0;
+  height: 1px;
+}
+
+body{
+  overflow-x:hidden;
+}
+
+.owl-item {
+  width: 270px !important
+}

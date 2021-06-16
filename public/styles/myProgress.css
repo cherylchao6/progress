@@ -1,0 +1,435 @@
+main {
+  margin-top: 100px;
+}
+
+.myProgrssMain {
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.timescale {
+  justify-content: center;
+  align-items: center;
+}
+
+.row1 {
+  height: 300px;
+  margin-left: 0px;
+  margin-bottom: 10px;
+  justify-content: center;
+}
+.user1 {
+  height: 260px;
+}
+
+.user2 {
+  height: 260px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.userProfile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+}
+
+/* #followBtn,
+#MessageBtn {
+  padding-top: 100px;
+} */
+
+/* #fans {
+  padding-top: 50px;
+} */
+
+#column4 {
+  width: 100px;
+}
+#column2Div {
+  width: 130px;
+}
+#userProfile {
+  padding-bottom: 50px;
+}
+
+#userPicture {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.userDetail {
+  margin-bottom: 5px;
+}
+
+/* 追蹤粉絲修這邊 */
+/* 把原本row拿掉 新增一個div  */
+#userName {
+ text-align: center;
+ letter-spacing: 1px;
+ font-size: 25px;
+ font-weight: bold;
+ color: rgb(19, 34, 53);
+}
+
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+
+
+.finishedProgress {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.progressDay {
+  width: 100%;
+  height: 250px;
+  background-image: url("../../images/circle.png");
+  background-position: center;
+  background-size: contain;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-repeat: no-repeat;
+  text-align: center;
+}
+
+.unfinishedProgress {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.btn-outline-dark {
+  color: #6ddad3;
+  border-color: #6ddad3;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#hint {
+  color: #6ddad3;
+  background-color: rgb(19, 34, 53);
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+
+
+
+
+.previous {
+  background-color: #f1f1f1;
+  color: black;
+}
+
+.next {
+  background-color: #f1f1f1;
+  color: black;
+}
+
+.round {
+  border-radius: 30%;
+  border-color:  #f1f1f1;
+}
+
+.page {
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 16px;
+  display: none;
+}
+
+.page:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.pagediv {
+  margin-top: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+#editProfile {
+  color: #6ddad3;
+  border: 2px solid #6ddad3;
+  width: 140px;
+  border-radius: 10px;
+  justify-content: center;
+  display: none;
+}
+#editProfileLink, #editProgressLink {
+  text-decoration:none
+}
+
+#editProfile:hover {
+  background-color: rgb(19, 34, 53);
+}
+#followBtn:hover {
+  background-color: rgb(19, 34, 53);
+}
+#MessageBtn:hover {
+  background-color: rgb(19, 34, 53);
+}
+
+#followBtn, #MessageBtn {
+  color: #6ddad3;
+  border: 2px solid #6ddad3;
+  border-radius: 10px;
+  width: 60px;
+  margin: 4px;
+  cursor: pointer;
+}
+
+
+#moreAction {
+  width: 140px;
+}
+
+#msgLink {
+  text-decoration: none;
+  color: #6ddad3;
+}
+
+
+
+#userPictureCol {
+  padding-top: 30px;
+  margin-right: 30px;
+}
+
+#updatemotto {
+  width: 447px;
+}
+#uploaduserPic {
+  padding-top: 9px;
+}
+
+.progressInfoBorder {
+  border: 2px rgb(19, 34, 53) solid;
+  height: 270px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.progressName {
+  padding-top: 5px;
+  padding-bottom: 6px;
+  background-color: rgb(19, 34, 53);
+  color: whitesmoke;
+  border-radius: 7px 7px 0 0;
+  letter-spacing: 2px;
+  font-size: 22px;
+}
+
+.progressNameFont {
+  margin-bottom: 0cm;
+}
+
+.progressImage {
+  height: 222px;
+  margin-bottom: 20px;
+  border-radius: 0 0 7px 7px;
+} 
+.addBtn {
+  width: 100px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.addBtn a {
+  text-decoration: none;
+  color: #6ddad3;
+}
+
+.memberName {
+  width: 50px;
+}
+
+#addBtnRow {
+  align-items: center;
+  justify-content: center;
+  display: none;
+}
+
+.progressLink {
+  text-decoration: none;
+}
+
+/* groupIcon */
+/* #progresses {
+  position: relative;
+  display: inline-block;
+} */
+.groupProgress{
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+.groupIcon {
+  position: absolute;
+  top: 220px;
+  right: 12px;
+  width: 50px;
+  height: 50px;
+}
+.noresult {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+#noProgress {
+  align-items: center;
+  justify-content: center;
+  display: none;
+}
+
+#fans, #idols {
+  cursor: url("../../images/heart.png"), auto;	
+}
+
+body{
+  overflow-x:hidden;
+}
+
+.modal-header {
+  background-color: rgb(19, 34, 53);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-title {
+  color: #ddd;
+  letter-spacing: 2px;
+}
+
+.listImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.listImgDiv {
+  width: 80px;
+  height: 80px;
+  padding: 0;
+}
+
+.listName {
+  margin-bottom: 0px;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+
+.listNameDiv {
+  line-height: 80px;
+}
+
+.listRow {
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+
+.modal-content {
+  width: 400px;
+}
+
+#motto {
+  letter-spacing: 2px;
+}
+
+/* 給category.html用 */
+.title {
+  background-color: rgb(19, 34, 53);
+  color: white;
+  letter-spacing: 2px;
+  font-size: 25px;
+}
+
+.main {
+  padding: 0px;
+}
+
+.searchResult {
+  background-color: white;
+  color: rgb(19, 34, 53);
+}
+
+.noProgressHint, .noUserHint{
+  color: rgb(158, 155, 155);
+  display: none;
+}
+
+.userTitle {
+  margin-top: 20px;
+}
+
+/* 給story */
+.videoRow {
+  align-items: center;
+  justify-content: center;
+  height: 433px;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+}
+
+.headerDiv {
+  height: 600px;
+}
+#headerImg {
+  padding: 0;
+  height: 100%;
+  border-radius: 0;
+}
+
+#reason1 {
+  background-color: rgb(19, 34, 53);
+  padding: 0;
+  height: 433px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.video {
+  padding: 0;
+  height: 433px;
+}
+
+.reasonTitle {
+  color: #f1f1f1;
+  font-weight: bolder;
+  font-size: 30px;
+  letter-spacing: 3px;
+}
+
+.reasonBottomLine {
+  color: #f1f1f1;
+  letter-spacing: 2px;
+}
+/* #storyMain {
+  margin-top: 0px;
+} */

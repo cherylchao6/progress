@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="./styles/reset.css" rel="stylesheet">
   <title>Diary</title>
+  <link rel="shortcut icon" href="./images/Hailomidrise.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+  <script src="https://kit.fontawesome.com/55390fb95c.js" crossorigin="anonymous"></script>
   <link href="./styles/header.css" rel="stylesheet">
   <link href="./styles/diary.css" rel="stylesheet">
 </head>
@@ -14,7 +16,7 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid" id="header">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/progressClub.html">
           <img src="./images/logo.jpg" id="logo">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +25,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-mutated">
             <li class="nav-item">
-              <a class="nav-link" href="#">品牌故事</a>
+              <a class="nav-link" href="/story.html">品牌故事</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" id="myprogress" href="#">ＭyProgress</a>
@@ -33,48 +35,64 @@
                 類別
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">運動</a></li>
-                <li><a class="dropdown-item" href="#">成長</a></li>
-                <li><a class="dropdown-item" href="#">體態外表</a></li>
-                <li><a class="dropdown-item" href="#">園藝</a></li>
-                <li><a class="dropdown-item" href="#">學習</a></li>
-                <li><a class="dropdown-item" href="#">居家</a></li>
-                <li><a class="dropdown-item" href="#">烹飪</a></li>
-                <li><a class="dropdown-item" href="#">作品</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=運動">運動</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=成長">成長</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=體態外表">體態外表</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=園藝">園藝</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=學習">學習</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=居家">居家</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=烹飪">烹飪</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=作品">作品</a></li>
               </ul>
+            </li>
           </ul>
-          <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="有人完成過......" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
+          <!-- 功能icon -->
+          <a href="#" class="notification" id="signOut" onclick="signOut()">
+            <i class="fas fa-sign-out-alt icon" data-bs-toggle="tooltip" data-bs-placement="bottom" title="登出" id="signOutIcon"></i>
+          </a>
+          <div class="notification dropdown" id="newNote">
+            <i class="far fa-bell icon dropdown-toggle" id="newNoteIcon" role="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="noteUl">
+              <li><a class="dropdown-item" href="#">尚無通知</a></li>
+            </ul>
+            <div class="iconBagde badge" id="noteBadge"> </div>
+          </div>
+          <a href="/chatroom.html" class="notification" id="message">
+            <i class="far fa-envelope icon" id="msgIcon"></i>
+            <div class="iconBagde badge" id="msgBadge"> </div>
+          </a>
+          <div class="d-flex">
+            <input id="search" class="form-control me-2" type="search" placeholder="找朋友或Progress......" aria-label="Search">
+            <div class="btn btn-outline-success" onclick="search()">Search</div>
+          </div>
         </div>
       </div>
     </nav>
   </header>
   <main>
     <div class="row row1" >
-      <div class="col-4 row">
-        <div class="col-6 user1 userProfile">
-
-          <div class="container" id ="userDetail">
-            <div class="row userDetail" id="userName"></div>
-            <div class="row userDetail" id="fans"></div>
-            <div class="row userDetail" id="idols"></div>
-            <div class="row userDetail">完成</div>
-            <div class="row userDetail" id="finishedProgress"></div>
-            <div class="row userDetail">個Progress</div>
+      <div class="col-4">
+        <div class="row">
+          <div class="col-6 user1 userProfile">
+            <div class="container" id ="userDetail">
+              <div class="userDetail" id="userName"></div>
+              <div id="fansidols">
+                <div class="userDetail text-center" id="fans" data-bs-toggle="modal" data-bs-target="#fansModal"></div>
+                <div class="userDetail text-center" id="idols" data-bs-toggle="modal" data-bs-target="#idolModal"></div>
+              </div>
+            </div>
+            <a id="editProfileLink" href="#"><div class="row userDetail" id="editProfile" onclick="editProfile()">編輯個人檔案</div></a>
+            <div class="row" id="moreAction">
+              <div class="col-6" id="followBtn" onclick="follow()">追蹤</div>
+              <div class="col-6" id="MessageBtn"><a id="msgLink" href="#">私訊</a></div>
+            </div>
           </div>
-          <a id="editProfileLink" href="#"><div class="row userDetail" id="editProfile">編輯個人檔案</div></a>
-          <div class="row" id="moreAction">
-            <div class="col-6" id="followBtn">追蹤</div>
-            <div class="col-6" id="MessageBtn">私訊</div>
+          <div class="col-6 user2">
+            <a href="#" id="userLink"><img id="userPicture"></a>
           </div>
-        </div>
-        <div class="col-6 user2">
-          <img id="userPicture">
         </div>
         <div class="row" id="motto">
-          
+
         </div>
       </div>
       <div class="col-2 progressFile">
@@ -120,10 +138,46 @@
           <button class="btn btn-outline-dark">編輯日記</button>
         </div>
       </a>
-    
+      <!-- FansModal -->
+      <div class="modal fade" id="fansModal" tabindex="-1" aria-labelledby="fansLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header" id="fansHeader">
+              <h5 class="modal-title" id="fansModalLabel">粉絲</h5>
+            </div>
+            <div class="modal-body container" id="fansList">
+  
+  
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- IdolModal -->
+      <div class="modal fade" id="idolModal" tabindex="-1" aria-labelledby="idolModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header" id="idolHeader">
+              <h5 class="modal-title" id="idolModalLabel">偶像</h5>
+            </div>
+            <div class="modal-body container" id="idolList">
+  
+  
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="./script/diary.js"></script>
 </body>
 </html>

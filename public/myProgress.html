@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./styles/reset.css" rel="stylesheet">
+  <title>myProgress</title>
+  <link rel="shortcut icon" href="./images/Hailomidrise.png">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
+  <script src="https://kit.fontawesome.com/55390fb95c.js" crossorigin="anonymous"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+  <link href="./styles/header.css" rel="stylesheet">
+  <link href="./styles/myProgress.css" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid" id="header">
+        <a class="navbar-brand" href="/progressClub.html">
+          <img src="./images/logo.jpg" id="logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-mutated">
+            <li class="nav-item">
+              <a class="nav-link" href="/story.html">品牌故事</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="myprogress" href="#">ＭyProgress</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                類別
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="/category.html?category=運動">運動</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=成長">成長</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=體態外表">體態外表</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=園藝">園藝</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=學習">學習</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=居家">居家</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=烹飪">烹飪</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=作品">作品</a></li>
+              </ul>
+            </li>  
+          </ul>
+          <!-- 功能icon -->
+          <a href="#" class="notification" id="signOut" onclick="signOut()">
+            <i class="fas fa-sign-out-alt icon" data-bs-toggle="tooltip" data-bs-placement="bottom" title="登出" id="signOutIcon"></i>
+          </a>
+          <div class="notification dropdown" id="newNote">
+            <i class="far fa-bell icon dropdown-toggle" id="newNoteIcon" role="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="noteUl">
+              <li><a class="dropdown-item" href="#">尚無通知</a></li>
+            </ul>
+            <div class="iconBagde badge" id="noteBadge"> </div>
+          </div>
+          <a href="/chatroom.html" class="notification" id="message">
+            <i class="far fa-envelope icon" id="msgIcon"></i>
+            <div class="iconBagde badge" id="msgBadge"> </div>
+          </a>
+          <div class="d-flex">
+            <input id="search" class="form-control me-2" type="search" placeholder="找朋友或Progress......" aria-label="Search">
+            <div class="btn btn-outline-success" onclick="search()">Search</div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div class="row row1" >
+      <div class="col-4" id="userPictureCol">
+        <div class="row">
+          <div class="col-6 user1 userProfile">
+            <div class="container" id ="userDetail">
+              <div class="userDetail" id="userName"></div>
+              <div id="fansidols">
+                <div class="userDetail text-center" id="fans" data-bs-toggle="modal" data-bs-target="#fansModal"></div>
+                <div class="userDetail text-center" id="idols" data-bs-toggle="modal" data-bs-target="#idolModal"></div>
+              </div>
+            </div>
+            <a id="editProfileLink" href="#"><div class="row userDetail" id="editProfile" onclick="editProfile()">編輯個人檔案</div></a>
+            <div class="row" id="moreAction">
+              <div class="col-6" id="followBtn" onclick="follow()">追蹤</div>
+              <div class="col-6" id="MessageBtn"><a id="msgLink" href="#">私訊</a></div>
+            </div>
+          </div>
+          <div class="col-6 user2">
+            <a href="#" id="userLink"><img id="userPicture"></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-3 finishedProgress">
+        <div class="raw progressDay" ><h2 id="finishedProgress"></br>Progress</br>Finished</br></h2></div>
+      </div>
+
+      <div class="col-3 unfinishedProgress">
+        <div class="raw progressDay" ><h2 id="unfinishedProgress"></br>Progress</br>To Go</br></h2></div>
+      </div>
+    </div>
+    <div id="hint">
+      <div class="row row2 text-center"><h3 id="motto">我的改變～你看得見</h3></div>
+    </div>
+    <!-- 主文 -->
+    <div class="container">
+      <div class="row" id="addBtnRow">
+        <button class="btn btn-outline-dark addBtn"><a id="addProgressLink" href="/addProgress">新增Progress</a></button>
+        <button class="btn btn-outline-dark addBtn"><a id="addGroupProgressLink" href="/addGroupProgress">新增群組Progress</a></button>
+        <button class="btn btn-outline-dark addBtn" onclick="joinGroupProgress()">加入群組Progress</button>
+      </div>
+      <div class="row" id="noProgress">
+        <div class="col-8">
+          <img src="./images/Rising-rafiki (1).jpg">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-11 myProgrssMain container">
+          <div class="row" id="progresses">
+            
+            
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FansModal -->
+    <div class="modal fade" id="fansModal" tabindex="-1" aria-labelledby="fansLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header" id="fansHeader">
+            <h5 class="modal-title" id="fansModalLabel">粉絲</h5>
+          </div>
+          <div class="modal-body container" id="fansList">
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IdolModal -->
+    <div class="modal fade" id="idolModal" tabindex="-1" aria-labelledby="idolModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header" id="idolHeader">
+            <h5 class="modal-title" id="idolModalLabel">偶像</h5>
+          </div>
+          <div class="modal-body container" id="idolList">
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./script/myProgress.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

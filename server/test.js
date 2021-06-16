@@ -81,3 +81,31 @@ select contributors.user_id, trips.name FROM contributors
     select s.name "Student", c.name "Course"
 from student s, bridge b, course c
 where b.sid = s.sid and b.cid = c.cid 
+
+`SELECT room_user.room_id, room.name, room.image, message.msg, message.time, message.sqltime, message.status FROM room_user JOIN room ON room_user.room_id = room.id JOIN (SELECT msg, time, sqltime, status FROM message GROUP BY room_id ORDER BY sqltime DESC ) AS message ON room_user.room_id = message.room_id WHERE user=${userID} GROUP BY message.room_id ORDER BY message.sqltime DESC`
+`SELECT room_user.room_id, room.name, room.image, message.msg, message.time, message.status FROM room_user JOIN room ON room_user.room_id = room.id JOIN message ON room_user.room_id = message.room_id WHERE user=${userID} GROUP BY message.room_id ORDER BY message.sqltime DESC`
+
+message.msg, message.time, message.sqltime, message.status
+
+`SELECT room_user.room_id, room.name, room.image, MAX(message.sqltime) AS latest_time FROM room_user JOIN room ON room_user.room_id = room.id JOIN message ON room_user.room_id = message.room_id WHERE user=${userID} GROUP BY message.room_id ORDER BY message.sqltime DESC`
+`SELECT room_user.room_id, room.name, room.image, MAX(message.sqltime) AS latest_time FROM room_user JOIN room ON room_user.room_id = room.id JOIN message ON room_user.room_id = message.room_id WHERE user=${userID} GROUP BY message.room_id ORDER BY message.sqltime DESC`
+
+let followBtn = document.querySelector("#followBtn");
+let msgBtn = document.querySelector('#MessageBtn');
+followBtn.style.display = "none";
+msgBtn.style.display = "none";
+
+#updatemotto {
+  width: 447px;
+}
+#uploaduserPic {
+  padding-top: 9px;
+}
+
+function step (n){
+  if (n=1) {
+    return 1
+  } else {
+    return n * step(n-1);
+  }
+}

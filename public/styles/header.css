@@ -1,7 +1,7 @@
 #logo {
   width: 250px;
   height: 65px;
-  margin-right: 80px;
+  margin-right: 30px;
 }
 .container-fluid {
   height: 100px;
@@ -19,7 +19,7 @@ header {
 }
 
 .nav-link {
-  letter-spacing: 16px;
+  letter-spacing: 10px;
   text-indent: 16px;
   font-size: 20px;
   text-align: center;
@@ -47,4 +47,51 @@ header {
 .navbar {
   padding-bottom: 0;
   padding-top: 0;
+}
+
+.navbar-nav {
+  margin-right: 10px;
+}
+
+/* 通知icon */
+
+.notification {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.notification .dropdown-toggle::after {
+  display: none;
+}
+
+#message {
+  margin-right: 20px;
+}
+
+#newNote, #signOut {
+  margin-right: 20px;
+}
+
+.icon {
+  font-size: 30px;
+  color: #6ddad3;
+}
+
+.iconBagde {
+  position: absolute;
+  top: 0px;
+  right: -5px;
+  padding: 5px 5px;
+  border-radius: 50%;
+  background: red;
+  display: none;
+}
+
+#noteUl {
+  width: 300px;
+}
+
+#search {
+  width: 170px;
 }

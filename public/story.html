@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./styles/reset.css" rel="stylesheet">
+  <title>品牌故事</title>
+  <link rel="shortcut icon" href="./images/Hailomidrise.png">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
+  <script src="https://kit.fontawesome.com/55390fb95c.js" crossorigin="anonymous"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+  <link href="./styles/header.css" rel="stylesheet">
+  <link href="./styles/myProgress.css" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid" id="header">
+        <a class="navbar-brand" href="/progressClub.html">
+          <img src="./images/logo.jpg" id="logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-mutated">
+            <li class="nav-item">
+              <a class="nav-link" href="/story.html">品牌故事</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="myprogress" href="#">ＭyProgress</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                類別
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="/category.html?category=運動">運動</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=成長">成長</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=體態外表">體態外表</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=園藝">園藝</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=學習">學習</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=居家">居家</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=烹飪">烹飪</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=作品">作品</a></li>
+              </ul>
+            </li>  
+          </ul>
+          <!-- 功能icon -->
+          <a href="#" class="notification" id="signOut" onclick="signOut()">
+            <i class="fas fa-sign-out-alt icon" data-bs-toggle="tooltip" data-bs-placement="bottom" title="登出" id="signOutIcon"></i>
+          </a>
+          <div class="notification dropdown" id="newNote">
+            <i class="far fa-bell icon dropdown-toggle" id="newNoteIcon" role="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="noteUl">
+              <li><a class="dropdown-item" href="#">尚無通知</a></li>
+            </ul>
+            <div class="iconBagde badge" id="noteBadge"> </div>
+          </div>
+          <a href="/chatroom.html" class="notification" id="message">
+            <i class="far fa-envelope icon" id="msgIcon"></i>
+            <div class="iconBagde badge" id="msgBadge"> </div>
+          </a>
+          <div class="d-flex">
+            <input id="search" class="form-control me-2" type="search" placeholder="找朋友或Progress" aria-label="Search">
+            <div class="btn btn-outline-success" onclick="search()">Search</div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main id="storyMain">
+    <div class="container-fluid">
+      <div class="row headerDiv">
+        <img src="./images/Mental-Kuat.jpg" id="headerImg">
+      </div>
+      <div class="row videoRow">
+        <div class="col-5" id="reason1">
+          <div class="reasonTitle">看見自己的變化</div>
+          <div class="reasonBottomLine">享受成長帶來的成就感</div>
+        </div>
+        <div class="col-7 video" id="video1Col6">
+          <video src="https://dsjwynur8i3ik.cloudfront.net/20210612152912_HD.mp4" controls type="video/mp4"></video>
+        </div>
+      </div>
+      <div class="row videoRow">
+        <div class="col-7 video" id="video2Col6">
+          <video src="https://dsjwynur8i3ik.cloudfront.net/20210613104700_HD.MP4" controls type="video/mp4"></video>
+        </div>
+        <div class="col-5" id="reason1">
+          <div class="reasonTitle">擁有志同道合的朋友</div>
+          <div class="reasonBottomLine">享受分享進度帶來的喜悅</div>
+        </div>
+      </div>
+      <div class="row videoRow">
+        <div class="col-5" id="reason1">
+          <div class="reasonTitle">與朋友一起完成共同目標</div>
+          <div class="reasonBottomLine">享受競賽帶來的動力</div>
+        </div>
+        <div class="col-7 video" id="video3Col6">
+          <video src="https://dsjwynur8i3ik.cloudfront.net/20210612223707_HD.mp4" controls type="video/mp4"></video>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./script/category.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

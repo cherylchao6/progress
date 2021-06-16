@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="./styles/reset.css" rel="stylesheet">
   <title>addProgress</title>
+  <link rel="shortcut icon" href="./images/Hailomidrise.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+  <script src="https://kit.fontawesome.com/55390fb95c.js" crossorigin="anonymous"></script>
   <link href="./styles/header.css" rel="stylesheet">
   <link href="./styles/addProgress.css" rel="stylesheet">
 </head>
@@ -14,7 +16,7 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid" id="header">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/progressClub.html">
           <img src="./images/logo.jpg" id="logo">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +25,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-mutated">
             <li class="nav-item">
-              <a class="nav-link" href="#">品牌故事</a>
+              <a class="nav-link" href="/story.html">品牌故事</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" id="myprogress" href="#">ＭyProgress</a>
@@ -33,20 +35,35 @@
                 類別
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">運動</a></li>
-                <li><a class="dropdown-item" href="#">成長</a></li>
-                <li><a class="dropdown-item" href="#">體態外表</a></li>
-                <li><a class="dropdown-item" href="#">園藝</a></li>
-                <li><a class="dropdown-item" href="#">學習</a></li>
-                <li><a class="dropdown-item" href="#">居家</a></li>
-                <li><a class="dropdown-item" href="#">烹飪</a></li>
-                <li><a class="dropdown-item" href="#">作品</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=運動">運動</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=成長">成長</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=體態外表">體態外表</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=園藝">園藝</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=學習">學習</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=居家">居家</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=烹飪">烹飪</a></li>
               </ul>
+            </li>
           </ul>
-          <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="有人完成過......" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
+          <!-- 功能icon -->
+          <a href="#" class="notification" id="signOut" onclick="signOut()">
+            <i class="fas fa-sign-out-alt icon" data-bs-toggle="tooltip" data-bs-placement="bottom" title="登出" id="signOutIcon"></i>
+          </a>
+          <div class="notification dropdown" id="newNote">
+            <i class="far fa-bell icon dropdown-toggle" id="newNoteIcon" role="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="noteUl">
+              <li><a class="dropdown-item" href="#">尚無通知</a></li>
+            </ul>
+            <div class="iconBagde badge" id="noteBadge"> </div>
+          </div>
+          <a href="/chatroom.html" class="notification" id="message">
+            <i class="far fa-envelope icon" id="msgIcon"></i>
+            <div class="iconBagde badge" id="msgBadge"> </div>
+          </a>
+          <div class="d-flex">
+            <input id="search" class="form-control me-2" type="search" placeholder="找朋友或Progress......" aria-label="Search">
+            <div class="btn btn-outline-success" onclick="search()">Search</div>
+          </div>
         </div>
       </div>
     </nav>
@@ -60,11 +77,11 @@
       <div class="row"> 
         <div class="col-10">
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="progressName" name="progressName" placeholder="讓你堅持下去的原因！">
+            <input type="text" class="form-control" id="progressName" name="progressName" placeholder="讓你堅持下去的原因！" maxlength="9" required>
             <label for="progressName">Progress名字</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="motivation" name="motivation" placeholder="讓你堅持下去的原因！">
+            <input type="text" class="form-control" id="motivation" name="motivation" placeholder="讓你堅持下去的原因！" maxlength="30" required>
             <label for="motivation">動機</label>
           </div>
           <select class="form-select mb-3" aria-label="Default select example" name="category">
@@ -78,6 +95,13 @@
             <option value="烹飪" name="烹飪">烹飪</option>
             <option value="作品" name="作品">作品</option>
           </select>
+          <div class="row">
+            <div class="form-check form-switch mb-3 openInput" onclick="hasInput()">
+              <input class="form-check-input" type="checkbox" id="addNum" name="addNum">
+              <label class="form-check-label" for="addNum">增加數據</label>
+            </div>
+            <div class="openInput openInputHint">*任何您想紀錄變化的數據，如體重(數據名稱)和公斤(數據單位)</div>
+          </div>
           <div class="row row2">
             <div class="col-4" id="inputForm1">
               <div class="inputForm">
@@ -89,8 +113,13 @@
                   <input type="text" class="form-control" id="input1Unit" placeholder="input1Unit" name="input1Unit">
                   <label for="input1Unit">數據單位</label>
                 </div>
-                <div class="text-end">
-                  <div class="addInputForm" id="addInputForm1">+</div>
+                <div class="row formRow">
+                  <div class="col-1 formBtnDiv">
+                    <div class="addInputForm"></div>
+                  </div>
+                  <div class="col-1">
+                    <div class="addInputForm" id="addInputForm1">+</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -101,12 +130,18 @@
                   <label for="input2Name">數據名稱</label>
                 </div>
                 <div class="form-floating mb-3 g-3">
-                  <input type="text" class="form-control" id="input1Unit2" placeholder="input2Unit" name="input2Unit">
+                  <input type="text" class="form-control" id="input2Unit" placeholder="input2Unit" name="input2Unit">
                   <label for="input2Unit">數據單位</label>
                 </div>
-                <div class="text-end">
-                  <div class="addInputForm" id="addInputForm2">+</div>
+                <div class="row formRow">
+                  <div class="col-1 formBtnDiv">
+                    <div class="addInputForm" id="minusInputForm2">-</div>
+                  </div>
+                  <div class="col-1">
+                    <div class="addInputForm" id="addInputForm2">+</div>
+                  </div>
                 </div>
+                
               </div>
             </div>
             <div class="col-4" id="inputForm3">
@@ -119,7 +154,11 @@
                   <input type="text" class="form-control" id="input3Unit" placeholder="input3Unit" name="input3Unit">
                   <label for="input3Unit">數據單位</label>
                 </div>
-                <div style="width: 251.98px; height: 24px;"></div>
+                <div class="row formRow">
+                  <div class="col-1 formBtnDiv">
+                    <div class="addInputForm" id="minusInputForm3">-</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -139,10 +178,10 @@
             </div>
           </div>
           <div class="form-check form-switch mb-3">
-            <input class="form-check-input" type="checkbox" id="checkPrivacy" value="1" name="checkPrivacy">
+            <input class="form-check-input" type="checkbox" id="checkPrivacy" value="3" name="checkPrivacy">
             <label class="form-check-label" for="checkPrivacy">設為隱私</label>
           </div>
-          <div class="text-center" id="submitBtn">
+          <div class="text-center" id="submitBtn" onclick="waitingAlert()">
             <input class="btn btn-outline-dark" type="submit" value="Challenge Accepted!">
           </div>
         </div>
@@ -151,6 +190,8 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="./script/addProgress.js"></script>
 </body>
 </html>

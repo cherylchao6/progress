@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./styles/reset.css" rel="stylesheet">
+  <title>progressClub</title>
+  <link rel="shortcut icon" href="./images/Hailomidrise.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"></link>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"></link>
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
+  <script src="https://kit.fontawesome.com/55390fb95c.js" crossorigin="anonymous"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+  <link href="./styles/header.css" rel="stylesheet">
+  <link href="./styles/index.css" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid" id="header">
+        <a class="navbar-brand" href="/progressClub.html">
+          <img src="./images/logo.jpg" id="logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-mutated">
+            <li class="nav-item">
+              <a class="nav-link" href="/story.html">品牌故事</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="myprogress" href="#">ＭyProgress</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                類別
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="/category.html?category=運動">運動</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=成長">成長</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=體態外表">體態外表</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=園藝">園藝</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=學習">學習</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=居家">居家</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=烹飪">烹飪</a></li>
+                <li><a class="dropdown-item" href="/category.html?category=作品">作品</a></li>
+              </ul>
+            </li>  
+          </ul>
+          <!-- 功能icon -->
+          <a href="#" class="notification" id="signOut" onclick="signOut()">
+            <i class="fas fa-sign-out-alt icon" data-bs-toggle="tooltip" data-bs-placement="bottom" title="登出" id="signOutIcon"></i>
+          </a>
+          <div class="notification dropdown" id="newNote">
+            <i class="far fa-bell icon dropdown-toggle" id="newNoteIcon" role="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="noteUl">
+              <li><a class="dropdown-item" href="#">尚無通知</a></li>
+            </ul>
+            <div class="iconBagde badge" id="noteBadge"> </div>
+          </div>
+          <a href="/chatroom.html" class="notification" id="message">
+            <i class="far fa-envelope icon" id="msgIcon"></i>
+            <div class="iconBagde badge" id="msgBadge"> </div>
+          </a>
+          <div class="d-flex searchForm">
+            <input id="search" class="form-control me-2" type="search" placeholder="找朋友或Progress......" aria-label="Search">
+            <div class="btn btn-outline-success" onclick="search()">Search</div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <!-- 主文 -->
+    <div class="container-fluid" id="banner">
+      <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="5" aria-label="Slide 6"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active imgDiv">
+            <img src="./images/plant_banner.jpg" class="d-block w-100 bannerImg">
+          </div>
+          <div class="carousel-item imgDiv">
+            <img src="./images/painter_banner.jpg" class="d-block w-100 bannerImg img2">
+          </div>
+          <div class="carousel-item imgDiv">
+            <img src="./images/training.jpg" class="d-block w-100 bannerImg img3">
+          </div>
+          <div class="carousel-item imgDiv">
+            <img src="./images/meal_banner.jpg" class="d-block w-100 bannerImg">
+          </div>
+          <div class="carousel-item imgDiv">
+            <img src="./images/running_banner.jpg" class="d-block w-100 bannerImg">
+          </div>
+          <div class="carousel-item imgDiv">
+            <img src="./images/house_banner.jpg" class="d-block w-100 bannerImg">
+          </div>        
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+    <div class="container-fluid" id="main">
+      <div class="row progressRow">
+        <div class="text-center category">運動</div>
+        <div class="owl-carousel owl-theme sport">
+          
+          
+          
+  
+        </div> 
+      </div>
+      <div class="row progressRow">
+        <div class="text-center category">成長</div>
+        <div class="owl-carousel owl-theme growth">
+
+        </div> 
+      </div>
+      
+      <div class="row progressRow">
+        <div class="text-center category">體態外表</div>
+        <div class="owl-carousel owl-theme outlook">
+          
+        </div>
+      </div>
+      
+      <div class="row progressRow">
+        <div class="text-center category">園藝</div>
+        <div class="owl-carousel owl-theme garden">
+          
+        </div>
+      </div>
+      
+      <div class="row progressRow">
+        <div class="text-center category">學習</div>
+        <div class="owl-carousel owl-theme learn">
+          
+        </div>
+      </div>
+      
+      <div class="row progressRow">
+        <div class="text-center category">居家</div>
+        <div class="owl-carousel owl-theme house">
+          
+        </div> 
+      </div>
+      
+      <div class="row progressRow">
+        <div class="text-center category">烹飪</div>
+        <div class="owl-carousel owl-theme cook">
+          
+        </div>
+      </div>
+      
+      <div class="row progressRow">
+        <div class="text-center category">作品</div>
+        <div class="owl-carousel owl-theme art">
+          
+        </div>
+      </div>
+      
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./script/index.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
