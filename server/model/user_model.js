@@ -27,8 +27,7 @@ const signUp = async (name, email, password) => {
     await pool.query(`INSERT INTO new_msg_status (user_id) VALUES (${signUpResult[0].insertId})`);
     return user;
   } catch (error) {
-    console.log(error);
-    return {error};
+    throw error;
   }
 };
 const signIn = async (email, password) => {
@@ -49,12 +48,10 @@ const signIn = async (email, password) => {
           }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '86400s' });
           //改變為上線狀態
           await pool.query(`UPDATE users SET online='1' WHERE id=${checkUser[0][0].id}`);
-          console.log("signIn model");
-          console.log(user);
           return user;
       }
   } catch (error) {
-      return {error}
+      throw error;
   }
 };
 
@@ -64,20 +61,13 @@ const selectUserPic = async (userID) => {
     let userPic = result[0][0].photo;
     return userPic;
   } catch (error) {
-    return {error}
+    throw error;
   }
 };
 
 const selectUserInfo = async (userID) => {
   try {
-    console.log("selectUserInfo model......");
     let userBasicInfo = await pool.query(`SELECT id, name, photo, motto FROM users WHERE id=${userID}`);
-    // {
-    //   id: 1,
-    //   name: '趙姿涵',
-    //   photo: 'cat5.jpeg',
-    //   motto: '我的改變----你看得見！！！！！'
-    // }
     let finishedProgress = await pool.query (`SELECT id FROM progress WHERE user_id=${userID} AND status =1`);
     let unfinishedProgress = await pool.query (`SELECT id FROM progress WHERE user_id=${userID} AND status =0`);
     let follower = await pool.query (`SELECT follow.follower_id, users.name, users.photo FROM follow JOIN users ON users.id = follow.follower_id WHERE following_id = ${userID}`);
@@ -100,7 +90,7 @@ const selectUserInfo = async (userID) => {
     }
     return data;
   } catch (error) {
-    return {error}
+    throw error;
   }
 };
 
@@ -108,7 +98,7 @@ const logOut = async (userID) => {
   try {   
     let result = await pool.query (`UPDATE users SET online="0" where id =${userID}`);
   } catch (error) {
-    return {error}
+    throw error;
   }
 };
 
@@ -118,13 +108,12 @@ const updateUserProfile = async (userData) => {
     let result = await pool.query (`UPDATE users SET motto="${motto}", photo='${photo}' WHERE id=${id}`);
   } catch (error) {
     console.log(error)
-    return {error}
+    throw error;
   }
 };
 
 const selectUser = async (requestInfo) => {
   try {  
-    console.log("selectUser model.....")
     let namekeyword = requestInfo.keyword;
     let sqlValue = [`%${namekeyword}%`];
     let result = await pool.query(`SELECT * FROM users WHERE name LIKE ?`, sqlValue);
@@ -134,27 +123,23 @@ const selectUser = async (requestInfo) => {
     return result[0];
   } catch (error) {
     console.log(error)
-    return {error}
+    throw error;
   }
 };
 
 const follow = async (request) => {
   try {  
-    console.log("follow model");
-    console.log(request)
     //先選避免重複追蹤
     let {fans, idol} = request;
     let sqlValue1 = [fans, idol];
     let result = await pool.query (`SELECT * FROM follow WHERE follower_id = ? AND following_id = ?`,sqlValue1);
     if (result[0].length == 0) {
-      console.log("new fans!");
       await pool.query(`INSERT INTO follow (follower_id, following_id) VALUES ?`, [[sqlValue1]]);
       let data = {
         followStatus: "追蹤成功"
       }
       return data;
     } else if (result[0].length !== 0) {
-      console.log("取消追蹤")
       await pool.query(`DELETE FROM follow WHERE follower_id = ? AND following_id = ?`, sqlValue1);
       let data = {
         followStatus: "取消追蹤成功"
@@ -163,7 +148,7 @@ const follow = async (request) => {
     }
   } catch (error) {
     console.log(error)
-    return {error}
+    throw error;
   }
 };
 

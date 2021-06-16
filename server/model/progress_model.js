@@ -8,15 +8,14 @@ const addProgress = async (addProgress) => {
       let progressId = result[0].insertId;
       return progressId;
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
-}
+};
 
 const addProgressData = async (progressDataArray) => {
   try {
       let sqlArray = [];
-      for (let i in progressDataArray){
+      for (let i in progressDataArray) {
         let inputArray = [];
         inputArray.push(progressDataArray[i]['progress_id']);
         inputArray.push(progressDataArray[i]['name']);
@@ -25,8 +24,7 @@ const addProgressData = async (progressDataArray) => {
       }
       await pool.query('INSERT INTO progress_data (progress_id, name, unit) VALUES ?', [sqlArray]);
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
@@ -41,8 +39,7 @@ const selectProgress = async (progressId) => {
     };
     return progressInfo;
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 };
 
@@ -67,8 +64,7 @@ const selectProgressWithDiarys = async (progressId) => {
     };
     return data;
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 };
 
@@ -98,8 +94,7 @@ const selectProgressWithDiarysVistor = async (progressId) => {
     }
     
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
@@ -114,10 +109,9 @@ const selectDiaryId = async (progressId) => {
     }
     return (diaryIdArray);
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
-}
+};
 
 const editProgress = async (editProgressData) => {
   try {
@@ -125,10 +119,9 @@ const editProgress = async (editProgressData) => {
     let sqlValue = [`${name}`, `${motivation}`, `${category}`, `${picture}`, `${public}`];
     let result = await pool.query(`UPDATE progress SET name =?, motivation=?, category=?, picture=?, public=? WHERE id='${progressId}'`, sqlValue);
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
-}
+};
 
 const editProgressData = async (progressData) => {
   try {
@@ -145,8 +138,7 @@ const editProgressData = async (progressData) => {
       await pool.query('INSERT INTO progress_data (progress_id, name, unit) VALUES ?', [sqlArray]);
     
 } catch (error) {
-    console.log(error);
-    return {error};
+    throw error;
   }
 };
 
@@ -174,8 +166,7 @@ const selectProgressAuthor = async (progressid) => {
     }
     return(data);
 } catch (error) {
-    console.log(error);
-    return {error};
+    throw error;
   }
 };
 
@@ -191,27 +182,22 @@ const selectProgressBasicInfo = async (progressId) => {
     }
     return (progressInfo);
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
 const addGroupProgress = async (progressData) => {
   try {
-    console.log('addGroupProgress model')
       let result  = await pool.query('INSERT INTO group_progress SET ?', progressData);
-      console.log(result[0]);
       let groupProgressId = result[0].insertId;
       return groupProgressId;
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
 const isnertGroupProgressUser = async (userID, groupProgressID) => {
   try {
-    console.log('isnertGroupProgressUser model')
     let data = {
       user_id: userID,
       group_progress_id: groupProgressID
@@ -232,24 +218,20 @@ const isnertGroupProgressUser = async (userID, groupProgressID) => {
     }
     
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
 const insertGroupRoomID = async (roomID, groupProgressID) => {
   try {
-    console.log('insertGroupRoomID model')
       let result  = await pool.query(`UPDATE group_progress SET room_id=${roomID} WHERE id=${groupProgressID}`);
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
 const selectGroupProgressBasicInfo = async (userID, groupProgressID) => {
   try {
-    console.log("selectGroupProgressBasicInfo model")
     let result = await pool.query(`SELECT * FROM group_progress WHERE id=${groupProgressID}`);
     result[0][0].picture = `${process.env.IMAGE_PATH}${result[0][0].picture}`;
     let result2 = await pool.query(`SELECT group_progress_user.percent, group_progress_user.last_date, users.id, users.name, users.photo FROM group_progress_user JOIN users ON group_progress_user.user_id = users.id WHERE group_progress_user.group_progress_id = ${groupProgressID} ORDER BY percent DESC, last_date ASC`);
@@ -266,14 +248,12 @@ const selectGroupProgressBasicInfo = async (userID, groupProgressID) => {
     };
     return (data);
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
 const addGroupPersonalProgress = async (personalData) => {
   try {
-    console.log('addGroupPersonalProgress model..........');
     //先選看看有沒有再加
     let result = await pool.query(`SELECT * FROM group_progress_diary WHERE user_id=${personalData.user_id} AND date='${personalData.date}' AND group_progress_id = ${personalData.group_progress_id}`);
     if (result[0].length == 0) {
@@ -295,50 +275,42 @@ const addGroupPersonalProgress = async (personalData) => {
     }
     let result6 = await pool.query (`UPDATE group_progress_user SET last_date='${personalData.date}', percent=${percent} WHERE user_id=${personalData.user_id} and group_progress_id=${personalData.group_progress_id}`);
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
 const editGroupProgress = async (progressData) => {
   try {
-    console.log("editGroupProgress model........");
     let {ID, name, motivation, category, startDate, endDate, goalVerb, goalNum, goalUnit, picture} = progressData;
     let sqlValue = [`${name}`, `${motivation}`, `${category}`, `${startDate}`, `${endDate}`, `${goalVerb}`, `${goalNum}`, `${goalUnit}`, `${picture}`];
     await pool.query(`UPDATE group_progress SET name =?, motivation=?, category=?, start_date=?, end_date=?, goal_verb=?, goal_num=?, goal_unit=?, picture=? WHERE id='${ID}'`,sqlValue);
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
 const selectGroupProgressIDRoomID = async (invitationCode) => {
   try {
     let groupProgressIDRoomID;
-    console.log("selectGroupRoomID model........");
     let result = await pool.query(`SELECT id, room_id FROM group_progress WHERE invitation_code ='${invitationCode}'`);
     if (result[0].length > 0) {
       groupProgressIDRoomID  = result[0][0]
     }
     return groupProgressIDRoomID;
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
 const selectMyProgress = async (identity, authorID) => {
   try {
-    console.log('selectMyProgress');
     //個人的部分
     let personalProgressArr;
     if (identity == 'author') {
-      console.log('myself')
       let result = await pool.query(`SELECT * FROM progress WHERE user_id=${authorID} ORDER BY id DESC`);
       personalProgressArr = result[0];
     } else {
       // 只選公開的
-      console.log("others");
       let result = await pool.query(`SELECT * FROM progress WHERE user_id=${authorID} AND public NOT IN ('1') ORDER BY id DESC`);
       personalProgressArr = result[0];
     }
@@ -356,24 +328,19 @@ const selectMyProgress = async (identity, authorID) => {
       personal: personalProgressArr,
       group: groupProgressArr
     }
-    console.log(data);
     return(data);
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
 const selectNewProgress = async () => {
   try {
-    console.log("selectNewProgress model");
     let selectEight = async (category) => {
-      console.log("here");
       let result = await pool.query(`SELECT * FROM (
         SELECT * FROM progress WHERE category ="${category}" AND public NOT IN ('1') ORDER BY id DESC LIMIT 8 
      )Var1
         ORDER BY id ASC`)
-      // console.log(result[0]);
       for (let i in result[0]) {
         result[0][i].picture = `${process.env.IMAGE_PATH}${result[0][i].picture}`
       }
@@ -399,19 +366,15 @@ const selectNewProgress = async () => {
     }
     return data;
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
 const selectProgressCategory = async (requestInfo) => {
   try {
-    console.log(requestInfo);
-    console.log("selectProgressCategory model........");
     let category = requestInfo.category;
     let sqlValue = [category];
     let result = await pool.query(`SELECT * FROM progress WHERE category=? AND public NOT IN ('1') ORDER BY id DESC`, sqlValue);
-    console.log(result[0]);
     for (let i in result[0]) {
       result[0][i].picture = `${process.env.IMAGE_PATH}${result[0][i].picture}`
     }
@@ -420,19 +383,15 @@ const selectProgressCategory = async (requestInfo) => {
     }
     return data;
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
 const selectProgressSearch = async (requestInfo) => {
   try {
-    console.log(requestInfo);
-    console.log("selectProgressSearch model........");
     let keyword = requestInfo.keyword;
     let sqlValue = [`%${keyword}%`];
     let result = await pool.query(`SELECT * FROM progress WHERE name LIKE ? AND public NOT IN ('1') ORDER BY id DESC`, sqlValue);
-    console.log(result[0]);
     for (let i in result[0]) {
       result[0][i].picture = `${process.env.IMAGE_PATH}${result[0][i].picture}`
     }
@@ -441,8 +400,7 @@ const selectProgressSearch = async (requestInfo) => {
     }
     return data;
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
@@ -450,11 +408,9 @@ const finishProgress = async (request) => {
   try {
     let updateStatus = request.status;
     let progressID = request.progressid;
-    console.log("finishProgress model........");
     let result = await pool.query(`UPDATE progress SET status=${updateStatus} WHERE id=${progressID}`);
   } catch (error) {
-      console.log(error);
-      return {error};
+      throw error;
   }
 }
 
