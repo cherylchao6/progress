@@ -88,7 +88,7 @@ socket.on("connect_error", (err) => {
   }
 });
 
-setTimeout(function(){ socket.emit("InTheChatRoom", "true"); }, 2000);
+setTimeout(function(){ socket.emit("inTheChatRoom", "true"); }, 2000);
 
 
 socket.on("newRoomInfo", newRoomInfo=>{
@@ -111,7 +111,7 @@ socket.on("newRoomInvitation", data => {
     memberIntArr.push(parseInt(memberArr[i]));
   }
   if (memberIntArr.indexOf(myID) !== -1) {
-    console.log("I join the room")
+    console.log("I join the room");
     socket.emit("letMeJoinRoom", data.newRoomID);
   }
 });

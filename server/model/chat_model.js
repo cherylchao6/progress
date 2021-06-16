@@ -189,9 +189,9 @@ const checkNewMsgUnread = async (userID) => {
 };
 
 //離線的人就要告訴他有未讀
-const upDatenewMsgUnread = async (userID) => {
+const upDateNewMsgUnread = async (userID) => {
   try {
-    console.log('upDatenewMsgUnread');
+    console.log('upDateNewMsgUnread');
     let result = await pool.query(`UPDATE new_msg_status SET new_msg = '1' WHERE user_id =${userID}`);
   } catch (err) {
     console.log(err);
@@ -200,9 +200,9 @@ const upDatenewMsgUnread = async (userID) => {
 };
 
 //使用者進入聊天室要改成沒有新訊息通知
-const NoNewMsgUnread = async (userID) => {
+const allMsgRead = async (userID) => {
   try {
-    console.log('Model NoNewMsgUnread');
+    console.log('Model allMsgRead');
     let result = await pool.query(`UPDATE new_msg_status SET new_msg = '0' WHERE user_id =${userID}`);
     console.log(result[0])
   } catch (err) {
@@ -280,8 +280,8 @@ module.exports = {
   createRoom,
   selectRoomMembersInfo,
   checkNewMsgUnread,
-  upDatenewMsgUnread,
-  NoNewMsgUnread,
+  upDateNewMsgUnread,
+  allMsgRead,
   createGroupRoom,
   addGroupChatMember,
   selectGroupRoomInfo

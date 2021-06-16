@@ -80,37 +80,13 @@ function verifyVistor (req, res, next) {
   }
 }
 
-function verifyAdminToken (req, res, next) {
-  const authHeader = req.headers.authorization; 
-  //if (authHeader) then do authHeader.split(' ')[1] -> token = undefined or is token
-  const token = authHeader && authHeader.split(' ')[1];
-  if (!token) {
-    res.sendStatus(401);
-  } else {
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, result) => {
-      if (err) {
-        console.log(err)
-        return res.sendStatus(403)
-      };
-      let email = result.email;
-      let sql = 'SELECT role FROM users WHERE email = ?';
-      let checkAdmin = await query(sql, email);
-      if (checkAdmin[0].role !== 1) {
-        res.sendStatus(403);
-      } else if (checkAdmin[0].role === 1) {
-        next();
-      };
-    });
-  }
-}
-
 function vefifyGroupMember (req, res, next) {
   const authHeader = req.headers.authorization; 
   //if (authHeader) then do authHeader.split(' ')[1] -> token = undefined or is token
   const token = authHeader && authHeader.split(' ')[1];
   if (!token) {
     console.log("no token");
-    res.sendStatus(401);
+    return res.sendStatus(401);
   } else {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, result) => {
       if (err) {
@@ -137,7 +113,6 @@ function verifyreqQuery (req, res, next) {
   console.log(reqObject);
   let reqQueryArr = Object.values(reqObject);
   console.log(reqQueryArr);
-
   for (let i in reqQueryArr) {
     if (!validator.isInt(reqQueryArr[i])) {
       console.log("not a number");
@@ -148,7 +123,7 @@ function verifyreqQuery (req, res, next) {
 }
 
 
-async function verifyRoomMember (req, res, next) {
+async function verifyRoomMember (req, res) {
   console.log("verifyRoomMember......")
   let sql = `SELECT user FROM room_user WHERE room_id = ${req.query.roomid}`;
   let checkMember = await pool.query(sql);
@@ -183,26 +158,9 @@ const upload = multer({
   }
 })
 
-// //Multer for uploading files
-// const storage = multer.diskStorage({
-//   destination: 'public/uploaded/',
-//   filename: function (req, file, cb) {
-//       cb(null, file.originalname);},
-// });
-
-// const upload = multer({ 
-//   storage: storage,
-//   limits: {
-//     // 限制上傳檔案的大小為 1MB
-//     fileSize: 1000000
-//   }
-// });
-
-
 
 module.exports = {
   verifyToken,
-  verifyAdminToken,
   verifyAuthor,
   verifyVistor,
   vefifyGroupMember,
