@@ -288,12 +288,11 @@ function getProgressData () {
         if (data.diarys.length !== 0) {
           const images = [];
           for (const i in data.diarys) {
-            const image = {
-              src: data.diarys[i].main_image
-            };
-            images.push(image);
+            // const image = {
+            //   src: data.diarys[i].main_image
+            // };
+            images.push(data.diarys[i].main_image);
           }
-          console.log(images);
           gifshot.createGIF({
             images: images,
             interval: 1

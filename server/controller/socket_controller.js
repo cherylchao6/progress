@@ -82,6 +82,9 @@ function socket (io) {
 
     socket.on("sendMsg", async (msgInfo) => {
       // 自己發的訊息一定已讀自己
+      console.log(msgInfo);
+      // msg存sql
+      await ChatModel.insertMsg(msgInfo);
       ChatModel.updateLastRead(socket, msgInfo.room_id);
       // 如果是群組聊天的話要回傳群組名字跟頭貼
       const roomNameImg = await ChatModel.selectRoomName(msgInfo.room_id);
