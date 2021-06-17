@@ -109,6 +109,7 @@ const editDiary = async (req, res, next) => {
     let editDiaryData;
     const reqData = JSON.parse(JSON.stringify(req.body));
     const reqImages = JSON.parse(JSON.stringify(req.files));
+    console.log(reqImages);
     const dateArray = reqData.date.split("-");
     if (!validator.isDate(reqData.date)) {
       res.status(400).send({ error: "日期格式錯誤" });
@@ -190,6 +191,7 @@ const editDiary = async (req, res, next) => {
     // 全部刪除重插
     if (reqImages.images) {
       for (const i in reqImages.images) {
+        console.log(reqImages.images[i].originalname);
         reqImagesArray.push(reqImages.images[i].originalname);
       }
       const sqlArray = [];
@@ -198,6 +200,7 @@ const editDiary = async (req, res, next) => {
         imageArray.push(req.query.diaryid);
         imageArray.push(reqImagesArray[l]);
         sqlArray.push(imageArray);
+        console.log(imageArray);
       };
       await Diary.deleteDiaryImages(req.query.diaryid);
       await Diary.addDiaryImages(sqlArray);
