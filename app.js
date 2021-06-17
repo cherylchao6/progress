@@ -47,3 +47,26 @@ app.use((err, req, res, next) => {
     message: err.message
   });
 });
+
+// // test
+// require("dotenv").config();
+// const { pool } = require("./server/model/mysql");
+// test();
+// async function test () {
+//   const IDArr = [];
+//   const diaryIDArr = [];
+//   const result = await pool.query("SELECT DISTINCT room_id FROM room_user");
+//   const result2 = await pool.query("SELECT id FROM room");
+//   console.log(result[0]);
+//   console.log(result2[0]);
+//   for (const i in result[0]) {
+//     diaryIDArr.push(result[0][i].room_id);
+//   }
+//   for (const i in result2[0]) {
+//     IDArr.push(result2[0][i].id);
+//   }
+//   const result3 = diaryIDArr.filter((e) => {
+//     return IDArr.indexOf(e) === -1;
+//   });
+//   console.log(result3);
+// }

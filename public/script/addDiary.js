@@ -9,7 +9,6 @@ let myID;
 let myName;
 let myPic;
 let myPicURL;
-const noteBadge = document.querySelector("#noteBadge");
 const msgBadge = document.querySelector("#msgBadge");
 
 const socket = io({
