@@ -109,6 +109,7 @@ const editDiary = async (req, res, next) => {
     let editDiaryData;
     const reqData = JSON.parse(JSON.stringify(req.body));
     const reqImages = JSON.parse(JSON.stringify(req.files));
+    console.log("113");
     console.log(reqImages);
     const dateArray = reqData.date.split("-");
     if (!validator.isDate(reqData.date)) {
@@ -123,27 +124,36 @@ const editDiary = async (req, res, next) => {
     const reqImageSrcArray = reqData.imagesSrc.split(",");
     const reqImagesArray = [];
     const reqImagesWithoutNewFileArray = [];
+    console.log("127");
     console.log(reqImageSrcArray);
     for (const i in reqImageSrcArray) {
+      console.log("130");
       console.log(reqImageSrcArray[i]);
       const splitArray = reqImageSrcArray[i].split("/");
+      console.log("133");
       console.log(splitArray);
       if (splitArray[0] !== "blob:http:") {
         reqImagesWithoutNewFileArray.push(reqImageSrcArray[i]);
       };
     }
+    console.log("139");
     console.log(reqImagesWithoutNewFileArray);
     for (const k in reqImagesWithoutNewFileArray) {
+      console.log("142");
       console.log(reqImagesWithoutNewFileArray[k]);
       const splitArray = reqImagesWithoutNewFileArray[k].split("/");
+      console.log("145");
       console.log(splitArray);
       const index = splitArray.length - 1;
       const encodefilename = splitArray[index];
+      console.log("149");
       console.log(encodefilename);
       const filename = decodeURIComponent(encodefilename);
+      console.log("152");
       console.log(filename);
       reqImagesArray.push(filename);
     }
+    console.log("156");
     console.log(reqImagesArray);
     // 整理回傳的照片檔名矩陣，拿掉3ubuq5o(未上傳圖片時的檔名)
     for (let j = 0; j < reqImagesArray.length; j++) {
@@ -152,6 +162,7 @@ const editDiary = async (req, res, next) => {
         j--;
       }
     }
+    console.log("165");
     console.log(reqImagesArray);
     // update diary table
     if (!reqImages.main_image) {
