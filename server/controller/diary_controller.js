@@ -1,7 +1,7 @@
 const Diary = require("../model/diary_model.js");
 const Progress = require("../model/progress_model.js");
 const validator = require("validator");
-
+require("dotenv").config();
 const addDiary = async (req, res, next) => {
   try {
     // insert diary table
@@ -132,7 +132,11 @@ const editDiary = async (req, res, next) => {
       const splitArray = reqImageSrcArray[i].split("/");
       console.log("133");
       console.log(splitArray);
-      if (splitArray[0] !== "blob:http:") {
+      const uploadSrc = process.env.UPLOADSRC;
+      console.log("136");
+      console.log(uploadSrc);
+      if (splitArray[0] !== uploadSrc) {
+        console.log("137");
         reqImagesWithoutNewFileArray.push(reqImageSrcArray[i]);
       };
     }
