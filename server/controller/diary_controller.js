@@ -1,37 +1,36 @@
-const Diary = require('../model/diary_model.js');
-const Progress = require('../model/progress_model.js');
-const validate = require('validator');
-
+const Diary = require("../model/diary_model.js");
+const Progress = require("../model/progress_model.js");
+const validator = require("validator");
+require("dotenv").config();
 const addDiary = async (req, res, next) => {
   try {
-    //insert diary table
+    // insert diary table
     let diaryData;
-    let reqData = JSON.parse(JSON.stringify(req.body));
-    let reqImages = JSON.parse(JSON.stringify(req.files));
-    let dateArray = reqData.date.split("-");
-    if(!validate.isDate(reqData.date)){
-      res.status(400).send({error:'日期格式錯誤'});
-      return;
-    } 
-    if (!validate.isIn(reqData.mood, ['0','1','2','3','4','5','6','7'])) {
-      res.status(400).send({error:'沒有這種心情'});
+    const reqData = JSON.parse(JSON.stringify(req.body));
+    const reqImages = JSON.parse(JSON.stringify(req.files));
+    const dateArray = reqData.date.split("-");
+    if (!validator.isDate(reqData.date)) {
+      res.status(400).send({ error: "日期格式錯誤" });
       return;
     }
-
-    if (reqImages["main_image"]) {
+    if (!validator.isIn(reqData.mood, ["0", "1", "2", "3", "4", "5", "6", "7"])) {
+      res.status(400).send({ error: "沒有這種心情" });
+      return;
+    }
+    if (reqImages.main_image) {
       diaryData = {
-        progress_id: req.query['progressid'],
+        progress_id: req.query.progressid,
         date: reqData.date,
         mood: reqData.mood,
         content: reqData.content,
         year: dateArray[0],
         month: dateArray[1],
         day: dateArray[2],
-        main_image: reqImages["main_image"][0]["originalname"]
+        main_image: reqImages.main_image[0].originalname
       };
     } else {
       diaryData = {
-        progress_id: req.query['progressid'],
+        progress_id: req.query.progressid,
         date: reqData.date,
         mood: reqData.mood,
         content: reqData.content,
@@ -41,25 +40,25 @@ const addDiary = async (req, res, next) => {
         main_image: "default.jpeg"
       };
     };
-    let insertDiaryId= await Diary.addDiary(diaryData); 
-    //insert diaryImages table
-    if (reqImages["images"]) {
-      let sqlArray = []
-      for (let i in reqImages["images"]) {
-        let imageArray = [];
+    const insertDiaryId = await Diary.addDiary(diaryData);
+    // insert diaryImages table
+    if (reqImages.images) {
+      const sqlArray = [];
+      for (const i in reqImages.images) {
+        const imageArray = [];
         imageArray.push(insertDiaryId);
-        imageArray.push(reqImages["images"][i]['originalname']);
+        imageArray.push(reqImages.images[i].originalname);
         sqlArray.push(imageArray);
       };
       await Diary.addDiaryImages(sqlArray);
     }
-    //insert diaryData table
-    let diaryDataArray = [];
-    for (let i = 1; i < 4; i++ ) {
-      if (reqData[`input${i}`] == '') {
+    // insert diaryData table
+    const diaryDataArray = [];
+    for (let i = 1; i < 4; i++) {
+      if (reqData[`input${i}`] == "") {
         break;
       }
-      let inputData = {
+      const inputData = {
         diary_id: insertDiaryId,
         name: reqData[`input${i}Name`],
         value: reqData[`input${i}`],
@@ -70,7 +69,7 @@ const addDiary = async (req, res, next) => {
     if (diaryDataArray.length !== 0) {
       await Diary.addDiaryData(diaryDataArray);
     }
-    res.sendStatus(200); 
+    res.sendStatus(200);
   } catch (err) {
     next(err);
   }
@@ -78,28 +77,27 @@ const addDiary = async (req, res, next) => {
 
 const selectDiary = async (req, res, next) => {
   try {
-    console.log("selectDiary controller...........");
-    let {diaryid,progressid} = req.query;
-    let progressData = await Progress.selectProgress(req.query);
+    const { diaryid, progressid } = req.query;
+    const progressData = await Progress.selectProgress(req.query);
     if (progressData.progress.public == "1") {
       if (req.user.identity == "author") {
-        let diaryData = await Diary.selectDiary(diaryid);
-        let progressInfo = await Progress.selectProgressBasicInfo(progressid);
+        const diaryData = await Diary.selectDiary(diaryid);
+        const progressInfo = await Progress.selectProgressBasicInfo(progressid);
         res.status(200).send({
-          data : diaryData,
+          data: diaryData,
           progressInfo
         });
         return;
-      } else {res.status(200).send({});return;}
+      } else { res.status(200).send({}); return; }
     } else if (progressData.progress.public == "0") {
-        let diaryData = await Diary.selectDiary(diaryid);
-        let progressInfo = await Progress.selectProgressBasicInfo(progressid);
-        res.status(200).send({
-          data : diaryData,
-          progressInfo
-        });
-        return;
-      }
+      const diaryData = await Diary.selectDiary(diaryid);
+      const progressInfo = await Progress.selectProgressBasicInfo(progressid);
+      res.status(200).send({
+        data: diaryData,
+        progressInfo
+      });
+      return;
+    }
   } catch (err) {
     next(err);
   }
@@ -107,75 +105,76 @@ const selectDiary = async (req, res, next) => {
 
 const editDiary = async (req, res, next) => {
   try {
-    //Update diary table
+    // Update diary table
     let editDiaryData;
-    let reqData = JSON.parse(JSON.stringify(req.body));
-    let reqImages = JSON.parse(JSON.stringify(req.files));
-    let dateArray = reqData.date.split("-");
-    if(!validate.isDate(reqData.date)){
-      res.status(400).send({error:'日期格式錯誤'});
-      return;
-    } 
-    if (!validate.isIn(reqData.mood, ['0','1','2','3','4','5','6','7'])) {
-      res.status(400).send({error:'沒有這種心情'});
+    const reqData = JSON.parse(JSON.stringify(req.body));
+    const reqImages = JSON.parse(JSON.stringify(req.files));
+    const dateArray = reqData.date.split("-");
+    if (!validator.isDate(reqData.date)) {
+      res.status(400).send({ error: "日期格式錯誤" });
       return;
     }
-    //images轉碼
-    let reqImageSrcArray = reqData.imagesSrc.split(',');
-    let reqImagesArray = [];
-    let reqImagesWithoutNewFileArray = [];
-    for( let i in reqImageSrcArray ) {
-      let splitArray = reqImageSrcArray[i].split('/');
-      if (splitArray[0] !== "blob:http:") {
-          reqImagesWithoutNewFileArray.push(reqImageSrcArray[i]);
-        };
+    if (!validator.isIn(reqData.mood, ["0", "1", "2", "3", "4", "5", "6", "7"])) {
+      res.status(400).send({ error: "沒有這種心情" });
+      return;
     }
-    for (let k in reqImagesWithoutNewFileArray) {
-      let splitArray = reqImagesWithoutNewFileArray[k].split('/');
-      let index = splitArray.length - 1;
-      let encodefilename = splitArray[index];
-      let filename = decodeURIComponent(encodefilename);
+    // images轉碼
+    const reqImageSrcArray = reqData.imagesSrc.split(",");
+    const reqImagesArray = [];
+    const reqImagesWithoutNewFileArray = [];
+    for (const i in reqImageSrcArray) {
+      const splitArray = reqImageSrcArray[i].split("/");
+      const uploadSrc = process.env.UPLOADSRC;
+      if (splitArray[0] !== uploadSrc) {
+        reqImagesWithoutNewFileArray.push(reqImageSrcArray[i]);
+      };
+    }
+    for (const k in reqImagesWithoutNewFileArray) {
+      const splitArray = reqImagesWithoutNewFileArray[k].split("/");
+      const index = splitArray.length - 1;
+      const encodefilename = splitArray[index];
+      const filename = decodeURIComponent(encodefilename);
       reqImagesArray.push(filename);
     }
-    //整理回傳的照片檔名矩陣，拿掉3ubuq5o(未上傳圖片時的檔名)
-    for (let j=0; j < reqImagesArray.length; j++) {
-      if ( reqImagesArray[j] == '3ubuq5o') { 
+    // 整理回傳的照片檔名矩陣，拿掉3ubuq5o(未上傳圖片時的檔名)
+    for (let j = 0; j < reqImagesArray.length; j++) {
+      if (reqImagesArray[j] == "3ubuq5o") {
         reqImagesArray.splice(j, 1);
-        j--
-      } 
+        j--;
+      }
     }
-    //update diary table
-    if (!reqImages["main_image"]) {
-      //src mainImage轉碼
-      let splitArray = reqData.mainImageSrc.split('/');
-      let index = splitArray.length - 1;
-      let encodefilename = splitArray[index];
-      let mainImageName = decodeURIComponent(encodefilename);
-      //case1取消照片
-      if (mainImageName == '3ubuq5o') {
+    // update diary table
+    if (!reqImages.main_image) {
+      // src mainImage轉碼
+      const splitArray = reqData.mainImageSrc.split("/");
+      const index = splitArray.length - 1;
+      const encodefilename = splitArray[index];
+      const mainImageName = decodeURIComponent(encodefilename);
+      // case1取消照片
+      if (mainImageName == "3ubuq5o") {
         editDiaryData = {
-            diary_id: req.query.diaryid,
-            date: reqData.date,
-            mood: reqData.mood,
-            content: reqData.content,
-            year: dateArray[0],
-            month: dateArray[1],
-            day: dateArray[2],
-            main_image: "default.jpeg"
-          };
+          diary_id: req.query.diaryid,
+          date: reqData.date,
+          mood: reqData.mood,
+          content: reqData.content,
+          year: dateArray[0],
+          month: dateArray[1],
+          day: dateArray[2],
+          main_image: "default.jpeg"
+        };
       } else {
         editDiaryData = {
-            diary_id: req.query.diaryid,
-            date: reqData.date,
-            mood: reqData.mood,
-            content: reqData.content,
-            year: dateArray[0],
-            month: dateArray[1],
-            day: dateArray[2],
-            main_image: mainImageName
+          diary_id: req.query.diaryid,
+          date: reqData.date,
+          mood: reqData.mood,
+          content: reqData.content,
+          year: dateArray[0],
+          month: dateArray[1],
+          day: dateArray[2],
+          main_image: mainImageName
         };
-      } 
-    } else if (reqImages["main_image"]) {
+      }
+    } else if (reqImages.main_image) {
       editDiaryData = {
         diary_id: req.query.diaryid,
         date: reqData.date,
@@ -184,46 +183,49 @@ const editDiary = async (req, res, next) => {
         year: dateArray[0],
         month: dateArray[1],
         day: dateArray[2],
-        main_image: reqImages["main_image"][0]["originalname"]
+        main_image: reqImages.main_image[0].originalname
       };
     }
     await Diary.editDiary(editDiaryData);
-    //insert diaryImages table
-    //全部刪除重插
-    if (reqImages["images"]) {
-      for (let i in reqImages["images"]) {
-        reqImagesArray.push(reqImages["images"][i]['originalname']);
+    // insert diaryImages table
+    // 全部刪除重插
+    if (reqImages.images) {
+      for (const i in reqImages.images) {
+        reqImagesArray.push(reqImages.images[i].originalname);
       }
-      let sqlArray = [];
-      for (let l in reqImagesArray) {
-        let imageArray = [];
+      const sqlArray = [];
+      for (const l in reqImagesArray) {
+        const imageArray = [];
         imageArray.push(req.query.diaryid);
         imageArray.push(reqImagesArray[l]);
         sqlArray.push(imageArray);
       };
       await Diary.deleteDiaryImages(req.query.diaryid);
       await Diary.addDiaryImages(sqlArray);
-    } else if (!reqImages["images"]) {
-      let sqlArray = [];
-      //若reqImagesArray.length == 0 表示使用者一開始日記就沒有上傳照片而且也沒有新增照片
+    } else if (!reqImages.images) {
+      const sqlArray = [];
       if (reqImagesArray.length !== 0) {
-        for (let l in reqImagesArray) {
-          let imageArray = [];
+        // 使用者一開始日記有上傳照片然後沒有在新增新的
+        for (const l in reqImagesArray) {
+          const imageArray = [];
           imageArray.push(req.query.diaryid);
           imageArray.push(reqImagesArray[l]);
           sqlArray.push(imageArray);
         };
         await Diary.deleteDiaryImages(req.query.diaryid);
         await Diary.addDiaryImages(sqlArray);
-      } 
+      } else if (reqImagesArray.length == 0) {
+        // 使用者一開始有上傳照片但全部移掉
+        await Diary.deleteDiaryImages(req.query.diaryid);
+      }
     }
-    //Update diaryData table
-    let diaryDataArray = [];
-    for (let i = 1; i < 4; i++ ) {
-      if (reqData[`input${i}`] == '') {
+    // Update diaryData table
+    const diaryDataArray = [];
+    for (let i = 1; i < 4; i++) {
+      if (reqData[`input${i}`] == "") {
         break;
       }
-      let inputData = {
+      const inputData = {
         diary_id: req.query.diaryid,
         name: reqData[`input${i}Name`],
         value: reqData[`input${i}`],
@@ -232,17 +234,14 @@ const editDiary = async (req, res, next) => {
       diaryDataArray.push(inputData);
     }
     await Diary.editDiaryData(diaryDataArray);
-    res.sendStatus(200); 
+    res.sendStatus(200);
   } catch (err) {
     next(err);
   }
 };
 
-
-
-
 module.exports = {
   addDiary,
   selectDiary,
-  editDiary,
+  editDiary
 };

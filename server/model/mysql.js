@@ -1,51 +1,31 @@
-require('dotenv').config()
-const mysql = require('mysql2/promise');
-const { DB_HOST, DB_USER, DB_PWD, DB_DB} = process.env;
+require("dotenv").config();
+const mysql = require("mysql2/promise");
+require("dotenv").config();
+
+const env = process.env.NODE_ENV || "test";
+const { DB_HOST, DB_USER, DB_PWD, DB_DB, DB_DB_TEST } = process.env;
 
 const mysqlConfig = {
-  host: DB_HOST,
-  user: DB_USER,
-  password: DB_PWD,
-  database: DB_DB,
-  waitForConnections: true,
-  connectionLimit: 20
+  production: {
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PWD,
+    database: DB_DB
+  },
+  test: {
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PWD,
+    database: DB_DB_TEST
+  }
 };
 
+const mysqlEnv = mysqlConfig[env];
+mysqlEnv.waitForConnections = true;
+mysqlEnv.connectionLimit = 20;
 
-const pool = mysql.createPool(mysqlConfig);
+const pool = mysql.createPool(mysqlEnv);
+
 module.exports = {
-    pool
-}
-
-
-
-
-
-
-
-// require('dotenv').config();
-
-//node.js原生功能
-// const { promisify } = require('util');
-
-// const mysql = require('mysql2/promise');
-
-// let db = mysql.createConnection({
-//     host: process.env.DB_HOST,
-//     user: process.env.DB_USER,
-//     password: process.env.DB_PWD,
-//     database: process.env.DB_DB,
-//   });
-
-
-
-
-//promisify db method
-// let transaction = promisify(db.beginTransaction).bind(db);
-// let query = promisify(db.query).bind(db);
-// let commit = promisify(db.commit).bind(db);
-// let rollback = promisify(db.rollback).bind(db);
-
-// module.exports = {
-//   pool
-// };
+  pool
+};
