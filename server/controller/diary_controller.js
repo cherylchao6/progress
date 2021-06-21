@@ -109,8 +109,6 @@ const editDiary = async (req, res, next) => {
     let editDiaryData;
     const reqData = JSON.parse(JSON.stringify(req.body));
     const reqImages = JSON.parse(JSON.stringify(req.files));
-    console.log("113");
-    console.log(reqImages);
     const dateArray = reqData.date.split("-");
     if (!validator.isDate(reqData.date)) {
       res.status(400).send({ error: "日期格式錯誤" });
@@ -124,41 +122,20 @@ const editDiary = async (req, res, next) => {
     const reqImageSrcArray = reqData.imagesSrc.split(",");
     const reqImagesArray = [];
     const reqImagesWithoutNewFileArray = [];
-    console.log("127");
-    console.log(reqImageSrcArray);
     for (const i in reqImageSrcArray) {
-      console.log("130");
-      console.log(reqImageSrcArray[i]);
       const splitArray = reqImageSrcArray[i].split("/");
-      console.log("133");
-      console.log(splitArray);
       const uploadSrc = process.env.UPLOADSRC;
-      console.log("136");
-      console.log(uploadSrc);
       if (splitArray[0] !== uploadSrc) {
-        console.log("137");
         reqImagesWithoutNewFileArray.push(reqImageSrcArray[i]);
       };
     }
-    console.log("139");
-    console.log(reqImagesWithoutNewFileArray);
     for (const k in reqImagesWithoutNewFileArray) {
-      console.log("142");
-      console.log(reqImagesWithoutNewFileArray[k]);
       const splitArray = reqImagesWithoutNewFileArray[k].split("/");
-      console.log("145");
-      console.log(splitArray);
       const index = splitArray.length - 1;
       const encodefilename = splitArray[index];
-      console.log("149");
-      console.log(encodefilename);
       const filename = decodeURIComponent(encodefilename);
-      console.log("152");
-      console.log(filename);
       reqImagesArray.push(filename);
     }
-    console.log("156");
-    console.log(reqImagesArray);
     // 整理回傳的照片檔名矩陣，拿掉3ubuq5o(未上傳圖片時的檔名)
     for (let j = 0; j < reqImagesArray.length; j++) {
       if (reqImagesArray[j] == "3ubuq5o") {
@@ -166,8 +143,6 @@ const editDiary = async (req, res, next) => {
         j--;
       }
     }
-    console.log("165");
-    console.log(reqImagesArray);
     // update diary table
     if (!reqImages.main_image) {
       // src mainImage轉碼
@@ -216,7 +191,6 @@ const editDiary = async (req, res, next) => {
     // 全部刪除重插
     if (reqImages.images) {
       for (const i in reqImages.images) {
-        console.log(reqImages.images[i].originalname);
         reqImagesArray.push(reqImages.images[i].originalname);
       }
       const sqlArray = [];
@@ -225,7 +199,6 @@ const editDiary = async (req, res, next) => {
         imageArray.push(req.query.diaryid);
         imageArray.push(reqImagesArray[l]);
         sqlArray.push(imageArray);
-        console.log(imageArray);
       };
       await Diary.deleteDiaryImages(req.query.diaryid);
       await Diary.addDiaryImages(sqlArray);

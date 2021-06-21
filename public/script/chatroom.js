@@ -30,7 +30,6 @@ if (!roomID) {
   // 生成房間ＲＲＲＲ
   // 避免重新生成要再socket一次確保兩個人沒有shareroom
   const users = [user1ID, user2ID];
-  console.log("checkShareRoom");
   socket.emit("checkShareRoom", users);
 } else if (roomID !== "no") {
   NowAtRoomID = roomID;
@@ -43,7 +42,6 @@ if (!roomID) {
     }
   }).then(response => {
     if (response.status === 200) {
-      console.log("check done");
       // 拿聊天室訊息同時也要跟server更新最新的一則未讀;
       socket.emit("getRoomMsg", roomID);
     } else if (response.status === 401) {
@@ -69,17 +67,13 @@ if (!roomID) {
 }
 
 socket.on("checkShareRoomResult", shareRoom => {
-  console.log("checkShareRoomResult");
-  console.log(shareRoom);
   if (shareRoom == "no") {
-    console.log("ok no share room create a room");
     const users = [user1ID, user2ID];
     socket.emit("createRoom", users);
   }
 });
 socket.on("connect", () => {
   socketID = socket.id;
-  console.log(socket.id);
 });
 
 socket.on("connect_error", (err) => {
@@ -93,7 +87,6 @@ socket.on("connect_error", (err) => {
 setTimeout(function () { socket.emit("inTheChatRoom", "true"); }, 2000);
 
 socket.on("newRoomInfo", newRoomInfo => {
-  console.log("got newRoomInfo");
   for (const i in newRoomInfo.memberInfo) {
     if (newRoomInfo.memberInfo[i].user !== myID) {
       newRoomUserName = newRoomInfo.memberInfo[i].name;
@@ -104,21 +97,17 @@ socket.on("newRoomInfo", newRoomInfo => {
 });
 // 看新創的room有沒有自己,有的話告訴server把我加進去
 socket.on("newRoomInvitation", data => {
-  console.log("newRoomInvitation");
-  console.log(data);
   const { memberArr } = data;
   const memberIntArr = [];
   for (const i in memberArr) {
     memberIntArr.push(parseInt(memberArr[i]));
   }
   if (memberIntArr.indexOf(myID) !== -1) {
-    console.log("I join the room");
     socket.emit("letMeJoinRoom", data.newRoomID);
   }
 });
 
 socket.on("userInfo", (userInfo) => {
-  console.log(userInfo);
   myID = userInfo.id;
   myName = userInfo.name;
   myPic = userInfo.photo;
@@ -128,7 +117,6 @@ socket.on("userInfo", (userInfo) => {
 });
 
 socket.on("roomList", roomList => {
-  console.log(roomList);
   if (roomList.length == 0) {
     Swal.fire({
       title: "您尚未任何人聊天",
@@ -236,11 +224,9 @@ function getMsg (roomID) {
     icon.className = "fa fa-check";
     readStatus.appendChild(icon);
   }
-  console.log(`get room ${roomID}`);
 }
 // 從server拿回的聊天室資料
 socket.on("getRoomMsg", data => {
-  console.log(data);
   const chatUl = document.querySelector("#chat");
   // 同時畫面改為聊天室畫面
   rightSide.style.display = "inline";
@@ -328,7 +314,6 @@ function sendMsg () {
   const currentTime = new Date().toLocaleString();
   const msg = document.querySelector("#msgInput");
   const msgValue = msg.value;
-  console.log("sendMsg");
   if (msg.value) {
     // 要讓server知道要給誰
     const msgInfo = {
@@ -428,8 +413,6 @@ function sendMsg () {
           }
         }).then(data => {
           if (data) {
-            console.log("here");
-            console.log(data);
             const friendImg = document.createElement("img");
             friendImg.src = data.image;
             friendImg.className = "img-circle friendImg";
@@ -469,8 +452,6 @@ function sendMsg () {
 }
 
 socket.on("newMsg", msgInfo => {
-  console.log(msgInfo);
-  console.log("here");
   const chatUl = document.querySelector("#chat");
   // 如果在該房間要及時append訊息
   // 不在該房間就不用，因為他點進去那個房間就會render最新訊息
@@ -514,7 +495,6 @@ socket.on("newMsg", msgInfo => {
     const lastTime = document.querySelector(`#room${msgInfo.room_id}Time`);
     lastMsg.innerHTML = msgInfo.msg;
     lastTime.innerHTML = msgInfo.time;
-    console.log("here to change order");
     roomLi.style.order = order - 1;
     order -= 1;
     // 判斷有沒有開著該聊天室
@@ -592,60 +572,3 @@ socket.on("newMsg", msgInfo => {
 function back () {
   window.history.go(-1);
 }
-// let paging=0;
-// let friendList = document.querySelector("#friend-list");
-// // console.log(friendList.offsetHeight);
-// if (paging == 0) {
-//   console.log("no scroll");
-//   socket.emit("paging", paging);
-// }
-// console.log(friendList.offsetHeight);
-// console.log(friendList.scrollTop);
-// console.log(friendList.innerHeight);
-// var style = window.getComputedStyle(document.getElementById("friendList"), null);
-// let height = parseInt(style.getPropertyValue("height"));
-// console.log(height);
-// friendList.onscroll = function () {
-//   console.log("scroll");
-//   // socket.emit("paging", paging);
-//   console.log(friendList.offsetHeight);
-//   console.log(friendList.scrollTop);
-//   if ((friendList.innerHeight + friendList.scrollTop) >= friendList.offsetHeight) {
-//         paging += 1;
-//         console.log("plus paging");
-//       }
-//   console.log(paging);
-// };
-
-// let time = new Date().toLocaleString();
-// console.log(time);
-
-// var form = document.getElementById('form');
-// var input = document.getElementById('input');
-
-// form.addEventListener('submit', function(e) {
-// e.preventDefault();
-// let time = new Date().toLocaleString();
-// if (input.value) {
-//   socket.emit('chat message', {
-//     id: socket.id,
-//     content: input.value,
-//     time
-//   });
-//   input.value = '';
-// }
-// });
-
-// socket.on('chat message', function(msg) {
-//   var item = document.createElement('li');
-//   item.textContent = msg;
-//   messages.appendChild(item);
-//   window.scrollTo(0, document.body.scrollHeight);
-// });
-
-// window.onscroll = function () {
-//   if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-//     paging += 1;
-//     productAJAX(paging);
-//   }
-// };

@@ -61,7 +61,6 @@ function getGroupData () {
               if (response.status === 200) {
                 return response.json();
               } else if (response.status === 403) {
-                console.log("請輸入正確邀請碼");
                 Swal.fire(
                   {
                     title: "請輸入正確邀請碼",
@@ -75,8 +74,6 @@ function getGroupData () {
             .then(data => {
               // suppose會是groupprogress id
               if (data) {
-                console.log("join.....");
-                console.log(data);
                 Swal.fire(
                   {
                     title: "加入成功",
@@ -97,7 +94,6 @@ function getGroupData () {
   })
     .then(data => {
       if (data) {
-        console.log(data);
         invationCode = data.basicInfo.invitation_code;
         // title part
         const progressName = document.querySelector("#progressName");
@@ -119,12 +115,10 @@ function getGroupData () {
         const editLink = document.querySelector("#editLink");
         editLink.href = `/editGroupProgress?id=${groupProgressID}`;
         if (data.basicInfo.end_date == "") {
-          console.log("here");
           endDate.style.display = "none";
           const firstDate = data.basicInfo.start_date;
           const lastDate = today;
           const totalDays = progressDays(firstDate, lastDate);
-          console.log(totalDays);
           if (firstDate > lastDate) {
             groupDay.innerHTML = `Begins In</br>${totalDays}</br>Days`;
             const personalProgressRow = document.querySelector("#personalProgressRow");
@@ -140,7 +134,6 @@ function getGroupData () {
               }
             }
             // 如果大家都100％
-            console.log(finishedCount);
             if (finishedCount == data.members.length) {
               groupDay.innerHTML = "Finished!";
               const todayDate = document.querySelector("#todayDate");
@@ -211,8 +204,6 @@ function getGroupData () {
             const myProgressBarDiv = document.createElement("div");
             myProgressBarDiv.className = "progress-bar progress-bar-striped";
             myProgressBarDiv.setAttribute("role", "progressbar");
-            console.log("here");
-            console.log(data.members[k].percent);
             myProgressBarDiv.style.width = `${data.members[k].percent}%`;
             myProgressBarDiv.setAttribute("aria-valuenow", `${data.members[k].percent}`);
             myProgressBarDiv.setAttribute("aria-valuemin", "0");
@@ -264,7 +255,6 @@ function getGroupData () {
         diaryUnit = data.basicInfo.goal_unit;
         // 自己的日記和數據
         const mytotalProgress = document.querySelector("#mytotalProgress");
-        console.log(data.personalSum);
         if (data.personalSum == null) {
           data.personalSum = 0;
         }
@@ -310,7 +300,6 @@ socket.on("connect_error", (err) => {
 });
 
 socket.on("userInfo", (userInfo) => {
-  console.log(userInfo);
   myID = userInfo.id;
   myName = userInfo.name;
   myPic = userInfo.photo;
@@ -323,16 +312,13 @@ socket.on("userInfo", (userInfo) => {
 
 // 看距離上次連線間有沒有未讀訊息(除了聊天室每頁都要有)
 socket.on("checknewMsgNotification", hasUnread => {
-  console.log("checknewMsgNotification");
   if (hasUnread == "true") {
     msgBadge.style.display = "block";
   }
 });
 // 上線狀態但在看別頁的時候有人密我
 socket.on("newMsgNotification", toWhom => {
-  console.log("newMsg but I am not in room");
   if (toWhom == myID) {
-    console.log("This msg is for me");
     msgBadge.style.display = "block";
   }
 });
@@ -388,7 +374,6 @@ const progressDays = function (firstDate, lastDate) {
 
 function insertMydiary () {
   const dataToday = document.querySelector("#dataToday").value;
-  console.log(dataToday);
   const data = {
     group_progress_id: groupProgressID,
     user_id: myID,
@@ -397,7 +382,6 @@ function insertMydiary () {
     data_unit: diaryUnit,
     date: today
   };
-  console.log(data);
   fetch(`/groupProgress/personalData?id=${groupProgressID}`, {
     method: "POST",
     body: JSON.stringify(data),

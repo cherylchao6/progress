@@ -160,8 +160,9 @@ const editProgress = async (req, res, next) => {
         progress_id: req.query.progressid,
         data: progressDataArray
       };
-      await Progress.editProgressData(progressData);
-
+      if (progressDataArray.length !== 0) {
+        await Progress.editProgressData(progressData);
+      }
       // 如果刪掉progress數據，日記相關數據也要刪掉
       const ProgressInfo = await Progress.selectProgress(req.query);
       const ProgressDataNameArray = [];

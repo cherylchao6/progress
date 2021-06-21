@@ -53,7 +53,6 @@ socket.on("connect_error", (err) => {
 });
 
 socket.on('userInfo', (userInfo)=>{
-  console.log(userInfo);
   myID =  userInfo.id
   myName = userInfo.name;
   myPic = userInfo.photo;
@@ -66,16 +65,13 @@ socket.on('userInfo', (userInfo)=>{
 
 //看距離上次連線間有沒有未讀訊息(除了聊天室每頁都要有)
 socket.on ("checknewMsgNotification", hasUnread => {
-  console.log("checknewMsgNotification");
   if (hasUnread == "true") {
     msgBadge.style.display = 'block';
   }
 });
 //上線狀態但在看別頁的時候有人密我
 socket.on(`newMsgNotification`, toWhom => {
-  console.log("newMsg but I am not in room");
   if (toWhom == myID) {
-    console.log("This msg is for me");
     msgBadge.style.display = 'block';
   }
 });
@@ -111,7 +107,6 @@ function getProgressData () {
     .then (data => {
       if (data) {
         //sql資料填入input
-        console.log(data);
         let name = document.querySelector("#progressName");
         name.value = data.data.progress.name;
         let motivation = document.querySelector("#motivation");

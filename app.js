@@ -48,6 +48,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+module.exports = app;
 // // test
 // require("dotenv").config();
 // const { pool } = require("./server/model/mysql");

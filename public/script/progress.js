@@ -48,7 +48,6 @@ socket.on("connect_error", (err) => {
 });
 
 socket.on("userInfo", (userInfo) => {
-  console.log(userInfo);
   myID = userInfo.id;
   myName = userInfo.name;
   myPic = userInfo.photo;
@@ -61,7 +60,6 @@ socket.on("userInfo", (userInfo) => {
 
 // 看距離上次連線間有沒有未讀訊息(除了聊天室每頁都要有)
 socket.on("checknewMsgNotification", hasUnread => {
-  console.log("checknewMsgNotification");
   if (hasUnread == "true") {
     msgBadge.style.display = "block";
   }
@@ -69,9 +67,7 @@ socket.on("checknewMsgNotification", hasUnread => {
 
 // 上線狀態但在看別頁的時候有人密我
 socket.on("newMsgNotification", toWhom => {
-  console.log("newMsg but I am not in room");
   if (toWhom == myID) {
-    console.log("This msg is for me");
     msgBadge.style.display = "block";
   }
 });
@@ -95,9 +91,7 @@ function getProgressTimeData () {
     .then(timedata => {
       if (timedata) {
         data = timedata;
-        console.log(timedata);
         if (Object.keys(timedata).length === 0) {
-          console.log("沒有日記");
           // let diaryMain = document.querySelector("#diaryMain");
           // diaryMain.display = "none";
           const noDiary = document.querySelector("#noDiary");
@@ -122,7 +116,6 @@ function getProgressTimeData () {
         const options = selectOptionsArray.join("");
         column1.innerHTML = options;
         const monthArray = [];
-        console.log(timedata[recentYear]);
         for (const k in timedata[recentYear]) {
           if (timedata[recentYear][k] !== null) {
             for (const key of Object.keys(timedata[recentYear][k])) {
@@ -130,7 +123,6 @@ function getProgressTimeData () {
             }
           }
         }
-        console.log(monthArray);
         monthArray.unshift("All");
         const selectOptionsMonthArray = monthArray.map(month => `<option value=${month} name=${month}>${month}</option>`);
         const recentMonth = monthArray[monthArray.length - 1];
@@ -159,7 +151,6 @@ function getAuthorProfile () {
   })
     .then(data => {
       if (data) {
-        console.log(data);
         authorID = data.author;
         if (data.shareRoomID) {
           const msgLink = document.querySelector("#msgLink");
@@ -188,7 +179,6 @@ function getAuthorProfile () {
         const followBtn = document.querySelector("#followBtn");
         const msgBtn = document.querySelector("#MessageBtn");
         if (data.author == data.vistor && data.status == 1) {
-          console.log(unfinishProgressCol);
           unfinishProgressCol.style.display = "flex";
         } else if (data.author == data.vistor && data.status == 0) {
           finishProgress.style.display = "flex";
@@ -277,7 +267,6 @@ function getProgressData () {
   })
     .then(data => {
       if (data) {
-        console.log(data);
         // 做gif
         const status = document.querySelector("#status");
         if (data.status == 1) {
@@ -339,7 +328,6 @@ function getProgressData () {
         if (data.diarys.length == 1) {
           const oneDiary = document.querySelector("#oneDiary");
           oneDiary.style.display = "block";
-          console.log("one diary");
         }
       }
     });
@@ -353,8 +341,6 @@ function onChangeColumn1 () {
     column2.innerHTML = "<option selected value= \"All\" name= \"All\">All</option>";
   }
   const monthArray = [];
-  console.log(year);
-  console.log(data);
   for (const k in data[year]) {
     for (const key of Object.keys(data[year][k])) {
       monthArray.push(key);
@@ -364,7 +350,6 @@ function onChangeColumn1 () {
   const selectOptionsMonthArray = monthArray.map(month => `<option value=${month} name=${month}>${month}</option>`);
   const recentMonth = monthArray[monthArray.length - 1];
   if (year == "All") {
-    console.log("here");
     selectOptionsMonthArray[0] = "<option selected value= \"All\" name= \"All\">All</option>";
   }
   selectOptionsMonthArray[selectOptionsMonthArray.length - 1] = `<option selected value=${recentMonth} name=${recentMonth}>${recentMonth}</option>`;
@@ -452,7 +437,6 @@ function sendDate () {
     })
     .then(data => {
       if (data) {
-        console.log(data);
         if (data.diarys.length == 0) {
           const chart = document.querySelector("#chart");
           chart.style.display = "none";

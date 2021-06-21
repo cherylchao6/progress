@@ -33,7 +33,6 @@ socket.on("connect_error", (err) => {
 });
 
 socket.on("userInfo", (userInfo) => {
-  console.log(userInfo);
   myID = userInfo.id;
   myName = userInfo.name;
   myPic = userInfo.photo;
@@ -46,16 +45,14 @@ socket.on("userInfo", (userInfo) => {
 
 // 看距離上次連線間有沒有未讀訊息(除了聊天室每頁都要有)
 socket.on("checknewMsgNotification", hasUnread => {
-  console.log("checknewMsgNotification");
   if (hasUnread == "true") {
     msgBadge.style.display = "block";
   }
 });
 // 上線狀態但在看別頁的時候有人密我
 socket.on("newMsgNotification", toWhom => {
-  console.log("newMsg but I am not in room");
+  ;
   if (toWhom == myID) {
-    console.log("This msg is for me");
     msgBadge.style.display = "block";
   }
 });
@@ -78,7 +75,6 @@ function getDiaryData () {
     .then(response => {
       if (response) {
         const data = response.data;
-        console.log(data);
         // //sql資料填入input
         const date = document.querySelector("#date");
         date.value = data.basicInfo.date;
@@ -200,17 +196,6 @@ previewBeforeUpload("file-6");
 previewBeforeUpload("file-7");
 previewBeforeUpload("file-8");
 
-// let mainImageSrc = document.querySelector('#mainImage').src
-// console.log(mainImageSrc);
-// let imageSrcArray = [];
-// for (let k=1; k<9; k++) {
-//   selectImagesSrc(k)
-// }
-// function selectImagesSrc (id) {
-//   let imagesSrc = document.querySelector(`#image${id}`).src;
-//   imageSrcArray.push(imagesSrc);
-// }
-// console.log(imageSrcArray);
 // Submit form
 const form = document.forms.namedItem("addDiary");
 form.addEventListener("submit", function (ev) {

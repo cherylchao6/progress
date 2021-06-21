@@ -12,7 +12,6 @@ function signUp () {
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json" }
   }).then(async (response) => {
-    console.log(response.status);
     if (response.status === 200) {
       return response.json();
     } else if (response.status === 403) {

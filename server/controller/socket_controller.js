@@ -76,13 +76,11 @@ function socket (io) {
     // 幫使用者檢查有沒有新訊息通知
     const newMsgStatus = await ChatModel.checkNewMsgUnread(socket.userInfo.id);
     if (newMsgStatus == "1") {
-      console.log("checknewMsgNotification");
       socket.emit("checknewMsgNotification", "true");
     }
 
     socket.on("sendMsg", async (msgInfo) => {
       // 自己發的訊息一定已讀自己
-      console.log(msgInfo);
       // msg存sql
       await ChatModel.insertMsg(msgInfo);
       ChatModel.updateLastRead(socket, msgInfo.room_id);

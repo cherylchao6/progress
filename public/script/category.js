@@ -38,7 +38,6 @@ socket.on("connect_error", (err) => {
 });
 
 socket.on("userInfo", (userInfo) => {
-  console.log(userInfo);
   myID = userInfo.id;
   myName = userInfo.name;
   myPic = userInfo.photo;
@@ -51,16 +50,13 @@ socket.on("userInfo", (userInfo) => {
 
 // 看距離上次連線間有沒有未讀訊息(除了聊天室每頁都要有)
 socket.on("checknewMsgNotification", hasUnread => {
-  console.log("checknewMsgNotification");
   if (hasUnread == "true") {
     msgBadge.style.display = "block";
   }
 });
 // 上線狀態但在看別頁的時候有人密我
 socket.on("newMsgNotification", toWhom => {
-  console.log("newMsg but I am not in room");
   if (toWhom == myID) {
-    console.log("This msg is for me");
     msgBadge.style.display = "block";
   }
 });
@@ -82,8 +78,6 @@ function getProgressData () {
   })
     .then(data => {
       if (data) {
-        console.log(data);
-        console.log("here");
         const title = document.getElementsByClassName("title");
         for (let i = 0; i < title.length; i++) {
           title[i].style.display = "none";
@@ -121,7 +115,6 @@ function getProgressData () {
 }
 
 function getSearchData () {
-  console.log("search");
   fetch(`/api/1.0/progressSearch?keyword=${keyword}`, {
     method: "GET",
     headers: { authorization: `Bearer ${token}` }
@@ -138,7 +131,6 @@ function getSearchData () {
   })
     .then(data => {
       if (data) {
-        console.log(data);
         if (data.data.length == 0 && data.users.length == 0) {
           const noresult = document.querySelector(".noresult");
           noresult.style.display = "flex";

@@ -31,7 +31,6 @@ socket.on("connect_error", (err) => {
 });
 
 socket.on("userInfo", (userInfo) => {
-  console.log(userInfo);
   myID = userInfo.id;
   myName = userInfo.name;
   myPic = userInfo.photo;
@@ -44,16 +43,13 @@ socket.on("userInfo", (userInfo) => {
 
 // 看距離上次連線間有沒有未讀訊息(除了聊天室每頁都要有)
 socket.on("checknewMsgNotification", hasUnread => {
-  console.log("checknewMsgNotification");
   if (hasUnread == "true") {
     msgBadge.style.display = "block";
   }
 });
 // 上線狀態但在看別頁的時候有人密我
 socket.on("newMsgNotification", toWhom => {
-  console.log("newMsg but I am not in room");
   if (toWhom == myID) {
-    console.log("This msg is for me");
     msgBadge.style.display = "block";
   }
 });
@@ -185,7 +181,6 @@ function getGroupProgressData () {
     .then(data => {
       if (data) {
         // //sql資料填入input
-        console.log(data);
         const endDateDiv = document.querySelector("#endDateDiv");
         const hasEndDate = document.querySelector("#hasEndDate");
         if (data.basicInfo.end_date !== "") {
@@ -242,17 +237,11 @@ function signOut () {
 }
 
 function checkDate () {
-  console.log("checkcheck");
   if (document.querySelector("#endDate").value !== "" && document.querySelector("#startDate").value !== "") {
-    console.log("checkDate");
     const startDate = document.querySelector("#startDate").value;
     const endDate = document.querySelector("#endDate").value;
-    console.log(startDate);
-    console.log(endDate);
     const newStartDate = new Date(startDate);
     const newEndDate = new Date(endDate);
-    console.log(newStartDate);
-    console.log(newEndDate);
     if (newStartDate > newEndDate) {
       Swal.fire({
         title: "結束日期不得早於開始日期",

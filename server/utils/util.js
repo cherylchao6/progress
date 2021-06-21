@@ -13,6 +13,14 @@ function verifyToken (req, res, next) {
         console.log(err);
         return res.sendStatus(403);
       }
+      // token result
+      // {
+      //   id: 1,
+      //   name: '趙姿涵',
+      //   email: 'nmpyt21@gmail.com',
+      //   iat: 1624089748,
+      //   exp: 1624176148
+      // }
       req.user = result;
       next();
     });

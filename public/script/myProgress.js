@@ -31,7 +31,6 @@ socket.on("connect_error", (err) => {
 });
 
 socket.on("userInfo", (userInfo) => {
-  console.log(userInfo);
   myID = userInfo.id;
   myName = userInfo.name;
   myPic = userInfo.photo;
@@ -44,16 +43,13 @@ socket.on("userInfo", (userInfo) => {
 
 // 看距離上次連線間有沒有未讀訊息(除了聊天室每頁都要有)
 socket.on("checknewMsgNotification", hasUnread => {
-  console.log("checknewMsgNotification");
   if (hasUnread == "true") {
     msgBadge.style.display = "block";
   }
 });
 // 上線狀態但在看別頁的時候有人密我
 socket.on("newMsgNotification", toWhom => {
-  console.log("newMsg but I am not in room");
   if (toWhom == myID) {
-    console.log("This msg is for me");
     msgBadge.style.display = "block";
   }
 });
@@ -76,7 +72,6 @@ function getUserInfo () {
   })
     .then(data => {
       if (data) {
-        console.log(data);
         if (data.shareRoomID) {
           const msgLink = document.querySelector("#msgLink");
           msgLink.href = `/chatroom.html?roomid=${data.shareRoomID}&user1id=${data.author}&user2id=${data.vistor}`;
@@ -285,7 +280,6 @@ function joinGroupProgress () {
           if (response.status === 200) {
             return response.json();
           } else if (response.status === 403) {
-            console.log("請輸入正確邀請碼");
             Swal.fire(
               {
                 title: "請輸入正確邀請碼",
@@ -299,8 +293,6 @@ function joinGroupProgress () {
         .then(data => {
         // suppose會是groupprogress id
           if (data) {
-            console.log("join.....");
-            console.log(data);
             Swal.fire(
               {
                 title: "加入成功",
@@ -334,7 +326,6 @@ function getMyProgressData () {
   })
     .then(data => {
       if (data) {
-        console.log(data);
         // 先append個人的
         if (data.personal.length == 0 && data.group.length == 0) {
           const noProgress = document.querySelector("#noProgress");

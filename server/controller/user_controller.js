@@ -6,7 +6,6 @@ const validator = require("validator");
 const signUp = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
-
     if (!name || !email || !password || validator.isEmpty(name) || validator.isEmpty(email) || validator.isEmpty(password)) {
       res.status(400).send({ error: "請輸入完整資訊" });
       return;
@@ -22,7 +21,6 @@ const signUp = async (req, res, next) => {
       res.sendStatus(403);
       return;
     }
-
     res.status(200).send({
       data: {
         access_token: result.token,
