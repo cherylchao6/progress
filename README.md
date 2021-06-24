@@ -56,3 +56,7 @@ Have you ever wonder what would keep you persistent when trying to finish a goal
 
 <img src="https://myprogress-club.s3.us-east-2.amazonaws.com/VivaVideo.GIF">
 <!-- <video src="https://dsjwynur8i3ik.cloudfront.net/20210612152912_HD.mp4" controls type="video/mp4"></video> -->
+
+
+https://user-images.githubusercontent.com/77141019/123245431-675c5300-d517-11eb-8942-2e35cb9cc05c.mov
+
