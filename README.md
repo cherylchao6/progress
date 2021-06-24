@@ -60,13 +60,21 @@ https://user-images.githubusercontent.com/77141019/123247786-d20e8e00-d519-11eb-
 
 https://user-images.githubusercontent.com/77141019/123249776-e8b5e480-d51b-11eb-8b4f-ae5b07fb7c30.mov
 
-＊ Customized data for recording a progress:
+＊ Create a personal progress with customized data:
 
 https://user-images.githubusercontent.com/77141019/123252610-12bcd600-d51f-11eb-9e45-aa6dd774c8a3.mov
 
-* Add dairies under a progress and visualize your change by line chart of data and GIF:
+* Add diaries under a progress and visualize your change by line chart of data and GIF:
 
 https://user-images.githubusercontent.com/77141019/123253655-45b39980-d520-11eb-971f-fedf61511825.MP4
+
+* Follow friends and chat with them:
+
+https://user-images.githubusercontent.com/77141019/123256661-cde76e00-d523-11eb-8cac-bcb8afbb7325.mp4
+
+
+* Create group prougress and compete with friends:
+https://user-images.githubusercontent.com/77141019/123254573-67f9e700-d521-11eb-977b-d1b87b57ca17.mp4
 
 
 
