@@ -64,6 +64,11 @@ https://user-images.githubusercontent.com/77141019/123249776-e8b5e480-d51b-11eb-
 
 https://user-images.githubusercontent.com/77141019/123252610-12bcd600-d51f-11eb-9e45-aa6dd774c8a3.mov
 
+* Add dairies under a progress and visualize your change by line chart of data and GIF:
+
+https://user-images.githubusercontent.com/77141019/123253655-45b39980-d520-11eb-971f-fedf61511825.MP4
+
+
 
 
 
