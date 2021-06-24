@@ -52,4 +52,4 @@ Have you ever wonder what would keep you persistent when trying to finish a goal
 ![Database screenshot](https://myprogress-club.s3.us-east-2.amazonaws.com/database-relation-graph.jpg)
 
 ## Features
-[![Demo CountPages alpha](https://myprogress-club.s3.us-east-2.amazonaws.com/%E6%88%AA%E5%9C%96+2021-06-22+%E4%B8%8B%E5%8D%8810.30.40.png)](https://myprogress-club.s3.us-east-2.amazonaws.com/index.mp4)
+[![Demo CountPages alpha](https://myprogress-club.s3.us-east-2.amazonaws.com/VivaVideo.GIF)](https://youtu.be/k31lNk48z3E)
