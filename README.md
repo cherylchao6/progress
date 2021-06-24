@@ -52,6 +52,12 @@ Have you ever wonder what would keep you persistent when trying to finish a goal
 ![Database screenshot](https://myprogress-club.s3.us-east-2.amazonaws.com/database-relation-graph.jpg)
 
 ## Features
-* Aboudant categories of progress:
+* Browse Abundant categories of progresses:
 
 https://user-images.githubusercontent.com/77141019/123247786-d20e8e00-d519-11eb-979c-926d3b0d6be4.mov
+
+* Search any progresses or friends of interests:
+
+https://user-images.githubusercontent.com/77141019/123249776-e8b5e480-d51b-11eb-8b4f-ae5b07fb7c30.mov
+
+
