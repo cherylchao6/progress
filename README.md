@@ -54,7 +54,4 @@ Have you ever wonder what would keep you persistent when trying to finish a goal
 ## Features
 * Aboudant categories of progress:
 
-https://user-images.githubusercontent.com/77141019/123247580-9ffd2c00-d519-11eb-9002-4cc4e8a7d523.mov
-
-
 https://user-images.githubusercontent.com/77141019/123246844-d25a5980-d518-11eb-9f02-100add3918a1.mov
