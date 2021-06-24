@@ -75,7 +75,9 @@ https://user-images.githubusercontent.com/77141019/123256661-cde76e00-d523-11eb-
 
 * Create group prougress and compete with friends:
 
-https://user-images.githubusercontent.com/77141019/123254573-67f9e700-d521-11eb-977b-d1b87b57ca17.mp4
+https://user-images.githubusercontent.com/77141019/123257631-0176c800-d525-11eb-8c46-096c803e8a12.mp4
+
+
 
 
 
