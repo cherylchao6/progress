@@ -60,4 +60,10 @@ https://user-images.githubusercontent.com/77141019/123247786-d20e8e00-d519-11eb-
 
 https://user-images.githubusercontent.com/77141019/123249776-e8b5e480-d51b-11eb-8b4f-ae5b07fb7c30.mov
 
+＊ Customized data for recording a progress:
+
+https://user-images.githubusercontent.com/77141019/123252610-12bcd600-d51f-11eb-9e45-aa6dd774c8a3.mov
+
+
+
 
