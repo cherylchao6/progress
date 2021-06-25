@@ -1,7 +1,7 @@
 # Myprogress
-<img src="https://myprogress-club.s3.us-east-2.amazonaws.com/%E9%A6%96%E9%A0%81%E6%88%AA%E5%9C%96.png" alt="drawing" width="200" align="right">
+<img src="https://myprogress-club.s3.us-east-2.amazonaws.com/%E9%A6%96%E9%A0%81%E6%88%AA%E5%9C%96.png" alt="drawing" width="230" style="margin-top:100" align="right">
 
-> Have you ever wonder what would keep you persistent when trying to finish a goal? I believe that it's not about the outcome but "Visualising the gradual changes on oneself" matters the most! Myprogress provides a social media platform that aims to help an individual to record their changes during a progress share with friends with privacy! 
+> Have you ever wondered what would keep you persistent when trying to finish a goal? I believe that it's not about the outcome but "Visualising the gradual changes on oneself" matters the most! Myprogress provides a social media platform that aims to help an individual to record their changes during a progress share with friends with privacy! 
 
 ## Start your own progress NOW !
 * Sign up easily [here](https://myprogress.club/signup)
@@ -33,6 +33,9 @@
 * HTML
 * CSS
 * JavaScript
+* Bootstrap
+* Chart.js
+* Owl Carousel
 
 
 ### Web Socket
