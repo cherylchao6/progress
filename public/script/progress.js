@@ -4,7 +4,7 @@ const token = localStorage.getItem("token");
 const urlParams = new URLSearchParams(window.location.search);
 const progressId = urlParams.get("progressid");
 getProgressTimeData();
-setTimeout(function () { sendDate(); }, 1200);
+// setTimeout(function () { sendDate(); }, 1200);
 getProgressData();
 getAuthorProfile();
 let authorID;
@@ -129,6 +129,7 @@ function getProgressTimeData () {
         selectOptionsMonthArray[selectOptionsMonthArray.length - 1] = `<option selected value=${recentMonth} name=${recentMonth}>${recentMonth}</option>`;
         const monthOptions = selectOptionsMonthArray.join("");
         column2.innerHTML = monthOptions;
+        sendDate();
       }
     });
 };
@@ -142,10 +143,8 @@ function getAuthorProfile () {
     if (response.status === 200) {
       return response.json();
     } else if (response.status === 401) {
-      alert("請先登入");
       return window.location.assign("/signin");
     } else if (response.status === 403) {
-      alert("無權限操做此網頁");
       return window.location.assign("/signin");
     }
   })
@@ -258,10 +257,8 @@ function getProgressData () {
     if (response.status === 200) {
       return response.json();
     } else if (response.status === 401) {
-      alert("請先登入");
       return window.location.assign("/signin");
     } else if (response.status === 403) {
-      alert("無權限操做此網頁");
       return window.location.assign("/signin");
     }
   })
@@ -408,129 +405,132 @@ function clearPage () {
 }
 function sendDate () {
   myChart.destroy();
+  console.log("onchange");
   const year = document.querySelector("#column1").value;
   const month = document.querySelector("#column2").value;
   const datatype = document.querySelector("#column3").value;
-  const data = {
-    year,
-    month,
-    datatype
-  };
-  fetch(`/progressChart?progressid=${progressId}&paging=${page}`, {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: new Headers({
-      "Content-Type": "application/json",
-      authorization: `Bearer ${token}`
+  if (year) {
+    const data = {
+      year,
+      month,
+      datatype
+    };
+    fetch(`/progressChart?progressid=${progressId}&paging=${page}`, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: new Headers({
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`
+      })
     })
-  })
-    .then(function (response) {
-      if (response.status === 200) {
-        return response.json();
-      } else if (response.status === 401) {
-        alert("請先登入");
-        return window.location.assign("/signin.html");
-      } else if (response.status === 403) {
-        alert("登入逾期，請重新登入");
-        return window.location.assign("/signin.html");
-      }
-    })
-    .then(data => {
-      if (data) {
-        if (data.diarys.length == 0) {
-          const chart = document.querySelector("#chart");
-          chart.style.display = "none";
+      .then(function (response) {
+        if (response.status === 200) {
+          return response.json();
+        } else if (response.status === 401) {
+          alert("請先登入");
+          return window.location.assign("/signin.html");
+        } else if (response.status === 403) {
+          alert("登入逾期，請重新登入");
+          return window.location.assign("/signin.html");
         }
-        if (data.diarys.length !== 0) {
-          myChart = new Chart(ctx, {
-            type: "line",
-            data: {
-              labels: data.Xs,
-              datasets: [{
-                data: data.Ys,
-                backgroundColor: [
-                  "rgba(255, 99, 132, 0.2)",
-                  "rgba(54, 162, 235, 0.2)",
-                  "rgba(255, 206, 86, 0.2)",
-                  "rgba(75, 192, 192, 0.2)",
-                  "rgba(153, 102, 255, 0.2)",
-                  "rgba(255, 159, 64, 0.2)"
-                ],
-                borderColor: [
-                  "rgba(255, 99, 132, 1)",
-                  "rgba(54, 162, 235, 1)",
-                  "rgba(255, 206, 86, 1)",
-                  "rgba(75, 192, 192, 1)",
-                  "rgba(153, 102, 255, 1)",
-                  "rgba(255, 159, 64, 1)"
-                ],
-                borderWidth: 1
-              }]
-            },
-            options: {
-              scales: {
-                y: {
-                  ticks: {
-                    // forces step size to be 50 units
-                    stepSize: 50
+      })
+      .then(data => {
+        if (data) {
+          if (data.diarys.length == 0) {
+            const chart = document.querySelector("#chart");
+            chart.style.display = "none";
+          }
+          if (data.diarys.length !== 0) {
+            myChart = new Chart(ctx, {
+              type: "line",
+              data: {
+                labels: data.Xs,
+                datasets: [{
+                  data: data.Ys,
+                  backgroundColor: [
+                    "rgba(255, 99, 132, 0.2)",
+                    "rgba(54, 162, 235, 0.2)",
+                    "rgba(255, 206, 86, 0.2)",
+                    "rgba(75, 192, 192, 0.2)",
+                    "rgba(153, 102, 255, 0.2)",
+                    "rgba(255, 159, 64, 0.2)"
+                  ],
+                  borderColor: [
+                    "rgba(255, 99, 132, 1)",
+                    "rgba(54, 162, 235, 1)",
+                    "rgba(255, 206, 86, 1)",
+                    "rgba(75, 192, 192, 1)",
+                    "rgba(153, 102, 255, 1)",
+                    "rgba(255, 159, 64, 1)"
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  y: {
+                    ticks: {
+                      // forces step size to be 50 units
+                      stepSize: 50
+                    }
+                  }
+                },
+                plugins: {
+                  legend: {
+                    display: false
                   }
                 }
-              },
-              plugins: {
-                legend: {
-                  display: false
-                }
               }
+            });
+            // ------圖表分隔線------------------------------------
+            const nextBtn = document.querySelector("#nextBtn");
+            const previousBtn = document.querySelector("#previousBtn");
+            if (data.next_paging == 1) {
+              previousBtn.style.display = "none";
+              nextBtn.style.display = "inline";
+            } else if (!data.next_paging) {
+              previousBtn.style.display = "inline";
+              nextBtn.style.display = "none";
+            } else {
+              nextBtn.style.display = "inline";
+              previousBtn.style.display = "inline";
             }
-          });
-          // ------圖表分隔線------------------------------------
-          const nextBtn = document.querySelector("#nextBtn");
-          const previousBtn = document.querySelector("#previousBtn");
-          if (data.next_paging == 1) {
-            previousBtn.style.display = "none";
-            nextBtn.style.display = "inline";
-          } else if (!data.next_paging) {
-            previousBtn.style.display = "inline";
-            nextBtn.style.display = "none";
-          } else {
-            nextBtn.style.display = "inline";
-            previousBtn.style.display = "inline";
-          }
-          // -------顯示日記--------------
-          const diarys = document.querySelector("#diarys");
-          diarys.innerHTML = "";
-          for (const i in data.diarys) {
-            const diaryInfo = document.createElement("div");
-            diaryInfo.className = "col-3 diaryInfo";
-            diaryInfo.dataset.bsToggle = "tooltip";
-            diaryInfo.dataset.bsPlacement = "bottom";
-            diaryInfo.title = `${data.diarys[i].content}`;
-            diarys.appendChild(diaryInfo);
-            const diaryLink = document.createElement("a");
-            diaryLink.href = `/diary?progressid=${progressId}&diaryid=${data.diarys[i].id}`;
-            diaryLink.style = "text-decoration:none;";
-            diaryInfo.appendChild(diaryLink);
-            const diaryInfoBorder = document.createElement("div");
-            diaryInfoBorder.id = "diaryInfoBorder";
-            diaryLink.appendChild(diaryInfoBorder);
-            const date = document.createElement("div");
-            date.className = "text-center";
-            date.id = "date";
-            const dateTitle = document.createElement("p");
-            dateTitle.id = "dateFont";
-            dateTitle.innerHTML = `${data.diarys[i].date}`;
-            date.appendChild(dateTitle);
-            diaryInfoBorder.appendChild(date);
-            const imgDiv = document.createElement("div");
-            const img = document.createElement("img");
-            img.className = "diaryImage";
-            img.src = `${data.diarys[i].main_image}`;
-            imgDiv.appendChild(img);
-            diaryInfoBorder.appendChild(imgDiv);
+            // -------顯示日記--------------
+            const diarys = document.querySelector("#diarys");
+            diarys.innerHTML = "";
+            for (const i in data.diarys) {
+              const diaryInfo = document.createElement("div");
+              diaryInfo.className = "col-3 diaryInfo";
+              diaryInfo.dataset.bsToggle = "tooltip";
+              diaryInfo.dataset.bsPlacement = "bottom";
+              diaryInfo.title = `${data.diarys[i].content}`;
+              diarys.appendChild(diaryInfo);
+              const diaryLink = document.createElement("a");
+              diaryLink.href = `/diary?progressid=${progressId}&diaryid=${data.diarys[i].id}`;
+              diaryLink.style = "text-decoration:none;";
+              diaryInfo.appendChild(diaryLink);
+              const diaryInfoBorder = document.createElement("div");
+              diaryInfoBorder.id = "diaryInfoBorder";
+              diaryLink.appendChild(diaryInfoBorder);
+              const date = document.createElement("div");
+              date.className = "text-center";
+              date.id = "date";
+              const dateTitle = document.createElement("p");
+              dateTitle.id = "dateFont";
+              dateTitle.innerHTML = `${data.diarys[i].date}`;
+              date.appendChild(dateTitle);
+              diaryInfoBorder.appendChild(date);
+              const imgDiv = document.createElement("div");
+              const img = document.createElement("img");
+              img.className = "diaryImage";
+              img.src = `${data.diarys[i].main_image}`;
+              imgDiv.appendChild(img);
+              diaryInfoBorder.appendChild(imgDiv);
+            }
           }
         }
-      }
-    });
+      });
+  }
 }
 
 function signOut () {

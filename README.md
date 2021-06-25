@@ -52,7 +52,29 @@ Have you ever wonder what would keep you persistent when trying to finish a goal
 ![Database screenshot](https://myprogress-club.s3.us-east-2.amazonaws.com/database-relation-graph.jpg)
 
 ## Features
-<!-- [![Demo CountPages alpha](https://myprogress-club.s3.us-east-2.amazonaws.com/VivaVideo.GIF)](https://youtu.be/k31lNk48z3E) -->
+* Browse Abundant categories of progresses:
 
-<img src="https://myprogress-club.s3.us-east-2.amazonaws.com/VivaVideo.GIF">
-<!-- <video src="https://dsjwynur8i3ik.cloudfront.net/20210612152912_HD.mp4" controls type="video/mp4"></video> -->
+https://user-images.githubusercontent.com/77141019/123247786-d20e8e00-d519-11eb-979c-926d3b0d6be4.mov
+
+* Search any progresses or friends of interests:
+
+https://user-images.githubusercontent.com/77141019/123249776-e8b5e480-d51b-11eb-8b4f-ae5b07fb7c30.mov
+
+＊ Create a personal progress with customized data:
+
+https://user-images.githubusercontent.com/77141019/123252610-12bcd600-d51f-11eb-9e45-aa6dd774c8a3.mov
+
+* Add diaries under a progress and visualize your change by line chart of data and GIF:
+
+https://user-images.githubusercontent.com/77141019/123253655-45b39980-d520-11eb-971f-fedf61511825.MP4
+
+* Follow friends and chat with them:
+
+https://user-images.githubusercontent.com/77141019/123256661-cde76e00-d523-11eb-8cac-bcb8afbb7325.mp4
+
+
+* Create group prougress and compete with friends:
+
+https://user-images.githubusercontent.com/77141019/123257631-0176c800-d525-11eb-8c46-096c803e8a12.mp4
+
+
