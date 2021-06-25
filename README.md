@@ -52,6 +52,28 @@ Have you ever wonder what would keep you persistent when trying to finish a goal
 ![Database screenshot](https://myprogress-club.s3.us-east-2.amazonaws.com/database-relation-graph.jpg)
 
 ## Features
+* Browse Abundant categories of progresses
+* Search any progresses or friends of interests
+* Progress-related feature:
+  * Create a progress with customized data sets
+  * Change progress publicity
+  * Present customized data sets with line-chart acording to time scale of interests
+  * Present continous daily change by gif
+  * Add diaries under a progress to recode daily progress
+  * Edit progress and diary
+* Social-related feature:
+  * Update profile picture and motto
+  * Follow and unfollow other users
+  * Create a group progress and invite friends by an invitation code
+  * Update daily progress in a group progresss
+  * Analyze achieved rate and rank of group members
+  * Chat rooms both for private and group
+
+
+
+
+
+
 * Browse Abundant categories of progresses:
 
 https://user-images.githubusercontent.com/77141019/123247786-d20e8e00-d519-11eb-979c-926d3b0d6be4.mov
