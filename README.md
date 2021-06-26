@@ -70,13 +70,13 @@
 * Progress-related feature:
   * Create a progress with customized data sets
   * Change progress publicity
-  * Present customized data sets with line-chart acording to time scale of interests
-  * Present continous daily change by gif
+  * Present customized data sets with line-chart according to time scale of interests
+  * Present continuous daily change by gif
   * Add diaries under a progress to recode daily progress
   * Edit progress and diary
 * Social-related feature:
   * Update profile picture and motto
-  * Follow and unfollow other users
+  * Follow and unfollow other users and check the follwing list
   * Create a group progress and invite friends by an invitation code
   * Update daily progress in a group progresss
   * Analyze achieved rate and rank of group members
@@ -108,6 +108,12 @@ https://user-images.githubusercontent.com/77141019/123256661-cde76e00-d523-11eb-
 * Create group prougress and compete with friends:
 
 https://user-images.githubusercontent.com/77141019/123257631-0176c800-d525-11eb-8c46-096c803e8a12.mp4
+
+## Author
+Ｃheryl Chao 
+[Github](https://github.com/cherylchao6)
+
+Email: nmpyt21@gmail.com
 
 
 
