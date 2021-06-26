@@ -4,7 +4,7 @@ const token = localStorage.getItem("token");
 const urlParams = new URLSearchParams(window.location.search);
 const progressId = urlParams.get("progressid");
 getProgressTimeData();
-setTimeout(function () { sendDate(); }, 1200);
+// setTimeout(function () { sendDate(); }, 1200);
 getProgressData();
 getAuthorProfile();
 let authorID;
@@ -129,6 +129,7 @@ function getProgressTimeData () {
         selectOptionsMonthArray[selectOptionsMonthArray.length - 1] = `<option selected value=${recentMonth} name=${recentMonth}>${recentMonth}</option>`;
         const monthOptions = selectOptionsMonthArray.join("");
         column2.innerHTML = monthOptions;
+        sendDate();
       }
     });
 };
@@ -142,10 +143,8 @@ function getAuthorProfile () {
     if (response.status === 200) {
       return response.json();
     } else if (response.status === 401) {
-      alert("請先登入");
       return window.location.assign("/signin");
     } else if (response.status === 403) {
-      alert("無權限操做此網頁");
       return window.location.assign("/signin");
     }
   })
@@ -258,10 +257,8 @@ function getProgressData () {
     if (response.status === 200) {
       return response.json();
     } else if (response.status === 401) {
-      alert("請先登入");
       return window.location.assign("/signin");
     } else if (response.status === 403) {
-      alert("無權限操做此網頁");
       return window.location.assign("/signin");
     }
   })
