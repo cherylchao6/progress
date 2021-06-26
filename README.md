@@ -58,7 +58,7 @@
 * Chai
 
 ## Structure
-![Structure screenshot](https://myprogress-club.s3.us-east-2.amazonaws.com/structure-2.png)
+![Structure screenshot](https://myprogress-club.s3.us-east-2.amazonaws.com/structure.jpg)
 
 ## Database Design
 ![Database screenshot](https://myprogress-club.s3.us-east-2.amazonaws.com/database-relation-graph.jpg)
