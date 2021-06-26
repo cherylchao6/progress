@@ -405,7 +405,6 @@ function clearPage () {
 }
 function sendDate () {
   myChart.destroy();
-  console.log("onchange");
   const year = document.querySelector("#column1").value;
   const month = document.querySelector("#column2").value;
   const datatype = document.querySelector("#column3").value;
