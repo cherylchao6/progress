@@ -16,7 +16,6 @@
 * [Structure](#structure)
 * [Database design](#database-design)
 * [Features](#features)
-* [Inspiration](#inspiration)
 * [Author](#author)
 
 ## Technologies
