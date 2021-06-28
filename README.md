@@ -11,8 +11,6 @@
 
   **Password:** 1234
   
-  ### -----------------------------------------------------------------
-  
   #### In case you want to test chat room in incognito window at the same time
   
   **Email:** <span>testsocket@</span>gmail.com
