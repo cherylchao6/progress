@@ -1,0 +1,11 @@
+config:
+  target: "http://localhost:4000"
+  http:
+    pool: 20
+  phases:
+    - duration: 20
+      arrivalRate: 200
+scenarios:
+  - flow:
+    - get:
+        url: "/testLoad"

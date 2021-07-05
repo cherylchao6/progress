@@ -1,16 +1,23 @@
 # Myprogress
-<img src="https://myprogress-club.s3.us-east-2.amazonaws.com/%E9%A6%96%E9%A0%81%E6%88%AA%E5%9C%96.png" alt="drawing" width="230" style="margin-top:100" align="right">
+<img src="https://myprogress-club.s3.us-east-2.amazonaws.com/%E9%A6%96%E9%A0%81%E6%88%AA%E5%9C%96.png" alt="drawing" width="400" style="margin-top:100" align="right">
 
 > Have you ever wondered what would keep you persistent when trying to finish a goal? I believe that it's not about the outcome but "Visualising the gradual changes on oneself" matters the most! Myprogress provides a social media platform that aims to help an individual to record their changes during a progress share with friends with privacy! 
 
 ## Start your own progress NOW !
 * Sign up easily [here](https://myprogress.club/signup)
-* Use the test account below to [sign in](https://myprogress.club/) 
+* Use the test accounts below to [sign in](https://myprogress.club/) 
 
   **Email:** <span>test@</span>gmail.com
 
   **Password:** 1234
+  
+  ### -----------------------------------------------------------------
+  
+  #### In case you want to test chat room in incognito window at the same time
+  
+  **Email:** <span>testsocket@</span>gmail.com
 
+  **Password:** 1234
 ## Table of content
 * [Technologies](#technologies)
 * [Structure](#structure)
@@ -58,7 +65,7 @@
 * Chai
 
 ## Structure
-![Structure screenshot](https://myprogress-club.s3.us-east-2.amazonaws.com/structure-2.png)
+![Structure screenshot](https://myprogress-club.s3.us-east-2.amazonaws.com/structure.jpg)
 
 ## Database Design
 ![Database screenshot](https://myprogress-club.s3.us-east-2.amazonaws.com/database-relation-graph.jpg)
