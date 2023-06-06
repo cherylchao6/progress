@@ -1,9 +1,7 @@
 # Myprogress
-<img src="https://myprogress-club.s3.us-east-2.amazonaws.com/%E9%A6%96%E9%A0%81%E6%88%AA%E5%9C%96.png" alt="drawing" width="400" style="margin-top:100" align="right">
+ Have you ever wondered what would keep you persistent when trying to finish a goal? I believe that it's not about the outcome but "Visualising the gradual changes on oneself" matters the most! Myprogress provides a social media platform that aims to help an individual to record their changes during a progress share with friends with privacy! 
 
-> Have you ever wondered what would keep you persistent when trying to finish a goal? I believe that it's not about the outcome but "Visualising the gradual changes on oneself" matters the most! Myprogress provides a social media platform that aims to help an individual to record their changes during a progress share with friends with privacy! 
-
-## Start your own progress NOW !
+## Start your own progress NOW ! ( The domain is no longer in service )
 * Sign up easily [here](https://myprogress.club/signup)
 * Use the test accounts below to [sign in](https://myprogress.club/) 
 
@@ -19,7 +17,6 @@
 ## Table of content
 * [Technologies](#technologies)
 * [Structure](#structure)
-* [Database design](#database-design)
 * [Features](#features)
 * [Author](#author)
 
@@ -63,10 +60,7 @@
 * Chai
 
 ## Structure
-![Structure screenshot](https://myprogress-club.s3.us-east-2.amazonaws.com/structure.jpg)
-
-## Database Design
-![Database screenshot](https://myprogress-club.s3.us-east-2.amazonaws.com/database-relation-graph.jpg)
+<img width="1224" alt="截圖 2023-06-06 下午9 14 50" src="https://github.com/cherylchao6/progress/assets/77141019/9c6cf308-da0e-4280-b78d-321984531f98">
 
 ## Features
 * Browse Abundant categories of progresses
